@@ -52,6 +52,8 @@ DORIS = "n_doris"
 MAVIS = "n_mavis"
 TRACY = "n_tracy"
 BAY   = "n_bay"
+ASH   = "n_ash"
+GROVER= "n_grover"
 
 add(ROOT,  0, couple_label("P001","P002"), "couple", [BR_A1, BR_B1])
 add(BR_A1, 1, couple_label("P007","P006"), "couple", [BR_A2])
@@ -63,8 +65,13 @@ add(BR_B3, 3, couple_label("P041","P038"), "couple", [CONV])
 add(CONV,  4, couple_label("P043","P042"), "couple", [DORIS])
 add(DORIS, 5, couple_label("P044","P045"), "couple", [MAVIS])
 add(MAVIS, 6, couple_label("P047","P046"), "couple", [TRACY])
-add(TRACY, 7, couple_label("P048","P049"), "couple", [BAY])
-add(BAY,   8, label("P050") + "\n(YOU)", "you", [])
+add(TRACY, 7, couple_label("P048","P049"), "couple", [BAY, ASH])
+add(BAY,   8, couple_label("P050","P088"), "couple", [GROVER])
+add(ASH,   8, couple_label("P083","P084"), "couple", [])
+add(GROVER,9, label("P089"), "person", [])
+
+# Highlight the "you" couple in the SVG
+YOUNODES = {"n_bay"}
 
 # In-law parent branches (drawn as side notes attached to the couple)
 SIDENOTES = {
@@ -95,12 +102,13 @@ def compute_layout():
         "n_a1": colx(COL_A, "couple"), "n_b1": colx(COL_B, "couple"),
         "n_a2": colx(COL_A, "couple"), "n_b2": colx(COL_B, "couple"),
         "n_a3": colx(COL_A, "couple"), "n_b3": colx(COL_B, "couple"),
-        "n_a4": colx(COL_A, "person"), "n_b4": colx(COL_B, "person"),
         "n_conv": colx(CENTER, "couple"),
         "n_doris": colx(CENTER, "couple"),
         "n_mavis": colx(CENTER, "couple"),
         "n_tracy": colx(CENTER, "couple"),
-        "n_bay": colx(CENTER, "you"),
+        "n_bay": colx(CENTER - 85, "couple"),
+        "n_ash": colx(CENTER + 85, "couple"),
+        "n_grover": colx(CENTER - 85, "person"),
     }
     minx = min(pos.values())
     return {k: v - minx for k, v in pos.items()}
@@ -131,7 +139,7 @@ def render_svg():
         x = xs[nid]; y = nd["row"]*ROW_H
         w = width(nd["kind"]); h = ROW_H - 14
         cx = x + w/2
-        cls = "you" if nd["kind"]=="you" else "metis" if nd["kind"]=="couple" else "person"
+        cls = "you" if (nd["kind"]=="you" or nid in YOUNODES) else "metis" if nd["kind"]=="couple" else "person"
         # optional portrait
         img = ""
         if nid in ("BR_B2",):  # David Spence couple -> show his portrait at left
@@ -176,6 +184,51 @@ for u in DATA["unions"]:
     if not items: items='<li class="muted">(no children recorded)</li>'
     fam.append(f'<div class="famunit"><div class="head">{head}</div><ul>{items}</ul></div>')
 fam.append('</section>')
+
+# =========================================================
+# ENTIRE EXTENDED FAMILY TREE — interactive, all people
+# =========================================================
+def build_extended():
+    un = DATA["unions"]
+    by_id = {u["id"]: u for u in un}
+    vis_u, vis_p = set(), set()
+    parts = []
+
+    def nm(pid): return PEOPLE.get(pid, {}).get("name", "")
+
+    def union_html(u):
+        if u["id"] in vis_u: return ""
+        vis_u.add(u["id"])
+        s1, s2 = u["spouse1"], u["spouse2"]
+        head = f"{esc(nm(s1))} <span class='amp'>⚭</span> {esc(nm(s2))}"
+        if u.get("note"): head += f" <span class='role'>{esc(u['note'])}</span>"
+        kids = []
+        for k in u["children"]:
+            if k in vis_p:
+                kids.append(f"<li class='muted'>{esc(nm(k))} — family shown at its home branch</li>")
+                continue
+            vis_p.add(k)
+            own = [x for x in by_id.values() if x["id"] not in vis_u and k in (x["spouse1"], x["spouse2"])]
+            if own:
+                inner = "".join(union_html(x) for x in own)
+                kids.append(f"<li class='famchild'><details open><summary>{esc(nm(k))} <span class='muted'>▾ family</span></summary>{inner}</details></li>")
+            else:
+                kids.append(f"<li>{esc(nm(k))}</li>")
+        kids_list = ("<ul class='kids'>" + "".join(kids) + "</ul>") if kids else ""
+        return f"<div class='eu'><div class='ehead'>{head}</div>{kids_list}</div>"
+
+    child_ppl = {c for u in un for c in u["children"]}
+    starts = [u for u in un if u["spouse1"] not in child_ppl and u["spouse2"] not in child_ppl]
+    order = {"U16": 0, "U01": 1, "U13": 2, "U14": 3}
+    starts.sort(key=lambda u: order.get(u["id"], 9))
+    for u in starts:
+        parts.append(union_html(u))
+    return "".join(parts)
+
+EXTENDED = f'''<section class="extended"><details>
+<summary><span class="ext-title">View entire extended family tree</span> <span class="ext-hint">(all {len(DATA["people"])} people, expandable)</span></summary>
+<div class="extbody">{build_extended()}</div>
+</details></section>'''
 
 # =========================================================
 # STORIES & PROFILES
@@ -240,6 +293,21 @@ section.fam h2,.stories h2,.paths h2{font-family:'Cinzel',serif;font-size:18px;c
 .stories details p{padding:0 14px 12px;font-size:15px;color:#2A2220;line-height:1.5}
 .stories .srclink{display:inline-block;margin:0 0 12px 14px;font-size:13px;color:#8C1F28;text-decoration:none;border:1px solid #C9A24B;padding:3px 10px;border-radius:14px;background:#FBF4F0}
 .paths{max-width:720px;margin:26px auto 0}
+section.extended{max-width:720px;margin:26px auto 0}
+section.extended details{background:#FFFDF7;border:1px solid #B9A793;border-radius:12px}
+section.extended>details>summary{cursor:pointer;padding:14px 16px;font-family:'Cinzel',serif;font-size:15px;color:#8C1F28;border-radius:12px;list-style:none}
+section.extended>details>summary:hover{background:#FBF4F0}
+section.extended .ext-hint{font-family:'EB Garamond',serif;font-weight:400;font-size:13px;color:#7A6E66}
+.extbody{padding:4px 16px 16px;border-top:1px solid #E3D7C4}
+.eu{background:#FBF6EC;border:1px solid #E3D7C4;border-left:3px solid #C9A24B;border-radius:9px;padding:8px 12px;margin-top:8px}
+.eu .ehead{font-family:'Cinzel',serif;font-size:13px;color:#8C1F28;font-weight:600}
+.eu .ehead .role{font-family:'EB Garamond',serif;font-weight:400;font-size:11px;color:#7A6E66}
+ul.kids{margin:6px 0 2px 20px;font-size:14px}
+ul.kids li{margin-bottom:3px}
+ul.kids .muted{color:#B9A793;font-style:italic;font-size:12px}
+li.famchild>details{background:#FFFDF7;border:1px solid #E3D7C4;border-radius:7px;padding:3px 8px;margin-top:3px}
+li.famchild>details>summary{cursor:pointer;font-size:13px;color:#2A2220}
+li.famchild>details>summary:hover{color:#8C1F28}
 .paths ol{margin-left:20px;font-size:15px}.paths li{margin-bottom:8px}
 .sources{max-width:720px;margin:28px auto 0;padding-top:14px;border-top:1px solid #B9A793;font-size:13px;color:#7A6E66}
 .sources h4{font-family:'Cinzel',serif;color:#2A2220;margin-bottom:6px;font-size:13px;letter-spacing:1px}
@@ -261,6 +329,7 @@ HTML = f"""<!DOCTYPE html>
   <span>★ you</span>
 </div>
 {render_svg()}
+{EXTENDED}
 {''.join(fam)}
 {''.join(story_html)}
 <div class="paths"><h2>Your two paths to the Métis root</h2><ol>{paths}</ol></div>

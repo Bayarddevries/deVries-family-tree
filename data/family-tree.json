@@ -423,7 +423,7 @@
       "name": "Bayard deVries",
       "metis": true,
       "privacy": "living",
-      "note": "YOU",
+      "note": "YOU · son of Tracy + Bryon · m. Paula · father of Grover · brother of Ashley",
       "you": true
     },
     {
@@ -650,6 +650,69 @@
       "metis": false,
       "privacy": "deceased",
       "note": "Isaac Batt's mother (genealogy source, verify)"
+    },
+    {
+      "id": "P083",
+      "name": "Ashley deVries",
+      "metis": false,
+      "privacy": "living",
+      "note": "Bayard's sister · m. Noel Brown"
+    },
+    {
+      "id": "P084",
+      "name": "Noel Brown",
+      "metis": false,
+      "privacy": "living",
+      "note": "Ashley's husband"
+    },
+    {
+      "id": "P085",
+      "name": "Hudson Brown",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Ashley + Noel"
+    },
+    {
+      "id": "P086",
+      "name": "Oliver Brown",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Ashley + Noel (twin)"
+    },
+    {
+      "id": "P087",
+      "name": "Ellis Brown",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Ashley + Noel (twin)"
+    },
+    {
+      "id": "P088",
+      "name": "Paula deVries",
+      "metis": false,
+      "privacy": "living",
+      "note": "Bayard's wife"
+    },
+    {
+      "id": "P089",
+      "name": "Grover deVries",
+      "metis": false,
+      "privacy": "living",
+      "note": "Bayard & Paula's son"
+    },
+    {
+      "id": "P090",
+      "name": "Wendy Provins",
+      "metis": true,
+      "privacy": "living",
+      "note": "Mavis's daughter · Diane's sister"
+    },
+    {
+      "id": "P091",
+      "name": "Gordon Lau",
+      "metis": true,
+      "privacy": "living",
+      "note": "Mavis's son · Diane's brother"
     }
   ],
   "unions": [
@@ -766,7 +829,9 @@
       "spouse1": "P047",
       "spouse2": "P046",
       "children": [
-        "P048"
+        "P048",
+        "P090",
+        "P091"
       ]
     },
     {
@@ -774,7 +839,8 @@
       "spouse1": "P048",
       "spouse2": "P049",
       "children": [
-        "P050"
+        "P050",
+        "P083"
       ]
     },
     {
@@ -830,6 +896,24 @@
         "P079"
       ],
       "note": "verify vs DCB (Stanstead Abbots, c1725)"
+    },
+    {
+      "id": "U17",
+      "spouse1": "P050",
+      "spouse2": "P088",
+      "children": [
+        "P089"
+      ]
+    },
+    {
+      "id": "U18",
+      "spouse1": "P083",
+      "spouse2": "P084",
+      "children": [
+        "P085",
+        "P086",
+        "P087"
+      ]
     }
   ],
   "paths_to_root": [
