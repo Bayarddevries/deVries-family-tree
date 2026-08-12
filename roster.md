@@ -1,0 +1,186 @@
+# deVries · Spence Family Roster
+All 91 people in the family tree, with relation to Bayard deVries.
+Source: data/family-tree.json (audited 2026-08-12). Dates from vital stats, redriverancestry, DCB, Metis Museum, obituaries.
+
+- **Bayard deVries** (dates unknown) MÉTIS [living] — *YOU*
+    - Parents: Tracy Diane Lau, Bryon Edward deVries | Spouse(s): Paula deVries | Children: Grover deVries
+- **Tracy Diane Lau** (dates unknown) MÉTIS [living] — *mother*
+    - Parents: Robert Lau, Mavis Irene Hamilton | Spouse(s): Bryon Edward deVries | Children: Bayard deVries, Ashley deVries
+- **Bryon Edward deVries** (1954–2019)  [deceased] — *father*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): Tracy Diane Lau | Children: Bayard deVries, Ashley deVries
+- **Paula deVries** (dates unknown)  [living] — *wife*
+    - Parents: — | Spouse(s): Bayard deVries | Children: Grover deVries
+- **Grover deVries** (dates unknown) MÉTIS [living] — *son*
+    - Parents: Bayard deVries, Paula deVries | Spouse(s): — | Children: —
+- **Mavis Irene Hamilton** (1933–2020) MÉTIS [deceased] — *maternal grandmother*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): Robert Lau | Children: Tracy Diane Lau, Wendy Provins, Gordon Lau
+- **Robert Lau** (dates unknown)  [deceased] — *maternal grandfather*
+    - Parents: — | Spouse(s): Mavis Irene Hamilton | Children: Tracy Diane Lau, Wendy Provins, Gordon Lau
+- **Gerhard De Vries** (dates unknown)  [deceased] — *paternal grandfather*
+    - Parents: — | Spouse(s): Geeske Oltrop | Children: John 'Johann' de Vries, Tina de Vries, Leonard De Vries, Etta de Vries, Annie 'Antje' de Vries, Margaret de Vries, Mary de Vries, Helen de Vries, Herman de Vries, Gerald de Vries, Bryon Edward deVries
+- **Geeske Oltrop** (dates unknown)  [deceased] — *paternal grandmother*
+    - Parents: — | Spouse(s): Gerhard De Vries | Children: John 'Johann' de Vries, Tina de Vries, Leonard De Vries, Etta de Vries, Annie 'Antje' de Vries, Margaret de Vries, Mary de Vries, Helen de Vries, Herman de Vries, Gerald de Vries, Bryon Edward deVries
+- **Ashley deVries** (dates unknown) MÉTIS [living] — *sister*
+    - Parents: Tracy Diane Lau, Bryon Edward deVries | Spouse(s): Noel Brown | Children: Hudson Brown, Oliver Brown, Ellis Brown
+- **Doris A. Setter** (1912–2006) MÉTIS [deceased] — *maternal great-grandmother*
+    - Parents: Alan Setter, Ella Alberta Riggs | Spouse(s): Lawrence Donald Hamilton | Children: Alan Guy Hamilton, Daniel Hamilton, Mavis Irene Hamilton, Patrick Hamilton, Wesley C. Hamilton, Harley Hamilton
+- **Lawrence Donald Hamilton** (1912–1984)  [deceased] — *maternal great-grandfather (Hamilton)*
+    - Parents: Guy Wentworth Hamilton, Ethel Rose King | Spouse(s): Doris A. Setter | Children: Alan Guy Hamilton, Daniel Hamilton, Mavis Irene Hamilton, Patrick Hamilton, Wesley C. Hamilton, Harley Hamilton
+- **John 'Johann' de Vries** (1936)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Tina de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Leonard De Vries** (1932–2016)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Etta de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Annie 'Antje' de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Margaret de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Mary de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Helen de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Herman de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Gerald de Vries** (dates unknown)  [deceased] — *ancestor or collateral (depth 3)*
+    - Parents: Gerhard De Vries, Geeske Oltrop | Spouse(s): — | Children: —
+- **Noel Brown** (dates unknown)  [living] — *brother-in-law (Ashley's husband)*
+    - Parents: — | Spouse(s): Ashley deVries | Children: Hudson Brown, Oliver Brown, Ellis Brown
+- **Hudson Brown** (dates unknown)  [living] — *ancestor or collateral (depth 3)*
+    - Parents: Ashley deVries, Noel Brown | Spouse(s): — | Children: —
+- **Oliver Brown** (dates unknown)  [living] — *ancestor or collateral (depth 3)*
+    - Parents: Ashley deVries, Noel Brown | Spouse(s): — | Children: —
+- **Ellis Brown** (dates unknown)  [living] — *ancestor or collateral (depth 3)*
+    - Parents: Ashley deVries, Noel Brown | Spouse(s): — | Children: —
+- **Wendy Provins** (dates unknown) MÉTIS [living] — *maternal aunt (Mavis's daughter)*
+    - Parents: Robert Lau, Mavis Irene Hamilton | Spouse(s): — | Children: —
+- **Gordon Lau** (dates unknown) MÉTIS [living] — *maternal uncle (Mavis's son)*
+    - Parents: Robert Lau, Mavis Irene Hamilton | Spouse(s): — | Children: —
+- **Ella Alberta Riggs** (c1880s) MÉTIS [deceased] — *maternal 2nd-great-grandmother (Riggs line B)*
+    - Parents: Ernest Charles Riggs, Mary Ann Spence | Spouse(s): Alan Setter | Children: Elwyn Setter, Erma Ann Setter, Doris A. Setter, Clayton N. Setter
+- **Alan Setter** (1884–1964) MÉTIS [deceased] — *maternal 2nd-great-grandfather (Setter line A)*
+    - Parents: Roderick McKenzie Setter, Sarah Ann Howrie | Spouse(s): Ella Alberta Riggs | Children: Elwyn Setter, Erma Ann Setter, Doris A. Setter, Clayton N. Setter
+- **Alan Guy Hamilton** (dates unknown)  [living] — *ancestor or collateral (depth 4)*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): — | Children: —
+- **Daniel Hamilton** (dates unknown)  [living] — *ancestor or collateral (depth 4)*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): — | Children: —
+- **Patrick Hamilton** (dates unknown)  [living] — *ancestor or collateral (depth 4)*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): — | Children: —
+- **Wesley C. Hamilton** (dates unknown)  [living] — *ancestor or collateral (depth 4)*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): — | Children: —
+- **Harley Hamilton** (1934–2001)  [deceased] — *ancestor or collateral (depth 4)*
+    - Parents: Doris A. Setter, Lawrence Donald Hamilton | Spouse(s): — | Children: —
+- **Guy Wentworth Hamilton** (1882–1946)  [deceased] — *maternal great-great-grandfather (Hamilton)*
+    - Parents: — | Spouse(s): Ethel Rose King | Children: Lawrence Donald Hamilton, Jean Margaret Hamilton, Madeleine Phyllis Hamilton, William Morrison Hamilton, Vivian Ethel Hamilton
+- **Ethel Rose King** (1892–1982)  [deceased] — *maternal great-great-grandmother (Hamilton)*
+    - Parents: — | Spouse(s): Guy Wentworth Hamilton | Children: Lawrence Donald Hamilton, Jean Margaret Hamilton, Madeleine Phyllis Hamilton, William Morrison Hamilton, Vivian Ethel Hamilton
+- **Roderick McKenzie Setter** (1856) MÉTIS [deceased] — *maternal 3rd-great-grandfather (Setter line A)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): Sarah Ann Howrie | Children: Alan Setter
+- **Mary Ann Spence** (1861–1930) MÉTIS [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): Ernest Charles Riggs | Children: Ella Alberta Riggs
+- **Ernest Charles Riggs** (1859) MÉTIS [deceased] — *maternal 4th-great-grandfather (Riggs)*
+    - Parents: — | Spouse(s): Mary Ann Spence | Children: Ella Alberta Riggs
+- **Elwyn Setter** (dates unknown) MÉTIS [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Alan Setter, Ella Alberta Riggs | Spouse(s): — | Children: —
+- **Erma Ann Setter** (1910) MÉTIS [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Alan Setter, Ella Alberta Riggs | Spouse(s): — | Children: —
+- **Clayton N. Setter** (1917–1975) MÉTIS [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Alan Setter, Ella Alberta Riggs | Spouse(s): — | Children: —
+- **Sarah Ann Howrie** (c1859) MÉTIS [deceased] — *maternal 3rd-great-grandmother (Howrie)*
+    - Parents: — | Spouse(s): Roderick McKenzie Setter | Children: Alan Setter
+- **Jean Margaret Hamilton** (1915–2000)  [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Guy Wentworth Hamilton, Ethel Rose King | Spouse(s): — | Children: —
+- **Madeleine Phyllis Hamilton** (1918–2004)  [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Guy Wentworth Hamilton, Ethel Rose King | Spouse(s): — | Children: —
+- **William Morrison Hamilton** (1926–1991)  [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Guy Wentworth Hamilton, Ethel Rose King | Spouse(s): — | Children: —
+- **Vivian Ethel Hamilton** (1930)  [deceased] — *ancestor or collateral (depth 5)*
+    - Parents: Guy Wentworth Hamilton, Ethel Rose King | Spouse(s): — | Children: —
+- **George Setter** (1815–1899) MÉTIS [deceased] — *maternal 4th-great-grandfather (Setter)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): Isabella Kennedy, Jessie Ellen Campbell | Children: John James Setter, Caroline Setter, Elizabeth Setter, Duncan Richard Setter, Colin Campbell Setter, Roderick McKenzie Setter, Alexander Hunter Murray Setter, George William Setter, Ellen Madeleine 'Nellie' Setter
+- **Jessie Ellen Campbell** (1824–1912) MÉTIS [deceased] — *ancestor or collateral (depth 6)*
+    - Parents: — | Spouse(s): George Setter | Children: Duncan Richard Setter, Colin Campbell Setter, Roderick McKenzie Setter, Alexander Hunter Murray Setter, George William Setter, Ellen Madeleine 'Nellie' Setter
+- **David Spence** (1824–1885) MÉTIS [deceased] — *maternal 3rd-great-grandfather (Spence line B)*
+    - Parents: James Spence Jr, Jane Morwick | Spouse(s): Catherine Hallett | Children: John 'Jake' Spence, Ellen Anderson Spence, Charles David Spence, Jane Spence, Mary Ann Spence, Harriet Spence, William 'Bill' Spence
+- **Catherine Hallett** (1824–1880) MÉTIS [deceased] — *maternal 3rd-great-grandmother (Hallett)*
+    - Parents: — | Spouse(s): David Spence | Children: John 'Jake' Spence, Ellen Anderson Spence, Charles David Spence, Jane Spence, Mary Ann Spence, Harriet Spence, William 'Bill' Spence
+- **James Spence Jr** (c1782–1857) MÉTIS [deceased] — *maternal 5th-great-grandfather (Spence Jr)*
+    - Parents: James Spence Sr, Margaret 'Nestichio' Batt | Spouse(s): Jane Morwick | Children: David Spence, Joseph Spence, Catherine Spence
+- **Margaret 'Peggy' Spence** (1795–1868) MÉTIS [deceased] — *maternal 5th-great-grandmother (Spence/Peggy)*
+    - Parents: James Spence Sr, Margaret 'Nestichio' Batt | Spouse(s): Andrew Setter | Children: James Setter, Margaret Setter, George Setter, Isabella 'Bella' Setter, Elizabeth Setter, Ann Setter, Mary Setter, Thomas Alexander Setter, John Setter, Catherine Setter
+- **Andrew Setter** (1777–1870)  [deceased] — *maternal 5th-great-grandfather (Setter)*
+    - Parents: — | Spouse(s): Margaret 'Peggy' Spence | Children: James Setter, Margaret Setter, George Setter, Isabella 'Bella' Setter, Elizabeth Setter, Ann Setter, Mary Setter, Thomas Alexander Setter, John Setter, Catherine Setter
+- **Isabella Kennedy** (1820–1846) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: — | Spouse(s): George Setter | Children: John James Setter, Caroline Setter, Elizabeth Setter
+- **John James Setter** (1837) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Isabella Kennedy | Spouse(s): — | Children: —
+- **Caroline Setter** (1840) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Isabella Kennedy | Spouse(s): — | Children: —
+- **Elizabeth Setter** (1842) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Isabella Kennedy | Spouse(s): Premier John Norquay | Children: —
+- **Duncan Richard Setter** (1852) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): — | Children: —
+- **Colin Campbell Setter** (1854) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): — | Children: —
+- **Alexander Hunter Murray Setter** (1858) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): — | Children: —
+- **George William Setter** (1861–1874) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): — | Children: —
+- **Ellen Madeleine 'Nellie' Setter** (1861–1874) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: George Setter, Jessie Ellen Campbell | Spouse(s): — | Children: —
+- **Jane Morwick** (1794–1874) MÉTIS [deceased] — *maternal 5th-great-grandmother (Morwick)*
+    - Parents: — | Spouse(s): James Spence Jr | Children: David Spence, Joseph Spence, Catherine Spence
+- **John 'Jake' Spence** (1848) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **Ellen Anderson Spence** (1853) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **Charles David Spence** (1857) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **Jane Spence** (1859) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **Harriet Spence** (1863) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **William 'Bill' Spence** (1866) MÉTIS [deceased] — *ancestor or collateral (depth 7)*
+    - Parents: David Spence, Catherine Hallett | Spouse(s): — | Children: —
+- **James Spence Sr** (c1753–1795)  [deceased] — *maternal 6th-great-grandfather (Spence Sr)*
+    - Parents: — | Spouse(s): Margaret 'Nestichio' Batt | Children: James Spence Jr, Andrew Spence, George Spence Sr, Margaret 'Peggy' Spence
+- **Margaret 'Nestichio' Batt** (1757–1829) MÉTIS [deceased] — *maternal 6th-great-grandmother (Batt)*
+    - Parents: Isaac Batt, Cree matriarch (Nikawiy) | Spouse(s): James Spence Sr | Children: James Spence Jr, Andrew Spence, George Spence Sr, Margaret 'Peggy' Spence
+- **James Setter** (1810) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Margaret Setter** (1813) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Isabella 'Bella' Setter** (1816) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Elizabeth Setter** (1822) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Ann Setter** (1825) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Mary Setter** (1830) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Thomas Alexander Setter** (1831) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **John Setter** (1832) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Catherine Setter** (1837) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: Andrew Setter, Margaret 'Peggy' Spence | Spouse(s): — | Children: —
+- **Joseph Spence** (1826) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: James Spence Jr, Jane Morwick | Spouse(s): — | Children: —
+- **Catherine Spence** (1829) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: James Spence Jr, Jane Morwick | Spouse(s): — | Children: —
+- **Premier John Norquay** (1841–1889) MÉTIS [deceased] — *ancestor or collateral (depth 8)*
+    - Parents: — | Spouse(s): Elizabeth Setter | Children: —
+- **Andrew Spence** (1786) MÉTIS [deceased] — *ancestor or collateral (depth 9)*
+    - Parents: James Spence Sr, Margaret 'Nestichio' Batt | Spouse(s): — | Children: —
+- **George Spence Sr** (1792) MÉTIS [deceased] — *ancestor or collateral (depth 9)*
+    - Parents: James Spence Sr, Margaret 'Nestichio' Batt | Spouse(s): — | Children: —
+- **Isaac Batt** (c1725–1791)  [deceased] — *maternal 7th-great-grandfather (Batt)*
+    - Parents: Dantzick Batt, Sarah Lindsel | Spouse(s): Cree matriarch (Nikawiy) | Children: Margaret 'Nestichio' Batt
+- **Cree matriarch (Nikawiy)** (dates unknown) MÉTIS [deceased] — *maternal 7th-great-grandmother (Cree matriarch)*
+    - Parents: — | Spouse(s): Isaac Batt | Children: Margaret 'Nestichio' Batt
+- **Dantzick Batt** (dates unknown)  [deceased] — *maternal 8th-great-grandfather (Batt)*
+    - Parents: — | Spouse(s): Sarah Lindsel | Children: Isaac Batt
+- **Sarah Lindsel** (dates unknown)  [deceased] — *maternal 8th-great-grandmother (Lindsel)*
+    - Parents: — | Spouse(s): Dantzick Batt | Children: Isaac Batt
