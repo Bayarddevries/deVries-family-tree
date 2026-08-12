@@ -1,0 +1,204 @@
+{
+  "project": "deVries-Spence Family Tree",
+  "owner": "Bayard deVries",
+  "focus": "Métis lineage, Red River to Winnipeg (and Flin Flon migration)",
+  "updated": "2026-08-11",
+  "root": "James Spence Sr & Margaret 'Nestichio' Batt",
+  "note": "Both Spence branches in this tree (via Peggy Spence and via David Spence MLA) descend from the SAME root: James Spence Sr (c1753-1795) + Margaret Nestichio Batt (1757-1829, Métis/Cree). The two lines re-converge at Allan Setter + Ella Alberta Riggs, a common Red River endogamy pattern.",
+  "generations": [
+    {
+      "id": "g0",
+      "label": "Métis root",
+      "branch": "root",
+      "couple": [
+        {"name": "James Spence Sr", "dates": "c1753-1795", "role": "Orkney-born HBC voyageur"},
+        {"name": "Margaret 'Nestichio' Batt", "dates": "1757-1829", "role": "Métis/Cree"}
+      ],
+      "metis": true,
+      "direct_child": "Peggy Spence (via Andrew Setter)",
+      "children": [
+        {"name": "James Spence Jr", "dates": "c1782-1857", "spouse": "1. Mary (Stone Indian); 2. Jane Morwick", "note": "→ David Spence line"},
+        {"name": "Andrew Spence", "dates": "1786-?", "spouse": "Margaret Tausand (Cree)"},
+        {"name": "George Spence Sr", "dates": "1792-?", "spouse": "Nancy Ann Ward", "note": "ancestors of Grove family of Selkirk"},
+        {"name": "Margaret 'Peggy' Spence", "dates": "1794-1868", "spouse": "Andrew Setter", "note": "DIRECT LINE"}
+      ],
+      "source": "redriverancestry.ca/SPENCE-JAMES-1753"
+    },
+    {
+      "id": "g1a",
+      "label": "Spence line A",
+      "branch": "A",
+      "couple": [
+        {"name": "Andrew Setter", "dates": "1777-1870", "role": "Orkney HBC voyageur"},
+        {"name": "Margaret 'Peggy' Spence", "dates": "1794-1868"}
+      ],
+      "metis": true,
+      "direct_child": "George Setter",
+      "children": [
+        {"name": "James Setter", "dates": "1810-?", "spouse": "Jane Morwick"},
+        {"name": "Margaret Setter", "dates": "1813-?", "spouse": "George Setter"},
+        {"name": "George Setter", "dates": "1815-1899", "spouse": "Isabella Kennedy / Jessie Campbell", "note": "DIRECT LINE"},
+        {"name": "Isabella 'Bella' Setter", "dates": "1816-?", "spouse": "Joseph Monkman"},
+        {"name": "Elizabeth Setter", "dates": "1822-?", "spouse": "Robert Miller"},
+        {"name": "Ann Setter", "dates": "1825-?", "spouse": "William Scott"},
+        {"name": "Mary Setter", "dates": "1830-?", "spouse": "William Reed"},
+        {"name": "Thomas Alexander Setter", "dates": "1831-?", "spouse": "Isabella Loutit"},
+        {"name": "John Setter", "dates": "1832-?", "spouse": "Elizabeth Gowler"},
+        {"name": "Catherine Setter", "dates": "1837-?", "spouse": "David Anderson"}
+      ],
+      "source": "redriverancestry.ca/SETTER-ANDREW-1777"
+    },
+    {
+      "id": "g1b",
+      "label": "Spence line B",
+      "branch": "B",
+      "couple": [
+        {"name": "James Spence Jr", "dates": "c1782-1857", "role": "Orkney HBC tailor, Red River 1818"},
+        {"name": "Jane Morwick", "dates": "1794-1874", "role": "née Morwick, wid. Norquay"}
+      ],
+      "metis": true,
+      "direct_child": "David Spence",
+      "children": [
+        {"name": "David Spence", "dates": "1824-1885", "spouse": "Catherine Hallett", "note": "DIRECT LINE · MLA"},
+        {"name": "Joseph Spence", "dates": "1826-?", "spouse": "Janet Hallett / Elizabeth Bubbie"},
+        {"name": "Catherine Spence", "dates": "1829-?"}
+      ],
+      "step_children": ["Norquay children of Jane Morwick's first marriage (incl. John Norquay Sr)"],
+      "source": "redriverancestry.ca/SPENCE-JAMES-1778"
+    },
+    {
+      "id": "g2a",
+      "label": "Setter",
+      "branch": "A",
+      "couple": [
+        {"name": "George Setter", "dates": "1815-1899", "role": "Fort Ellice → Poplar Point"},
+        {"name": "Isabella Kennedy", "dates": "1820-1846", "role": "1st wife; then Jessie Ellen Campbell (1824-1912)"}
+      ],
+      "metis": true,
+      "direct_child": "Allan Setter (line to Ella Riggs not yet pinned)",
+      "children": [
+        {"name": "John James Setter", "dates": "1837-?", "spouse": "Ann Matheson"},
+        {"name": "Caroline Setter", "dates": "1840-?", "spouse": "Donald McDonald"},
+        {"name": "Elizabeth Setter", "dates": "1842-?", "spouse": "Premier John Norquay", "highlight": "Manitoba's first Métis premier (1878-87)"},
+        {"name": "Duncan Richard Setter", "dates": "1852-?", "spouse": "Catherine Sutherland"},
+        {"name": "Colin Campbell Setter", "dates": "1854-?", "spouse": "Jemima Hourie"},
+        {"name": "Roderick McKenzie Setter", "dates": "1856-?", "spouse": "Sarah Ann Hourie"},
+        {"name": "Alexander Hunter Murray Setter", "dates": "1858-?", "spouse": "Elizabeth Taylor"},
+        {"name": "George William Setter", "dates": "1861-1874", "note": "twin, died age 13"},
+        {"name": "Ellen Madeleine 'Nellie' Setter", "dates": "1861-1874", "note": "twin, died age 13"}
+      ],
+      "source": "redriverancestry.ca/SETTER-GEORGE-1815"
+    },
+    {
+      "id": "g2b",
+      "label": "Spence B / Riggs",
+      "branch": "B",
+      "couple": [
+        {"name": "David Spence", "dates": "1824-1885", "role": "MLA Poplar Point 1870-74, Convention of Forty rep, JP"},
+        {"name": "Catherine Hallett", "dates": "1824-1880", "role": "dau of Henry Hallett + Catherine Parenteau"}
+      ],
+      "metis": true,
+      "direct_child": "Mary Ann Spence",
+      "children": [
+        {"name": "John 'Jake' Spence", "dates": "1848-?", "spouse": "Ellen McNab"},
+        {"name": "Ellen Anderson Spence", "dates": "1853-?", "spouse": "George Brown"},
+        {"name": "Charles David Spence", "dates": "1857-?", "spouse": "Elizabeth 'Eliza' Foulds"},
+        {"name": "Jane Spence", "dates": "1859-?", "spouse": "William Folster"},
+        {"name": "Mary Ann Spence", "dates": "1861-1930", "spouse": "Ernest Charles Riggs", "note": "DIRECT LINE"},
+        {"name": "Harriet Spence", "dates": "1863-?", "spouse": "Peter Henry Wishart"},
+        {"name": "William 'Bill' Spence", "dates": "1866-?", "spouse": "Martha McNab"}
+      ],
+      "source": "redriverancestry.ca/SPENCE-DAVID-1834"
+    },
+    {
+      "id": "g3",
+      "label": "Riggs",
+      "branch": "B",
+      "couple": [
+        {"name": "Ernest Charles Riggs", "dates": "1859-?", "role": "son of Harmon M. Riggs + Amelia M. Williams"},
+        {"name": "Mary Ann Spence", "dates": "1861-1930", "role": "dau of David Spence + Catherine Hallett"}
+      ],
+      "metis": true,
+      "direct_child": "Ella Alberta Riggs",
+      "children": [
+        {"name": "Ella Alberta Riggs", "dates": "c1880s", "spouse": "Allan Setter", "note": "DIRECT LINE · m. 31 Mar 1909 PLAP"}
+      ],
+      "source": "redriverancestry.ca/SPENCE-DAVID-1834 + vitalstats 1909,001530"
+    },
+    {
+      "id": "g4",
+      "label": "Convergence",
+      "branch": "converge",
+      "couple": [
+        {"name": "Allan Setter", "dates": "", "role": "Spence line A"},
+        {"name": "Ella Alberta Riggs", "dates": "", "role": "Spence line B"}
+      ],
+      "metis": true,
+      "direct_child": "Doris Alberta Setter",
+      "children": [
+        {"name": "Doris Alberta Setter", "dates": "1912-", "spouse": "Lawrence D. Hamilton", "note": "DIRECT LINE · b. 24 Dec 1912 PLAP"}
+      ],
+      "source": "vitalstats 1909,001530"
+    },
+    {
+      "id": "g5",
+      "label": "Hamilton",
+      "branch": "spine",
+      "couple": [
+        {"name": "Doris Alberta Setter", "dates": "1912-"},
+        {"name": "Lawrence D. Hamilton", "dates": ""}
+      ],
+      "metis": true,
+      "direct_child": "Mavis Hamilton",
+      "children": [
+        {"name": "Mavis Hamilton", "dates": "c1925-1935", "note": "DIRECT LINE"}
+      ],
+      "source": "family knowledge"
+    },
+    {
+      "id": "g6",
+      "label": "Hamilton / Lau",
+      "branch": "spine",
+      "couple": [
+        {"name": "Robert Lau", "dates": "", "role": "maternal grandfather"},
+        {"name": "Mavis Hamilton", "dates": "c1925-1935", "role": "maternal grandmother"}
+      ],
+      "metis": true,
+      "direct_child": "Tracy Diane Lau",
+      "source": "family knowledge"
+    },
+    {
+      "id": "g7",
+      "label": "Parents",
+      "branch": "spine",
+      "couple": [
+        {"name": "Tracy Diane Lau", "dates": "b. 1950s", "role": "b. Flin Flon MB"},
+        {"name": "Bryon deVries", "dates": "", "role": "father"}
+      ],
+      "metis": true,
+      "direct_child": "Bayard deVries",
+      "source": "family knowledge"
+    },
+    {
+      "id": "g8",
+      "label": "You",
+      "branch": "spine",
+      "couple": [{"name": "Bayard deVries", "dates": "", "role": "Winnipeg, MB"}],
+      "metis": true,
+      "you": true
+    }
+  ],
+  "deeper_ancestors": {
+    "hallett_line": "Henry Hallett (1773-1844) + Catherine T. Tenance → Henry Jr Hallett (1799-1871) + Catherine Parenteau (1806-1857); Joseph V. Parenteau (1752-1817) + Suzanne Cree",
+    "morwick_line": "James Morwick + Catherine Dungas (1775-1817) → Jane Morwick (1794-1874)",
+    "riggs_line": "David J. Riggs Jr (1804-1850) + Catherine M. Hendricks → Harmon M. Riggs (1834-1874) + Amelia M. Williams (1830-1874) → Ernest C. Riggs",
+    "source": "Ancestry DNA tree screenshots (Aug 2026) — verify vs primary"
+  },
+  "open_items": [
+    "Pin the intermediate Setter generations between George Setter (1815) and Allan Setter",
+    "Confirm Doris Setter's birth mother = Ella (Riggs) Setter (vital stats birth detail)",
+    "Locate the Setter→Hamilton marriage record (may be Saskatchewan, Flin Flon area)",
+    "Expand the deVries paternal side (Bryon's family) — needs family input",
+    "Verify app-date discrepancies (e.g. Catherine Hallett 1824-1887 vs 1824-1880) against primary records"
+  ]
+}
