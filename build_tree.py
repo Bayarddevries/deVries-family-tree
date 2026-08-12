@@ -41,173 +41,114 @@ def yrs(pid):
 
 # =========================================================
 # FULL EXTENDED TREE LAYOUT (all unions, all people)
-# classic descendant chart: spouse pairs + marriage bars + child rails
+# classic columnar descendant chart: two lineage trunks (Setter line A,
+# Spence/Riggs line B) converging into the central spine down to Bayard.
+# Hand-placed column slots -> real tree silhouette with clear columns.
 # =========================================================
-P_W, P_H = 122, 54                 # person box
+P_W, P_H = 112, 52                 # person box
 GAP2 = 8                           # gap between spouses
 ROW_H = 128
-GAP = 10
+LEAF_GAP = 8                       # gap between leaf siblings on a rail
 
 by_union = {u["id"]: u for u in UNIONS}
 
 def spouse_unions(pid):
     return [u for u in UNIONS if pid in (u["spouse1"], u["spouse2"])]
 
-def parent_unions(pid):
-    return [u for u in UNIONS if pid in u["children"]]
-
-# --- generation depth: unions + people, root U16 = depth 0 ---
-depth = {"U16": 0}
-def propagate():
-    changed = True
-    while changed:
-        changed = False
-        for u in UNIONS:
-            ud = depth.get(u["id"])
-            if ud is None: continue
-            for pid in (u["spouse1"], u["spouse2"]):
-                if depth.get(pid) != ud: depth[pid] = ud; changed = True
-            for c in u["children"]:
-                if depth.get(c) != ud + 1: depth[c] = ud + 1; changed = True
-                for fu in spouse_unions(c):
-                    if fu["id"] != u["id"] and depth.get(fu["id"]) != ud + 1:
-                        depth[fu["id"]] = ud + 1; changed = True
-            for pid in (u["spouse1"], u["spouse2"]):
-                for pu in parent_unions(pid):
-                    if pu["id"] != u["id"] and depth.get(pu["id"]) != ud - 1:
-                        depth[pu["id"]] = ud - 1; changed = True
-propagate()
-
-# --- descendant-reachable set ---
-desc = set()
-def mark_desc(u_id):
-    if u_id in desc: return
-    desc.add(u_id)
-    for c in by_union[u_id]["children"]:
-        for fu in spouse_unions(c):
-            if fu["id"] != u_id: mark_desc(fu["id"])
-mark_desc("U16")
-
-# --- ownership: each union rendered once, under the branch that reaches it first ---
-owner, in_prog = {}, set()
-def assign(u_id):
-    if u_id in owner or u_id in in_prog: return
-    in_prog.add(u_id)
-    u = by_union[u_id]
-    for c in u["children"]:
-        for fu in spouse_unions(c):
-            if fu["id"] != u_id and fu["id"] not in owner:
-                assign(fu["id"])
-                owner[fu["id"]] = u_id
-    for pid in (u["spouse1"], u["spouse2"]):
-        for pu in parent_unions(pid):
-            if pu["id"] != u_id and pu["id"] not in desc and pu["id"] not in owner:
-                assign(pu["id"])
-                owner[pu["id"]] = u_id
-    in_prog.discard(u_id)
-assign("U16")
-owner["U16"] = None
-
-# --- subtree block width (memoized, cycle-guarded) ---
-WID, IN_PROG = {}, set()
-def swidth(u_id):
-    if u_id in WID: return WID[u_id]
-    if u_id in IN_PROG: return P_W
-    IN_PROG.add(u_id)
-    u = by_union[u_id]
-    w = 0
-    for c in u["children"]:
-        fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
-        cw = P_W
-        if fams: cw = max(P_W, sum(swidth(fu["id"]) for fu in fams) + GAP*(len(fams)-1))
-        w += cw + GAP
-    inlaws = [pu for pid in (u["spouse1"], u["spouse2"]) for pu in parent_unions(pid)
-              if pu["id"] != u_id and owner.get(pu["id"]) == u_id]
-    for pu in inlaws: w += swidth(pu["id"]) + GAP
-    w = max(w - GAP, P_W*2 + GAP2)
-    IN_PROG.discard(u_id)
-    WID[u_id] = w
-    return w
-
-# --- recursive placement ---
 PERS, FAMS, TEDGES = [], [], []
-visited_u = set()
 
-def add_person(pid, x, y, you):
+def add_person(pid, x, y, you=False):
     nid = "b" + str(len(PERS))
     PERS.append({"id": nid, "pid": pid, "x": round(x, 1), "y": y,
                  "w": P_W, "h": P_H, "you": you})
     return nid
 
-def place_union(u_id, x_center, row):
-    if u_id in visited_u: return
-    visited_u.add(u_id)
+def add_couple(u_id, x, row, you=False):
     u = by_union[u_id]
-    bw = swidth(u_id)
-    you = u_id == "U17"
-    # spouse pair (two boxes, marriage gap between)
-    b1x = x_center - P_W - GAP2/2
-    b2x = x_center + GAP2/2
-    n1 = add_person(u["spouse1"], b1x, row*ROW_H, you and u["spouse1"] == "P050")
-    n2 = add_person(u["spouse2"], b2x, row*ROW_H, you and u["spouse2"] == "P050")
+    n1 = add_person(u["spouse1"], x - P_W - GAP2/2, row*ROW_H, you and u["spouse1"] == "P050")
+    n2 = add_person(u["spouse2"], x + GAP2/2, row*ROW_H, you and u["spouse2"] == "P050")
     fam = {"u": u_id, "s1": n1, "s2": n2,
-           "s1x": b1x + P_W/2, "s2x": b2x + P_W/2, "x": x_center, "y": row*ROW_H,
-           "children": []}   # children: box ids (geometry recomputed after sweep)
+           "s1x": x - P_W/2 - GAP2/2, "s2x": x + P_W/2 + GAP2/2,
+           "x": x, "y": row*ROW_H, "children": []}
     FAMS.append(fam)
+    return fam, n1, n2
 
-    # children columns
-    cols = []
-    for c in u["children"]:
-        fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
-        fuv = [fu for fu in fams if fu["id"] not in visited_u]
-        fv  = [fu for fu in spouse_unions(c) if fu["id"] != u_id and fu["id"] not in fuv and fu["id"] in visited_u]
-        cw = P_W
-        if fuv: cw = max(P_W, sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1))
-        cols.append((c, cw, fuv, fv))
-    children_total = sum(cw for _, cw, _, _ in cols) + GAP*max(0, len(cols)-1)
+def leaf_boxes(u, row, cx):
+    """leaf child boxes of union u spread on a rail at row, centered on cx"""
+    leaves = [c for c in u["children"]
+              if not any(c in (fu["spouse1"], fu["spouse2"]) for fu in UNIONS if fu["id"] != u["id"])]
+    if not leaves: return []
+    n = len(leaves); total = n*(P_W + LEAF_GAP) - LEAF_GAP
+    x0 = cx - total/2
+    out = []
+    for i, pid in enumerate(leaves):
+        bx = x0 + i*(P_W + LEAF_GAP)
+        nid = add_person(pid, bx, row*ROW_H)
+        out.append((nid, bx + P_W/2))
+    return out
 
-    # in-law unions (spouse-parents, one generation above)
-    inlaws = [(pu, swidth(pu["id"])) for pid in (u["spouse1"], u["spouse2"])
-              for pu in parent_unions(pid) if pu["id"] != u_id
-              and owner.get(pu["id"]) == u_id and pu["id"] not in visited_u]
-    inlaws_w = sum(w for _, w in inlaws) + GAP*max(0, len(inlaws)-1)
+# ---- explicit columnar layout (x = canvas center; COL = column pitch) ----
+COL = 560
+# rows 0-2: the Batt root spine (top center)
+f16, isaac_b, _ = add_couple("U16", 0, 0)
+f15, marg_b, _  = add_couple("U15", 0, 1)
+f01, james_b, nest_b = add_couple("U01", 0, 2)
+f16["children"] = [(isaac_b, f15["s1x"])]                # Isaac hangs under Dantzick
+f15["children"] = [(marg_b, f01["s2x"])]                 # Margaret hangs under Isaac
 
-    span = children_total + inlaws_w + GAP*(bool(inlaws) and bool(cols))
-    off = max((bw - span)/2, 0)
-    cx = x_center - children_total/2 + off
-    ix = x_center + children_total/2 + (GAP if inlaws and cols else 0) + off
+# row 3: the two Spence lines split into two columns
+f02, andrew_b, peggy_b = add_couple("U02", -COL, 3)
+f04, jamesj_b, jane_b  = add_couple("U04",  COL, 3)
+# U01's rail drops to Andrew (U02), Peggy (U02) and JamesJr (U04); George Sr is a leaf
+george_sr = leaf_boxes(by_union["U01"], 3, 0)          # George Spence Sr leaf at center
+f01["children"] = [(andrew_b, f02["s1x"]), (peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
 
-    # children
-    x = cx
-    for c, cw, fuv, fv in cols:
-        ccx = x + cw/2
-        if fuv:
-            total = sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1)
-            fx = ccx - total/2
-            for fu in fuv:
-                fcx = fx + swidth(fu["id"])/2
-                ret = place_union(fu["id"], fcx, row+1)
-                # child box = whichever spouse slot the child occupies in fu
-                child_box = ret["s1"] if c == fu["spouse1"] else ret["s2"]
-                fam["children"].append(child_box)
-                fx += swidth(fu["id"]) + GAP
-        elif fv:
-            cid = add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
-            fam["children"].append(cid)
-            TEDGES.append({"from": cid, "to": "fam_" + fv[0]["id"], "dashed": True})
-        else:
-            cid = add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
-            fam["children"].append(cid)
-        x += cw + GAP
-    # in-law unions (upward stub from this family's marriage center)
-    for pu, pw in inlaws:
-        place_union(pu["id"], ix + pw/2, row-1)
-        TEDGES.append({"from": "fam_" + u_id, "to": "fam_" + pu["id"], "up": True})
-        ix += pw + GAP
-    return {"s1": n1, "s2": n2}
+# row 4: line A = George's two marriages; line B = David
+f03, george_b1, isab_b = add_couple("U03", -COL-230, 4)
+f19, george_b2, jess_b = add_couple("U19", -COL+230, 4)
+f05, david_b, cath_b   = add_couple("U05",  COL, 4)
+f02["children"] = [(george_b1, f03["s1x"]), (george_b2, f19["s1x"])] + leaf_boxes(by_union["U02"], 4, -COL)
+f04["children"] = [(david_b, f05["s1x"])] + leaf_boxes(by_union["U04"], 4, COL)
 
-ROOT_UNION = "U16"
-place_union(ROOT_UNION, 0, 0)
+# row 5: line A = Roderick; line B = Ernest; Elizabeth⚭Norquay side branch
+f12, rod_b, sarah_b  = add_couple("U12", -COL, 5)
+f06, ern_b, mary_b   = add_couple("U06",  COL, 5)
+f11, eliz_b, norq_b  = add_couple("U11", -COL*1.9, 5)
+f03["children"] = [(eliz_b, f11["s1x"])] + leaf_boxes(by_union["U03"], 5, -COL-230)
+f19["children"] = [(rod_b, f12["s1x"])] + leaf_boxes(by_union["U19"], 5, -COL)
+f05["children"] = [(mary_b, f06["s2x"])] + leaf_boxes(by_union["U05"], 5, COL)
+
+# row 6: the two lines CONVERGE at Alan⚭Ella; Hamilton in-law column
+f07, alan_b, ella_b  = add_couple("U07", 0, 6)
+f13, guy_b, ethel_b  = add_couple("U13", COL*2.1, 6)
+f12["children"] = [(alan_b, f07["s1x"])]               # line A drops into Alan
+f06["children"] = [(ella_b, f07["s2x"])]               # line B drops into Ella
+TEDGES.append({"from": "fam_U08", "to": "fam_U13", "up": True})   # Lawrence's parents
+
+# row 7: the trunk: Doris⚭Lawrence; Hamilton leaves beside their column
+f08, doris_b, law_b  = add_couple("U08", 0, 7)
+f07["children"] = [(doris_b, f08["s1x"])] + leaf_boxes(by_union["U07"], 7, 0)
+f13["children"] += leaf_boxes(by_union["U13"], 7, COL*2.1)
+
+# row 8: Mavis⚭Robert; deVries in-law column
+f09, mavis_b, rob_b  = add_couple("U09", -220, 8)
+f14, ger_b, gees_b   = add_couple("U14", COL*2.1, 8)
+f08["children"] = [(mavis_b, f09["s1x"])] + leaf_boxes(by_union["U08"], 8, -220)
+TEDGES.append({"from": "fam_U10", "to": "fam_U14", "up": True})   # Bryon's parents
+
+# row 9: Tracy⚭Bryon; deVries leaves in their column
+f10, tracy_b, bry_b  = add_couple("U10", 0, 9)
+f09["children"] = [(tracy_b, f10["s1x"])] + leaf_boxes(by_union["U09"], 9, -220)
+f14["children"] += leaf_boxes(by_union["U14"], 9, COL*2.1)
+
+# row 10: Bayard⚭Paula and Ashley⚭Noel
+f17, bay_b, paula_b  = add_couple("U17", -300, 10, you=True)
+f18, ash_b, noel_b   = add_couple("U18",  300, 10)
+f10["children"] = [(bay_b, f17["s1x"]), (ash_b, f18["s1x"])]
+
+# row 11: the kids
+f17["children"] = leaf_boxes(by_union["U17"], 11, -300)
+f18["children"] = leaf_boxes(by_union["U18"], 11,  300)
 
 # --- resolve same-row overlaps (left-to-right sweep per row) ---
 rows = {}
@@ -217,14 +158,13 @@ for y, ns in rows.items():
     ns.sort(key=lambda n: n["x"])
     for i in range(1, len(ns)):
         prev, cur = ns[i-1], ns[i]
-        min_x = prev["x"] + prev["w"] + GAP
+        min_x = prev["x"] + prev["w"] + 10
         if cur["x"] < min_x:
             cur["x"] = round(min_x, 1)
 
-# --- generation lane labels (left column) ---
-bay_depth = depth.get("P050")
+# ---- generation lane labels ----
+bay_depth = 10
 def lane_label(d):
-    if bay_depth is None: return f"gen {d}"
     rel = bay_depth - d
     if rel == 0: return "You"
     if rel == 1: return "Parents"
@@ -234,12 +174,7 @@ def lane_label(d):
     if rel == -1: return "Children"
     if rel == -2: return "Grandchildren"
     return f"desc {abs(rel)} gen"
-y_to_depth = {}
-for n in PERS:
-    key = n["pid"]
-    if key in depth:
-        y_to_depth.setdefault(n["y"], depth[key])
-TREE_LANES = [{"y": y, "label": lane_label(y_to_depth[y])} for y in sorted(y_to_depth)]
+TREE_LANES = [{"y": d*ROW_H, "label": lane_label(d)} for d in range(12)]
 
 # shift boxes right to make room for the label column
 for n in PERS: n["x"] += 130
@@ -250,7 +185,7 @@ maxx = max(n["x"] + n["w"] for n in PERS)
 maxy = max(n["y"] + n["h"] for n in PERS)
 for n in PERS: n["x"] -= (minx - 130)
 
-# recompute family geometry from the FINAL box positions (sweep + gutter applied)
+# recompute family geometry from the FINAL box positions
 bybox = {n["id"]: n for n in PERS}
 for f in FAMS:
     n1, n2 = bybox[f["s1"]], bybox[f["s2"]]
@@ -258,7 +193,7 @@ for f in FAMS:
     f["s2x"] = n2["x"] + P_W/2
     f["x"] = (f["s1x"] + f["s2x"])/2
     f["y"] = n1["y"]
-    f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid in f["children"]]
+    f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid, _ in f["children"]]
 TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
         "pw": P_W, "ph": P_H, "rowh": ROW_H,
         "w": int(maxx - minx + 190), "h": int(maxy + 60)}
@@ -675,7 +610,7 @@ window.addEventListener('resize',()=>{if(scale<=0.01)fit();});
 
 // initial view: center on the "you" family once fonts/layout settle
 function settle(){
-  const doIt = () => { zoomToYou(); };
+  const doIt = () => { fit(); };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(doIt,30));
   setTimeout(doIt, 60);
 }
@@ -696,7 +631,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     const tab=t.dataset.tab;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const v=document.getElementById('view-'+tab);v.classList.add('active');
-    if(tab==='tree')setTimeout(zoomToYou,60);
+    if(tab==='tree')setTimeout(fit,60);
   });
 });
 
