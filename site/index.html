@@ -220,7 +220,8 @@ function drawTree(){
     seg(f.x, y0, f.x, ry, RAIL, 4);                                // drop from marriage
     if(f.children.length){
       const cxs=f.children.map(c=>c[1]);
-      const mn=Math.min(...cxs), mx=Math.max(...cxs);
+      // rail must always span from the marriage drop to every child (even a single child)
+      const mn=Math.min(f.x, ...cxs), mx=Math.max(f.x, ...cxs);
       if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
       const ctop=f.y+RH;
       f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, RAIL, 4); });
