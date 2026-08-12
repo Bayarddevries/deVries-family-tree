@@ -45,9 +45,9 @@ def yrs(pid):
 # Spence/Riggs line B) converging into the central spine down to Bayard.
 # Hand-placed column slots -> real tree silhouette with clear columns.
 # =========================================================
-P_W, P_H = 112, 52                 # person box
-GAP2 = 8                           # gap between spouses
-ROW_H = 128
+P_W, P_H = 116, 54                 # person box
+GAP2 = 16                          # gap between spouses (marriage bar spans this)
+ROW_H = 140
 LEAF_GAP = 8                       # gap between leaf siblings on a rail
 
 by_union = {u["id"]: u for u in UNIONS}
@@ -88,7 +88,7 @@ def leaf_boxes(u, row, cx):
     return out
 
 # ---- explicit columnar layout (x = canvas center; COL = column pitch) ----
-COL = 560
+COL = 470
 # rows 0-2: the Batt root spine (top center)
 f16, isaac_b, _ = add_couple("U16", 0, 0)
 f15, marg_b, _  = add_couple("U15", 0, 1)
@@ -454,20 +454,21 @@ function drawTree(){
     if(dash)l.setAttribute('stroke-dasharray','5,5');
     svg.appendChild(l);
   };
-  // classic structure: marriage bars + child rails
+  // classic structure: marriage bars + child rails (THICK, high-visibility lines)
   const PW=T.pw, PH=T.ph, RH=T.rowh;
+  const RAIL='#7A6D96', MAR='#E8B45A';
   const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
   T.fams.forEach(f=>{
     const my=f.y+PH/2;
-    seg(f.s1x+PW/2, my, f.s2x-PW/2, my, '#D4A853', 3);          // marriage bar
-    const y0=f.y+PH, ry=y0+22;
-    seg(f.x, y0, f.x, ry, 'url(#lg)', 2.5);                        // drop from marriage
+    seg(f.s1x+PW/2, my, f.s2x-PW/2, my, MAR, 4.5);                 // marriage bar
+    const y0=f.y+PH, ry=y0+26;
+    seg(f.x, y0, f.x, ry, RAIL, 4);                                // drop from marriage
     if(f.children.length){
       const cxs=f.children.map(c=>c[1]);
       const mn=Math.min(...cxs), mx=Math.max(...cxs);
-      if(mx-mn>3) seg(mn, ry, mx, ry, 'url(#lg)', 2.5);            // children rail
+      if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
       const ctop=f.y+RH;
-      f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, 'url(#lg)', 2.5); });
+      f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, RAIL, 4); });
     }
   });
   // special edges: dashed convergence + in-law stubs (up)
@@ -475,14 +476,14 @@ function drawTree(){
     if(e.dashed){
       const a=nodeById(e.from), fam=famById[e.to];
       if(a&&fam){
-        seg(a.x+a.w/2, a.y+a.h, fam.x, fam.y+PH/2, '#D4A853', 2, true);
+        seg(a.x+a.w/2, a.y+a.h, fam.x, fam.y+PH/2, MAR, 3, true);
       }
     }else if(e.up){
       const f1=famById[e.from], f2=famById[e.to];
       if(f1&&f2){
         const x1=f1.x, y1=f1.y, x2=f2.x, y2=f2.y+PH;
         const mid=(y1+y2)/2;
-        seg(x1,y1,x1,mid);seg(x1,mid,x2,mid);seg(x2,mid,x2,y2);
+        seg(x1,y1,x1,mid,RAIL,3.5);seg(x1,mid,x2,mid,RAIL,3.5);seg(x2,mid,x2,y2,RAIL,3.5);
       }
     }
   });
@@ -609,8 +610,16 @@ document.getElementById('zfit').onclick=fit;
 window.addEventListener('resize',()=>{if(scale<=0.01)fit();});
 
 // initial view: center on the "you" family once fonts/layout settle
+// initial view: open at a readable zoom on the tree's middle (never fully zoomed out)
+function focusMiddle(){
+  const cw=wrap.clientWidth,ch=wrap.clientHeight;
+  scale=Math.max(Math.min(cw/(T.w+40),ch/(T.h+40)),0.45);
+  tx=cw/2-(T.w/2)*scale;
+  ty=ch/2-(T.h/2)*scale;
+  applyTransform();
+}
 function settle(){
-  const doIt = () => { fit(); };
+  const doIt = () => { focusMiddle(); };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(doIt,30));
   setTimeout(doIt, 60);
 }
