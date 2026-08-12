@@ -41,11 +41,11 @@ def yrs(pid):
 
 # =========================================================
 # FULL EXTENDED TREE LAYOUT (all unions, all people)
-# generation-lane descendant chart from the deepest root (U16)
+# classic descendant chart: spouse pairs + marriage bars + child rails
 # =========================================================
-NODE_W, NODE_H = 176, 82          # couple box
-P_W, P_H = 112, 50                # leaf person box
-ROW_H = 134
+P_W, P_H = 122, 54                 # person box
+GAP2 = 8                           # gap between spouses
+ROW_H = 128
 GAP = 10
 
 by_union = {u["id"]: u for u in UNIONS}
@@ -121,42 +121,50 @@ def swidth(u_id):
         cw = P_W
         if fams: cw = max(P_W, sum(swidth(fu["id"]) for fu in fams) + GAP*(len(fams)-1))
         w += cw + GAP
-    # in-law unions (spouse-parents) add width
     inlaws = [pu for pid in (u["spouse1"], u["spouse2"]) for pu in parent_unions(pid)
               if pu["id"] != u_id and owner.get(pu["id"]) == u_id]
     for pu in inlaws: w += swidth(pu["id"]) + GAP
-    w = max(w - GAP, NODE_W)
+    w = max(w - GAP, P_W*2 + GAP2)
     IN_PROG.discard(u_id)
     WID[u_id] = w
     return w
 
-# --- recursive placement (rows = generation depth) ---
-TNODES, TEDGES = [], []
+# --- recursive placement ---
+PERS, FAMS, TEDGES = [], [], []
 visited_u = set()
 
-def place_union(u_id, x_center):
+def add_person(pid, x, y, you):
+    PERS.append({"id": "p_" + pid, "pid": pid, "x": round(x, 1), "y": y,
+                 "w": P_W, "h": P_H, "you": you})
+
+def place_union(u_id, x_center, row):
     if u_id in visited_u: return
     visited_u.add(u_id)
     u = by_union[u_id]
-    row = depth[u_id]
     bw = swidth(u_id)
-    nid = "u_" + u_id
-    TNODES.append({"id": nid, "x": round(x_center - NODE_W/2, 1), "y": row*ROW_H,
-                   "w": NODE_W, "h": NODE_H, "kind": "couple", "pids": [u["spouse1"], u["spouse2"]],
-                   "you": u_id == "U17"})
+    you = u_id == "U17"
+    # spouse pair (two boxes, marriage gap between)
+    b1x = x_center - P_W - GAP2/2
+    b2x = x_center + GAP2/2
+    add_person(u["spouse1"], b1x, row*ROW_H, you and u["spouse1"] == "P050")
+    add_person(u["spouse2"], b2x, row*ROW_H, you and u["spouse2"] == "P050")
+    fam = {"u": u_id, "s1": u["spouse1"], "s2": u["spouse2"],
+           "s1x": b1x + P_W/2, "s2x": b2x + P_W/2, "x": x_center, "y": row*ROW_H,
+           "children": []}   # children: (pid, box_center_x)
+    FAMS.append(fam)
 
-    # children columns (their families render in the SAME lane; leaves as person boxes)
+    # children columns
     cols = []
     for c in u["children"]:
         fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
         fuv = [fu for fu in fams if fu["id"] not in visited_u]
-        fv  = [fu for fu in fams if fu["id"] in visited_u]
+        fv  = [fu for fu in spouse_unions(c) if fu["id"] != u_id and fu["id"] not in fuv and fu["id"] in visited_u]
         cw = P_W
         if fuv: cw = max(P_W, sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1))
         cols.append((c, cw, fuv, fv))
     children_total = sum(cw for _, cw, _, _ in cols) + GAP*max(0, len(cols)-1)
 
-    # in-law unions at the row ABOVE (spouse-parents)
+    # in-law unions (spouse-parents, one generation above)
     inlaws = [(pu, swidth(pu["id"])) for pid in (u["spouse1"], u["spouse2"])
               for pu in parent_unions(pid) if pu["id"] != u_id
               and owner.get(pu["id"]) == u_id and pu["id"] not in visited_u]
@@ -175,34 +183,33 @@ def place_union(u_id, x_center):
             total = sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1)
             fx = ccx - total/2
             for fu in fuv:
-                place_union(fu["id"], fx + swidth(fu["id"])/2)
-                TEDGES.append([nid, "u_" + fu["id"]])
+                fcx = fx + swidth(fu["id"])/2
+                place_union(fu["id"], fcx, row+1)
+                # child box center = which spouse slot the child occupies
+                if c == fu["spouse1"]: cbc = fcx - P_W/2 - GAP2/2
+                else: cbc = fcx + P_W/2 + GAP2/2
+                fam["children"].append((c, cbc))
                 fx += swidth(fu["id"]) + GAP
         elif fv:
-            # convergence: leaf person box + dashed same-lane link to the displayed family
-            cid = "p_" + c
-            TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
-                           "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
-            TEDGES.append([nid, cid])
-            TEDGES.append({"from": cid, "to": "u_" + fv[0]["id"], "dashed": True})
+            add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
+            fam["children"].append((c, ccx))
+            TEDGES.append({"from": "p_" + c, "to": "fam_" + fv[0]["id"], "dashed": True})
         else:
-            cid = "p_" + c
-            TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
-                           "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
-            TEDGES.append([nid, cid])
+            add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
+            fam["children"].append((c, ccx))
         x += cw + GAP
-    # in-law unions (upward stub from this union's box)
+    # in-law unions (upward stub from this family's marriage center)
     for pu, pw in inlaws:
-        place_union(pu["id"], ix + pw/2)
-        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "up": True})
+        place_union(pu["id"], ix + pw/2, row-1)
+        TEDGES.append({"from": "fam_" + u_id, "to": "fam_" + pu["id"], "up": True})
         ix += pw + GAP
 
 ROOT_UNION = "U16"
-place_union(ROOT_UNION, 0)
+place_union(ROOT_UNION, 0, 0)
 
 # --- resolve same-row overlaps (left-to-right sweep per row) ---
 rows = {}
-for n in TNODES:
+for n in PERS:
     rows.setdefault(n["y"], []).append(n)
 for y, ns in rows.items():
     ns.sort(key=lambda n: n["x"])
@@ -226,22 +233,25 @@ def lane_label(d):
     if rel == -2: return "Grandchildren"
     return f"desc {abs(rel)} gen"
 y_to_depth = {}
-for n in TNODES:
-    nid = n["id"]
-    key = nid[2:]
+for n in PERS:
+    key = n["pid"]
     if key in depth:
         y_to_depth.setdefault(n["y"], depth[key])
 TREE_LANES = [{"y": y, "label": lane_label(y_to_depth[y])} for y in sorted(y_to_depth)]
 
 # shift boxes right to make room for the label column
-for n in TNODES: n["x"] += 130
+for n in PERS: n["x"] += 130
 
 # canvas bounds (keep a 130px label gutter on the left)
-minx = min(n["x"] for n in TNODES); miny = 0
-maxx = max(n["x"] + n["w"] for n in TNODES)
-maxy = max(n["y"] + n["h"] for n in TNODES)
-for n in TNODES: n["x"] -= (minx - 130)
-TREE = {"nodes": TNODES, "edges": TEDGES, "lanes": TREE_LANES,
+minx = min(n["x"] for n in PERS)
+maxx = max(n["x"] + n["w"] for n in PERS)
+maxy = max(n["y"] + n["h"] for n in PERS)
+for n in PERS: n["x"] -= (minx - 130)
+for f in FAMS:
+    f["x"] -= (minx - 130); f["s1x"] -= (minx - 130); f["s2x"] -= (minx - 130)
+    f["children"] = [(pid, cx - (minx - 130)) for pid, cx in f["children"]]
+TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
+        "pw": P_W, "ph": P_H, "rowh": ROW_H,
         "w": int(maxx - minx + 190), "h": int(maxy + 60)}
 
 # =========================================================
@@ -487,55 +497,70 @@ const T=D.tree;
 function drawTree(){
   canvas.innerHTML='';
   canvas.style.width=T.w+'px';canvas.style.height=T.h+'px';
-  // connector svg
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('width',T.w);svg.setAttribute('height',T.h);
   svg.style.position='absolute';svg.style.top='0';svg.style.left='0';svg.style.pointerEvents='none';
   const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
   defs.innerHTML='<linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A4258"/><stop offset="1" stop-color="#2E2839"/></linearGradient>';
   svg.appendChild(defs);
-  const edgeSet=new Map();
+  const seg=(x1,y1,x2,y2,color,w,dash)=>{
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+    l.setAttribute('stroke',color||'url(#lg)');l.setAttribute('stroke-width',w||2.5);
+    if(dash)l.setAttribute('stroke-dasharray','5,5');
+    svg.appendChild(l);
+  };
+  // classic structure: marriage bars + child rails
+  const PW=T.pw, PH=T.ph, RH=T.rowh;
+  const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
+  T.fams.forEach(f=>{
+    const my=f.y+PH/2;
+    seg(f.s1x+PW/2, my, f.s2x-PW/2, my, '#D4A853', 3);          // marriage bar
+    const y0=f.y+PH, ry=y0+22;
+    seg(f.x, y0, f.x, ry, 'url(#lg)', 2.5);                        // drop from marriage
+    if(f.children.length){
+      const cxs=f.children.map(c=>c[1]);
+      const mn=Math.min(...cxs), mx=Math.max(...cxs);
+      if(mx-mn>3) seg(mn, ry, mx, ry, 'url(#lg)', 2.5);            // children rail
+      const ctop=f.y+RH;
+      f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, 'url(#lg)', 2.5); });
+    }
+  });
+  // special edges: dashed convergence + in-law stubs (up)
   T.edges.forEach(e=>{
-    const a=T.nodes.find(n=>n.id===e[0]||n.id===e.from),b=T.nodes.find(n=>n.id===e[1]||n.id===e.to);
-    if(!a||!b)return;
-    const dashed=!!e.dashed;
-    let x1=a.x+a.w/2, y1=a.y+a.h;
-    const x2=b.x+b.w/2;
-    let y2=b.y;
-    if(e.up){ y1=a.y; y2=b.y+b.h; }        // in-law stub: upward from marriage box
-    const my=(y1+y2)/2;
-    [[x1,y1,x1,my],[x1,my,x2,my],[x2,my,x2,y2]].forEach(seg=>{
-      const l=document.createElementNS('http://www.w3.org/2000/svg','line');
-      l.setAttribute('x1',seg[0]);l.setAttribute('y1',seg[1]);l.setAttribute('x2',seg[2]);l.setAttribute('y2',seg[3]);
-      l.setAttribute('stroke',dashed?'#D4A853':'url(#lg)');l.setAttribute('stroke-width',dashed?'2':'2.5');
-      if(dashed)l.setAttribute('stroke-dasharray','5,5');
-      svg.appendChild(l);
-    });
+    if(e.dashed){
+      const a=nodeById(e.from), fam=famById[e.to];
+      if(a&&fam){
+        seg(a.x+a.w/2, a.y+a.h, fam.x, fam.y+PH/2, '#D4A853', 2, true);
+      }
+    }else if(e.up){
+      const f1=famById[e.from], f2=famById[e.to];
+      if(f1&&f2){
+        const x1=f1.x, y1=f1.y, x2=f2.x, y2=f2.y+PH;
+        const mid=(y1+y2)/2;
+        seg(x1,y1,x1,mid);seg(x1,mid,x2,mid);seg(x2,mid,x2,y2);
+      }
+    }
   });
   canvas.appendChild(svg);
   renderLanes();
   T.nodes.forEach(n=>{
-    const p1=people[n.pids[0]],p2=n.pids.length>1?people[n.pids[1]]:null;
+    const p=people[n.pid];
+    if(!p)return;
     const div=document.createElement('div');
-    div.className='cnode'+(n.kind==='person'?' person':'')+(n.you?' you':'');
+    div.className='cnode'+(n.you?' you':'');
     div.style.left=n.x+'px';div.style.top=n.y+'px';div.style.width=n.w+'px';div.style.height=n.h+'px';
     let h='';
-    if(p2){
-      h+=`<div class="n1">${escH(p1.name)}</div><div class="n2">⚭</div><div class="n3">${escH(p2.name)}</div>`;
-      const y1=yrs(p1),y2=yrs(p2);
-      h+=`<div class="years">${escH(y1)}${y1&&y2?' · ':''}${escH(y2)}</div>`;
-      if(p1.metis||p2.metis)h+='<span class="m">MÉTIS</span>';
-    }else{
-      h+=`<div class="n1">${escH(p1.name)}</div><div class="years">${escH(yrs(p1))}</div>`;
-      if(p1.metis)h+='<span class="m">MÉTIS</span>';
-    }
+    h+=`<div class="n1">${escH(p.name)}</div><div class="years">${escH(yrs(p))}</div>`;
+    if(p.metis)h+='<span class="m">MÉTIS</span>';
     div.innerHTML=h;
-    if(p1.name.length>17||(p2&&p2.name.length>17))div.classList.add('long');
-    div.addEventListener('click',()=>openSheet(n.pids));
+    if(p.name.length>15)div.classList.add('long');
+    div.addEventListener('click',()=>openSheet([n.pid]));
     canvas.appendChild(div);
   });
   applyTransform();
 }
+function nodeById(id){return T.nodes.find(n=>n.id===id);}
 function applyTransform(){
   canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
   laneEls.forEach(el=>{el.style.top=(ty+el._y*scale)+'px';});
