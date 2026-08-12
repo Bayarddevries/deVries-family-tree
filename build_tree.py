@@ -17,37 +17,35 @@ PEOPLE = {p["id"]: p for p in DATA["people"]}
 UNIONS = DATA["unions"]
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
-# Facts sourced from the research: vital-stats registrations, redriverancestry.ca,
-# and the MMF/RRMNHC research files already in the data.
 STORIES.update({
- "P042": {"title": "Ella Alberta Riggs — where the two lines meet",
-   "text": "Ella (b. c1880s) was the daughter of Ernest C. Riggs and Mary Ann Spence. Through her mother she carries Spence line B: Mary Ann was the daughter of David Spence (Métis MLA and Convention of Forty delegate) and Catherine Hallett. Ella married Alan Setter on 31 Mar 1909 at Portage la Prairie (reg. 1909,001530). Because Alan descends from line A (Peggy Spence), Ella is the point where Bayard's two Spence lines converge. Their daughter Doris inherited her mother's middle name, 'Alberta'. [Verify Ella's exact birth year vs vital records.]",
+ "P042": {"title": "Ella Alberta Riggs \u2014 where the two lines meet",
+   "text": "Ella (b. c1880s) was the daughter of Ernest C. Riggs and Mary Ann Spence. Through her mother she carries Spence line B: Mary Ann was the daughter of David Spence (M\u00e9tis MLA and Convention of Forty delegate) and Catherine Hallett. Ella married Alan Setter on 31 Mar 1909 at Portage la Prairie (reg. 1909,001530). Because Alan descends from line A (Peggy Spence), Ella is the point where Bayard's two Spence lines converge. Their daughter Doris inherited her mother's middle name, 'Alberta'. [Verify Ella's exact birth year vs vital records.]",
    "source": "vital stats reg. 1909,001530"},
- "P044": {"title": "Doris Alberta Setter — the bridge to the Hamiltons",
+ "P044": {"title": "Doris Alberta Setter \u2014 the bridge to the Hamiltons",
    "text": "Doris (b. 24 Dec 1912, Portage la Prairie; reg. 1912,004481; d. 23 Apr 2006) was the daughter of Alan Setter and Ella Alberta Riggs. On 29 Dec 1932 she married Lawrence Donald Hamilton at Tisdale, Saskatchewan. Their only daughter, Mavis Irene, was born 1 Sep 1933 in Tisdale and became the mother of Bayard's mother, Tracy. Doris is the hinge joining the Setter/Spence family to the Hamilton line.",
    "source": "vital stats regs 1912,004481; SK marriage record 1932"},
- "P045": {"title": "Lawrence Donald Hamilton — the Flin Flon connection",
+ "P045": {"title": "Lawrence Donald Hamilton \u2014 the Flin Flon connection",
    "text": "Lawrence (b. 15 Jun 1912, Tisdale SK; d. 5 Feb 1984, Flin Flon MB) was the son of Guy Wentworth Hamilton and Ethel Rose King. He married Doris Setter in 1932. The family moved to Flin Flon, Manitoba, in 1939 (when Mavis was six), which is how Bayard's maternal line came to Flin Flon. Also recorded as 'Laurence'.",
    "source": "family research; Flin Flon move c.1939"},
- "P043": {"title": "Alan Setter — Spence line A",
+ "P043": {"title": "Alan Setter \u2014 Spence line A",
    "text": "Alan (b. 22 Oct 1884, R.M. Portage la Prairie; reg. 1884,005103; d. 1964; also spelled 'Sutter') was the son of Roderick McKenzie Setter and Sarah Ann Howrie. Roderick was the son of George Setter and Jessie Ellen Campbell. Alan's marriage to Ella Alberta Riggs in 1909 is the meeting point of the two Spence lines. He was Bayard's great-grandfather.",
    "source": "vital stats reg. 1884,005103"},
- "P033": {"title": "Catherine Hallett — wife of the MLA",
-   "text": "Catherine Hallett (1824\u20131880) was the daughter of Henry Hallett and Catherine Parenteau. She married David Spence on 15 Feb 1844 at St. John's parish, Red River. In 1876, as a Métis family, she and David received Métis scrip. Their daughter Mary Ann Spence became the grandmother of Ella Riggs. [Verify the Catherine Hallett death date: 1880 vs 1887.]",
+ "P033": {"title": "Catherine Hallett \u2014 wife of the MLA",
+   "text": "Catherine Hallett (1824\u20131880) was the daughter of Henry Hallett and Catherine Parenteau. She married David Spence on 15 Feb 1844 at St. John's parish, Red River. In 1876, as a M\u00e9tis family, she and David received M\u00e9tis scrip. Their daughter Mary Ann Spence became the grandmother of Ella Riggs. [Verify the Catherine Hallett death date: 1880 vs 1887.]",
    "source": "parish record 1844; scrip 1876"},
- "P029": {"title": "Jane Morwick — grandmother of a Premier",
-   "text": "Jane Morwick (1794\u20131874) was a widow (née Morwick, previously married into the Norquay family) when she married James Spence Jr. She is the grandmother of Premier John Norquay, Manitoba's first Méis Premier, who was raised in the Spence household. Through Jane and James Jr, their son David Spence continued the family's public life in Red River.",
+ "P029": {"title": "Jane Morwick \u2014 grandmother of a Premier",
+   "text": "Jane Morwick (1794\u20131874) was a widow (n\u00e9e Morwick, previously married into the Norquay family) when she married James Spence Jr. She is the grandmother of Premier John Norquay, Manitoba's first M\u00e9tis Premier, who was raised in the Spence household. Through Jane and James Jr, their son David Spence continued the family's public life in Red River.",
    "source": "family research; Norquay genealogy"},
- "P010": {"title": "George Setter — the middle bridge",
+ "P010": {"title": "George Setter \u2014 the middle bridge",
    "text": "George Setter (1815\u20131899) was the son of Andrew Setter (an Orkney HBC voyageur) and Peggy Spence (a daughter of James Spence Sr and Margaret 'Nestichio' Batt). He married Isabella Kennedy (d. 1846), then Jessie Ellen Campbell. His son Roderick McKenzie Setter (by Jessie) carried line A down to Alan Setter.",
    "source": "redriverancestry.ca; family research"},
- "P007": {"title": "Andrew Setter — the Orkney voyageur",
-   "text": "Andrew Setter (1777\u20131870) was born in Westray, Orkney and joined the Hudson's Bay Company at York Factory in 1800. On 28 Jan 1821 he married Peggy Spence at Beaver Creek, baptised by Rev. John West. Their son George carried the family's Métis lineage forward. Andrew's line is the paternal thread that joined the Spence family.",
+ "P007": {"title": "Andrew Setter \u2014 the Orkney voyageur",
+   "text": "Andrew Setter (1777\u20131870) was born in Westray, Orkney and joined the Hudson's Bay Company at York Factory in 1800. On 28 Jan 1821 he married Peggy Spence at Beaver Creek, baptised by Rev. John West. Their son George carried the family's M\u00e9tis lineage forward. Andrew's line is the paternal thread that joined the Spence family.",
    "source": "HBC records; Rev. John West baptism 1821"},
- "P019": {"title": "Jessie Ellen Campbell — second wife, and a key correction",
+ "P019": {"title": "Jessie Ellen Campbell \u2014 second wife, and a key correction",
    "text": "Jessie Ellen Campbell (1824\u20131912) married George Setter after Isabella Kennedy's death in 1846, and was the mother of Roderick McKenzie Setter. The research corrects an earlier assumption: Roderick was Jessie's son, NOT Isabella's. This matters because it pins line A's descent through Jessie. [Line A ancestress = Jessie Ellen Campbell.]",
    "source": "family research; corrected lineage"},
- "P025": {"title": "Roderick McKenzie Setter — completing line A",
+ "P025": {"title": "Roderick McKenzie Setter \u2014 completing line A",
    "text": "Roderick McKenzie Setter (b. 1856) was the son of George Setter and Jessie Ellen Campbell. He married Sarah Ann Howrie, and their son Alan Setter (b. 1884) closed line A end-to-end. Primary records (vital stats reg. 1884,005103) confirm Alan as Roderick and Sarah's son, completing the Spence-to-Setter descent to Bayard.",
    "source": "vital stats reg. 1884,005103"},
 })
@@ -75,45 +73,174 @@ def yrs(pid):
     return ""
 
 # =========================================================
-# FAMILY-CHART (donatso, d3-based) DATA MODEL
-# The descendant chart is rendered by the family-chart library, which
-# handles multiple marriages AND converging lines (the cousin-marriage at
-# Alan + Ella, where both partners descend from James Sr + Batt) without
-# crashing. Full data, no cuts.
+# FULL EXTENDED TREE LAYOUT (all unions, all people)
+# classic columnar descendant chart: two lineage trunks (Setter line A,
+# Spence/Riggs line B) converging into the central spine down to Bayard.
+# Hand-placed column slots -> real tree silhouette with clear columns.
 # =========================================================
-FEMALE = {"P080","P002","P006","P009","P011","P012","P013","P014","P017","P018","P019","P021","P022","P028","P029","P032","P033","P035","P037","P038","P039","P042","P044","P046","P048","P053","P060","P062","P063","P064","P066","P068","P070","P072","P073","P074","P075","P076","P082","P083","P088","P090"}
+P_W, P_H = 116, 54                 # person box
+GAP2 = 16                          # gap between spouses (marriage bar spans this)
+ROW_H = 140
+LEAF_GAP = 8                       # gap between leaf siblings on a rail
 
-def build_fc_data():
-    by_id = {p["id"]: p for p in DATA["people"]}
-    rels = {pid: {"parents": [], "spouses": [], "children": []} for pid in by_id}
-    for u in UNIONS:
-        s1, s2 = u["spouse1"], u["spouse2"]
-        if s2 not in rels[s1]["spouses"]: rels[s1]["spouses"].append(s2)
-        if s1 not in rels[s2]["spouses"]: rels[s2]["spouses"].append(s1)
-        for c in u["children"]:
-            if c not in by_id: continue
-            if s1 not in rels[c]["parents"]: rels[c]["parents"].append(s1)
-            if s2 not in rels[c]["parents"]: rels[c]["parents"].append(s2)
-            if c not in rels[s1]["children"]: rels[s1]["children"].append(c)
-            if c not in rels[s2]["children"]: rels[s2]["children"].append(c)
-    def yrs(p):
-        b, dd = p.get("birth",""), p.get("death","")
-        if b and dd: return f"{b}\u2013{dd}"
-        if b: return f"b. {b}"
-        return ""
+by_union = {u["id"]: u for u in UNIONS}
+
+def spouse_unions(pid):
+    return [u for u in UNIONS if pid in (u["spouse1"], u["spouse2"])]
+
+PERS, FAMS, TEDGES = [], [], []
+
+def add_person(pid, x, y, you=False):
+    nid = "b" + str(len(PERS))
+    PERS.append({"id": nid, "pid": pid, "x": round(x, 1), "y": y,
+                 "w": P_W, "h": P_H, "you": you})
+    return nid
+
+def add_couple(u_id, x, row, you=False):
+    u = by_union[u_id]
+    n1 = add_person(u["spouse1"], x - P_W - GAP2/2, row*ROW_H, you and u["spouse1"] == "P050")
+    n2 = add_person(u["spouse2"], x + GAP2/2, row*ROW_H, you and u["spouse2"] == "P050")
+    fam = {"u": u_id, "s1": n1, "s2": n2,
+           "s1x": x - P_W/2 - GAP2/2, "s2x": x + P_W/2 + GAP2/2,
+           "x": x, "y": row*ROW_H, "children": []}
+    FAMS.append(fam)
+    return fam, n1, n2
+
+def leaf_boxes(u, row, cx):
+    """leaf child boxes of union u spread on a rail at row, centered on cx"""
+    leaves = [c for c in u["children"]
+              if not any(c in (fu["spouse1"], fu["spouse2"]) for fu in UNIONS if fu["id"] != u["id"])]
+    if not leaves: return []
+    n = len(leaves); total = n*(P_W + LEAF_GAP) - LEAF_GAP
+    x0 = cx - total/2
     out = []
-    for pid, p in by_id.items():
-        out.append({
-            "id": pid,
-            "data": {"gender": "F" if pid in FEMALE else "M", "name": p["name"],
-                     "years": yrs(p), "you": bool(p.get("you")),
-                     "metis": bool(p.get("metis")), "note": p.get("note", p.get("notes",""))},
-            "rels": rels[pid],
-        })
+    for i, pid in enumerate(leaves):
+        bx = x0 + i*(P_W + LEAF_GAP)
+        nid = add_person(pid, bx, row*ROW_H)
+        out.append((nid, bx + P_W/2))
     return out
 
-TREE = {"fcData": build_fc_data()}
+# ---- explicit columnar layout (x = canvas center; COL = column pitch) ----
+COL = 470
+# rows 0-2: the Batt root spine (top center)
+f16, isaac_b, _ = add_couple("U16", 0, 0)
+f15, marg_b, _  = add_couple("U15", 0, 1)
+f01, james_b, nest_b = add_couple("U01", 0, 2)
+f16["children"] = [(isaac_b, f15["s1x"])]                # Isaac hangs under Dantzick
+f15["children"] = [(marg_b, f01["s2x"])]                 # Margaret hangs under Isaac
 
+# row 3: the two Spence lines split into two columns
+f02, andrew_b, peggy_b = add_couple("U02", -COL, 3)
+f04, jamesj_b, jane_b  = add_couple("U04",  COL, 3)
+# U01's rail drops to Andrew (U02), Peggy (U02) and JamesJr (U04); George Sr is a leaf
+george_sr = leaf_boxes(by_union["U01"], 3, 0)          # George Spence Sr leaf at center
+f01["children"] = [(andrew_b, f02["s1x"]), (peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
+
+# row 4: line A = George's two marriages; line B = David
+f03, george_b1, isab_b = add_couple("U03", -COL-230, 4)
+f19, george_b2, jess_b = add_couple("U19", -COL+230, 4)
+f05, david_b, cath_b   = add_couple("U05",  COL, 4)
+f02["children"] = [(george_b1, f03["s1x"]), (george_b2, f19["s1x"])] + leaf_boxes(by_union["U02"], 4, -COL)
+f04["children"] = [(david_b, f05["s1x"])] + leaf_boxes(by_union["U04"], 4, COL)
+
+# row 5: line A = Roderick; line B = Ernest; Elizabeth⚭Norquay side branch
+f12, rod_b, sarah_b  = add_couple("U12", -COL, 5)
+f06, ern_b, mary_b   = add_couple("U06",  COL, 5)
+f11, eliz_b, norq_b  = add_couple("U11", -COL*1.9, 5)
+f03["children"] = [(eliz_b, f11["s1x"])] + leaf_boxes(by_union["U03"], 5, -COL-230)
+f19["children"] = [(rod_b, f12["s1x"])] + leaf_boxes(by_union["U19"], 5, -COL)
+f05["children"] = [(mary_b, f06["s2x"])] + leaf_boxes(by_union["U05"], 5, COL)
+
+# row 6: the two lines CONVERGE at Alan⚭Ella; Hamilton in-law column
+f07, alan_b, ella_b  = add_couple("U07", 0, 6)
+f13, guy_b, ethel_b  = add_couple("U13", COL*2.1, 6)
+f12["children"] = [(alan_b, f07["s1x"])]               # line A drops into Alan
+f06["children"] = [(ella_b, f07["s2x"])]               # line B drops into Ella
+TEDGES.append({"from": "fam_U08", "to": "fam_U13", "up": True})   # Lawrence's parents
+
+# row 7: the trunk: Doris⚭Lawrence; Hamilton leaves beside their column
+f08, doris_b, law_b  = add_couple("U08", 0, 7)
+f07["children"] = [(doris_b, f08["s1x"])] + leaf_boxes(by_union["U07"], 7, 0)
+f13["children"] += leaf_boxes(by_union["U13"], 7, COL*2.1)
+
+# row 8: Mavis⚭Robert; deVries in-law column
+f09, mavis_b, rob_b  = add_couple("U09", -220, 8)
+f14, ger_b, gees_b   = add_couple("U14", COL*2.1, 8)
+f08["children"] = [(mavis_b, f09["s1x"])] + leaf_boxes(by_union["U08"], 8, -220)
+TEDGES.append({"from": "fam_U10", "to": "fam_U14", "up": True})   # Bryon's parents
+
+# row 9: Tracy⚭Bryon; deVries leaves in their column
+f10, tracy_b, bry_b  = add_couple("U10", 0, 9)
+f09["children"] = [(tracy_b, f10["s1x"])] + leaf_boxes(by_union["U09"], 9, -220)
+f14["children"] += leaf_boxes(by_union["U14"], 9, COL*2.1)
+
+# row 10: Bayard⚭Paula and Ashley⚭Noel
+f17, bay_b, paula_b  = add_couple("U17", -300, 10, you=True)
+f18, ash_b, noel_b   = add_couple("U18",  300, 10)
+f10["children"] = [(bay_b, f17["s1x"]), (ash_b, f18["s1x"])]
+
+# row 11: the kids
+f17["children"] = leaf_boxes(by_union["U17"], 11, -300)
+f18["children"] = leaf_boxes(by_union["U18"], 11,  300)
+
+# --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
+rows = {}
+for n in PERS:
+    rows.setdefault(n["y"], []).append(n)
+byid_p = {n["id"]: n for n in PERS}
+for y, ns in rows.items():
+    units, used = [], set()
+    for f in FAMS:
+        n1, n2 = byid_p[f["s1"]], byid_p[f["s2"]]
+        if n1["y"] == y:
+            units.append([n1, n2]); used.add(n1["id"]); used.add(n2["id"])
+    for n in ns:
+        if n["id"] not in used:
+            units.append([n])
+    units.sort(key=lambda u: min(b["x"] for b in u))
+    for i in range(1, len(units)):
+        prev_max = max(b["x"] + b["w"] for b in units[i-1])
+        cur_min = min(b["x"] for b in units[i])
+        if cur_min < prev_max + 10:
+            shift = prev_max + 10 - cur_min
+            for b in units[i]:
+                b["x"] = round(b["x"] + shift, 1)
+
+# ---- generation lane labels ----
+bay_depth = 10
+def lane_label(d):
+    rel = bay_depth - d
+    if rel == 0: return "You"
+    if rel == 1: return "Parents"
+    if rel == 2: return "Grandparents"
+    if rel == 3: return "Great-grandparents"
+    if rel >= 4: return f"{rel-2}× great-grandparents"
+    if rel == -1: return "Children"
+    if rel == -2: return "Grandchildren"
+    return f"desc {abs(rel)} gen"
+TREE_LANES = [{"y": d*ROW_H, "label": lane_label(d)} for d in range(12)]
+
+# shift boxes right to make room for the label column
+for n in PERS: n["x"] += 130
+
+# canvas bounds (keep a 130px label gutter on the left)
+minx = min(n["x"] for n in PERS)
+maxx = max(n["x"] + n["w"] for n in PERS)
+maxy = max(n["y"] + n["h"] for n in PERS)
+for n in PERS: n["x"] -= (minx - 130)
+
+# recompute family geometry from the FINAL box positions
+bybox = {n["id"]: n for n in PERS}
+for f in FAMS:
+    n1, n2 = bybox[f["s1"]], bybox[f["s2"]]
+    f["s1x"] = n1["x"] + P_W/2
+    f["s2x"] = n2["x"] + P_W/2
+    f["x"] = (f["s1x"] + f["s2x"])/2
+    f["y"] = n1["y"]
+    f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid, _ in f["children"]]
+TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
+        "pw": P_W, "ph": P_H, "rowh": ROW_H,
+        "w": int(maxx - minx + 190), "h": int(maxy + 60)}
 
 # =========================================================
 # TIMELINE
@@ -175,13 +302,18 @@ APP = r"""
 
 <main>
   <section id="view-tree" class="view active">
-    <div id="FamilyChart" class="f3"></div>
-    <div class="zbtns">
-      <button class="zbtn" id="zin">+</button>
-      <button class="zbtn" id="zout">−</button>
-      <button class="zbtn" id="zfit">⤲</button>
+    <div id="wrap">
+      <div id="stage">
+        <div id="canvas"></div>
+      </div>
+      <div id="lanes"></div>
+      <div class="zbtns">
+        <button class="zbtn" id="zin">+</button>
+        <button class="zbtn" id="zout">−</button>
+        <button class="zbtn" id="zfit">⤢</button>
+      </div>
+      <div class="hint" id="treehint">drag to pan · pinch or double-tap to zoom · tap a person</div>
     </div>
-    <div class="hint" id="treehint">drag to pan · pinch or scroll to zoom · tap a person · search top-right</div>
   </section>
 
   <section id="view-people" class="view">
@@ -346,38 +478,200 @@ const P = D.people;
 const byName = {};
 P.forEach(p=>byName[p.name.toLowerCase()]=p);
 
-/* ---------- family-chart tree ---------- */
-var chart = window.f3.createChart('#FamilyChart', D.tree.fcData);
-chart.setCardHtml().setCardDisplay([["name"],["years"]]);
-chart.setAncestryDepth(30).setProgenyDepth(30);
-chart.setShowSiblingsOfMain(true);
-chart.setDuplicateBranchToggle(true);   // lets you collapse the two converging branches
-chart.setTransitionTime(350);
-// tap a card -> profile sheet
-document.getElementById('FamilyChart').addEventListener('click', function(ev){
-  var card = ev.target.closest('.card');
-  if(card && card.dataset.id){ ev.preventDefault(); openSheet([card.dataset.id.replace(/--x\d+$/,'')]); }
-}, true);
-function chartReset(){ try{ chart.updateTree({tree_position:'fit', transition_time:350}); }catch(e){} }
-// in-tree search: finds ANY of the 91 people and centres on them
-try{
-  chart.setPersonDropdown(function(d){ return d.data.name; }, {
-    placeholder:'Find someone…',
-    onSelect:function(id){ try{ chart.updateMainId(id); chart.updateTree({tree_position:'main_to_middle', transition_time:400}); }catch(e){} }
+/* ---------- tree canvas ---------- */
+const wrap=document.getElementById('wrap'), stage=document.getElementById('stage'), canvas=document.getElementById('canvas');
+let scale=1,tx=40,ty=30,initial=null;
+const T=D.tree;
+function drawTree(){
+  canvas.innerHTML='';
+  canvas.style.width=T.w+'px';canvas.style.height=T.h+'px';
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('width',T.w);svg.setAttribute('height',T.h);
+  svg.style.position='absolute';svg.style.top='0';svg.style.left='0';svg.style.pointerEvents='none';
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  defs.innerHTML='<linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A4258"/><stop offset="1" stop-color="#2E2839"/></linearGradient>';
+  svg.appendChild(defs);
+  const seg=(x1,y1,x2,y2,color,w,dash)=>{
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
+    l.setAttribute('stroke',color||'url(#lg)');l.setAttribute('stroke-width',w||2.5);
+    l.setAttribute('vector-effect','non-scaling-stroke');  // lines stay thick at ANY zoom (phone fix)
+    if(dash)l.setAttribute('stroke-dasharray','5,5');
+    svg.appendChild(l);
+  };
+  // classic structure: marriage bars + child rails (THICK, high-visibility lines)
+  const PW=T.pw, PH=T.ph, RH=T.rowh;
+  const RAIL='#A99BD9', MAR='#E8B45A';
+  const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
+  T.fams.forEach(f=>{
+    const my=f.y+PH/2;
+    seg(f.s1x+PW/2, my, f.s2x-PW/2, my, MAR, 4.5);                 // marriage bar
+    const y0=f.y+PH, ry=y0+26;
+    seg(f.x, y0, f.x, ry, RAIL, 4);                                // drop from marriage
+    if(f.children.length){
+      const cxs=f.children.map(c=>c[1]);
+      // rail must always span from the marriage drop to every child (even a single child)
+      const mn=Math.min(f.x, ...cxs), mx=Math.max(f.x, ...cxs);
+      if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
+      const ctop=f.y+RH;
+      f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, RAIL, 4); });
+    }
   });
-}catch(e){}
-chart.updateTree({initial:true, tree_position:'fit'});
-// zoom buttons
-var zsvg = document.getElementById('FamilyChart').querySelector('svg');
-function zoomBy(f){
-  if(!zsvg || !zsvg.__zoom) return;
-  try{ var t=d3.zoomTransform(zsvg);
-    d3.select(zsvg).transition().duration(200).call(zsvg.__zoom.transform, d3.zoomIdentity.translate(t.x,t.y).scale(t.k*f)); }catch(e){}
+  // special edges: dashed convergence + in-law stubs (up)
+  T.edges.forEach(e=>{
+    if(e.dashed){
+      const a=nodeById(e.from), fam=famById[e.to];
+      if(a&&fam){
+        seg(a.x+a.w/2, a.y+a.h, fam.x, fam.y+PH/2, MAR, 3, true);
+      }
+    }else if(e.up){
+      const f1=famById[e.from], f2=famById[e.to];
+      if(f1&&f2){
+        const x1=f1.x, y1=f1.y, x2=f2.x, y2=f2.y+PH;
+        const mid=(y1+y2)/2;
+        seg(x1,y1,x1,mid,RAIL,3.5);seg(x1,mid,x2,mid,RAIL,3.5);seg(x2,mid,x2,y2,RAIL,3.5);
+      }
+    }
+  });
+  canvas.appendChild(svg);
+  renderLanes();
+  T.nodes.forEach(n=>{
+    const p=people[n.pid];
+    if(!p)return;
+    const div=document.createElement('div');
+    div.className='cnode'+(n.you?' you':'');
+    div.style.left=n.x+'px';div.style.top=n.y+'px';div.style.width=n.w+'px';div.style.height=n.h+'px';
+    let h='';
+    h+=`<div class="n1">${escH(p.name)}</div><div class="years">${escH(yrs(p))}</div>`;
+    if(p.metis)h+='<span class="m">MÉTIS</span>';
+    div.innerHTML=h;
+    if(p.name.length>15)div.classList.add('long');
+    div.addEventListener('click',()=>openSheet([n.pid]));
+    canvas.appendChild(div);
+  });
+  applyTransform();
 }
-document.getElementById('zin').onclick=()=>zoomBy(1.25);
-document.getElementById('zout').onclick=()=>zoomBy(0.8);
-document.getElementById('zfit').onclick=chartReset;
+function nodeById(id){return T.nodes.find(n=>n.id===id);}
+function applyTransform(){
+  canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
+  laneEls.forEach(el=>{el.style.top=(ty+el._y*scale)+'px';});
+}
+// generation lane labels: fixed axis on the left, tracks rows vertically
+let laneEls=[];
+function renderLanes(){
+  const host=document.getElementById('lanes');
+  host.innerHTML='';
+  laneEls=[];
+  (T.lanes||[]).forEach(l=>{
+    const d=document.createElement('div');
+    d.className='lane';
+    d._y=l.y;
+    d.textContent=l.label;
+    host.appendChild(d);
+    laneEls.push(d);
+  });
+  applyTransform();
+}
+function fit(){
+  const cw=wrap.clientWidth,ch=wrap.clientHeight;
+  scale=Math.min(cw/(T.w+40),ch/(T.h+40),1.15);scale=Math.max(scale,.25);
+  tx=(cw-T.w*scale)/2;ty=(ch-T.h*scale)/2;applyTransform();
+}
+function zoomToYou(){
+  const n=T.nodes.find(x=>x.you);
+  if(!n)return fit();
+  const cw=wrap.clientWidth,ch=wrap.clientHeight;
+  scale=0.8;
+  tx=cw/2-(n.x+n.w/2)*scale;
+  ty=ch/2-(n.y+n.h/2)*scale;
+  applyTransform();
+}
+// pan/zoom (pointer events; works for touch + mouse)
+function zoomAt(cx, cy, f) {
+  const ns = Math.min(5, Math.max(.2, scale * f));
+  const k = ns / scale;
+  tx = cx - (cx - tx) * k;
+  ty = cy - (cy - ty) * k;
+  scale = ns;
+  applyTransform();
+}
+const ptrs = new Map();
+let dragStart = null;      // single-finger pan anchor {x,y,tx,ty}
+let pinchDist = null;      // two-finger pinch distance
+let pinchMid = null;
 
+wrap.addEventListener('pointerdown', e => {
+  ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 1) {
+    dragStart = { x: e.clientX, y: e.clientY, tx: tx, ty: ty };
+  } else if (ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()];
+    pinchDist = Math.hypot(a[0]-b[0], a[1]-b[1]);
+    pinchMid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+    dragStart = null;
+  }
+});
+window.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 2 && pinchDist) {
+    const [a, b] = [...ptrs.values()];
+    const d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+    const mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+    if (d > 0) zoomAt(mid[0]-wm(), mid[1]-wh(), d/pinchDist);
+    pinchDist = d;
+  } else if (ptrs.size === 1 && dragStart) {
+    tx = dragStart.tx + (e.clientX - dragStart.x);
+    ty = dragStart.ty + (e.clientY - dragStart.y);
+    applyTransform();
+  }
+});
+function endPointer(e) {
+  ptrs.delete(e.pointerId);
+  if (ptrs.size < 2) { pinchDist = null; pinchMid = null; }
+  if (ptrs.size === 0) dragStart = null;
+}
+window.addEventListener('pointerup', endPointer);
+window.addEventListener('pointercancel', endPointer);
+wrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoomAt(e.clientX-wm(), e.clientY-wh(), Math.exp(-e.deltaY*0.0015));
+}, { passive: false });
+function wm() { return wrap.getBoundingClientRect().left; }
+function wh() { return wrap.getBoundingClientRect().top; }
+// double-tap to zoom (touch)
+let lastTap = 0;
+wrap.addEventListener('touchend', e => {
+  if (e.changedTouches.length !== 1) return;
+  const now = Date.now();
+  if (now - lastTap < 320) {
+    const t = e.changedTouches[0];
+    zoomAt(t.clientX - wm(), t.clientY - wh(), 1.8);
+    lastTap = 0;
+  } else lastTap = now;
+}, { passive: true });
+document.getElementById('zin').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.clientHeight/2,1.35);
+document.getElementById('zout').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.clientHeight/2,1/1.35);
+document.getElementById('zfit').onclick=fit;
+window.addEventListener('resize',()=>{if(scale<=0.01)fit();});
+
+// initial view: center on the "you" family once fonts/layout settle
+// initial view: open at a readable zoom on the tree's middle (never fully zoomed out)
+function focusMiddle(){
+  const cw=wrap.clientWidth,ch=wrap.clientHeight;
+  scale=Math.max(Math.min(cw/(T.w+40),ch/(T.h+40)),0.45);
+  tx=cw/2-(T.w/2)*scale;
+  ty=ch/2-(T.h/2)*scale;
+  applyTransform();
+}
+function settle(){
+  const doIt = () => { focusMiddle(); };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(doIt,30));
+  setTimeout(doIt, 60);
+}
+settle();
+
+/* ---------- helpers ---------- */
 function escH(s){const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;}
 function yrs(p){const b=p.birth,dd=p.death;
   if(b&&dd)return b+'–'+dd; if(b)return 'b. '+b; if(dd)return 'd. '+dd; return '';}
@@ -392,7 +686,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     const tab=t.dataset.tab;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const v=document.getElementById('view-'+tab);v.classList.add('active');
-    if(tab==='tree')setTimeout(()=>{try{chartReset();}catch(e){}},80);
+    if(tab==='tree')setTimeout(fit,60);
   });
 });
 
@@ -517,6 +811,7 @@ document.getElementById('sheetbody').addEventListener('click',e=>{
 function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('show');}
 document.getElementById('sheetclose').onclick=closeSheet;
 backdrop.addEventListener('click',closeSheet);
+drawTree();
 """
 
 HTML = f"""<!DOCTYPE html>
@@ -525,38 +820,15 @@ HTML = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>{esc(PROJ['title'])}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<style>{CSS}</style><style>@@FT_CSS@@</style>
+<style>{CSS}</style>
 </head><body>
 {APP.replace('[[TITLE]]', esc(PROJ['title'])).replace('[[SUBTITLE]]', esc(PROJ['focus']))}
-<script src="assets/d3.min.js"></script><script src="assets/family-chart.js"></script>
 <script>
 const __DATA__ = {json_blob};
 {JS.replace('__DATA__', '__DATA__')}
 </script>
 </body></html>"""
 
-FT_CSS = """
-/* ---- family-chart dark theme ---- */
-.f3{background:transparent;color:#F2EBD9;font-family:'EB Garamond',serif}
-#FamilyChart{position:absolute;inset:58px 0 62px;background:var(--bg,#16141c)}
-#FamilyChart .card{background:#241D2E;border:1px solid #3a3346;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.45)}
-#FamilyChart .card-inner{color:#F2EBD9}
-#FamilyChart .card-male .card-inner{background:#2a3350}
-#FamilyChart .card-female .card-inner{background:#463a4e}
-#FamilyChart .card-main .card-inner{background:#3A2C1E;outline:2px solid #D4A853;border-radius:10px}
-#FamilyChart .card-label{color:#F2EBD9!important;font-family:'Cinzel',serif}
-#FamilyChart .person-icon{color:#D4A853}
-#FamilyChart .main_svg .link{stroke:#FFD873!important;stroke-width:4px!important;vector-effect:non-scaling-stroke!important;opacity:1}
-#FamilyChart .card[data-id="P050"] .card-inner{outline:2px solid #D4A853;border-radius:10px}
-#FamilyChart .f3-card-duplicate-tag{color:#9a8fc0;background:#2a2438;border-radius:6px;font-size:10px}
-#FamilyChart .f3-nav-cont input{background:#16141c!important;color:#F2EBD9!important;border:1px solid #3a3346!important;border-radius:8px!important}
-"""
-D3_LIB = open(os.path.join(HERE, "site", "assets", "d3.min.js")).read()
-FC_LIB = open(os.path.join(HERE, "site", "assets", "family-chart.js")).read()
-FC_CSS = open(os.path.join(HERE, "site", "assets", "family-chart.css")).read()
-HTML = HTML.replace("@@FT_CSS@@", FC_CSS + "\n" + FT_CSS)
-HTML = HTML.replace('<script src="assets/d3.min.js"></script>', "<script>" + D3_LIB + "</script>")
-HTML = HTML.replace('<script src="assets/family-chart.js"></script>', "<script>" + FC_LIB + "</script>")
 out = os.path.join(HERE, "site", "index.html")
 os.makedirs(os.path.dirname(out), exist_ok=True)
 open(out, "w").write(HTML)
