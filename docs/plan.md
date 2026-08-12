@@ -1,6 +1,6 @@
 # Plan & Vision — deVries · Spence Family Tree
 
-> Status: DRAFT — pending review by deepseek agent.
+> Status: ACTIVE — data-model refactored to a person graph (schema v2), build script live. Deepseek review applied (2026-08-12).
 
 ## Vision
 Build an **expanding, source-backed family tree** for Bayard deVries's Métis lineage, assembled from **all available open-source data, images, stories, and sources**, presented as a clean, readable, mobile-first diagram where every fact is tied to a source and every unverified item is clearly flagged. The tree should keep growing as new records and family knowledge arrive.
@@ -17,13 +17,22 @@ Bayard deVries → Tracy Lau ⚭ Bryon deVries → Robert Lau ⚭ Mavis Hamilton
 
 ## Build plan
 - **Phase 1 (done):** Establish + verify the direct line; scaffold the project; document sources/methodology/gaps.
-- **Phase 2 (next):** Rebuild `site/index.html` as a **full family tree** — direct spine + collapsible sibling/descendant branches at each generation, driven by `data/family-tree.json`. Add the Norquay highlight, David Spence portrait, and photo slots.
-- **Phase 3:** Research pass — pin the Setter bridge generations, confirm Doris's birth mother, locate the Setter→Hamilton marriage (likely SK), pull scrip/census. Add descendants of collateral branches where public.
-- **Phase 4:** Stories + media — Red River historical context, family photos/stories from Bayard's relatives; wire images into the tree.
+- **Phase 2 (done):** Data-model refactor to a **person graph** (`data/family-tree.json`, schema v2: unique person IDs, `unions` edges, per-person privacy/metis/highlight fields). **Build script** (`build_tree.py`) generates `site/index.html` from the JSON — single source of truth, no hand-edited HTML, self-contained output.
+- **Phase 3 (next):** Research pass — **highest value first**: pull full vital-stats registrations (Allan Setter ⚭ Ella Riggs 1909; Doris Setter birth 1912) to pin the Setter bridge + confirm Doris's mother; then Saskatchewan vital stats for the Setter→Hamilton marriage. Cap collateral branches at name+dates; full detail only on the spine and notable figures (Norquay, David Spence).
+- **Phase 4:** Stories + media — Red River historical context, family photos/stories (with consent), wire images into the tree (image fields, base64-embedded at build).
 - **Phase 5:** Paternal deVries branch (with family input).
 
+## Deepseek-review guardrails (applied)
+- **Data model:** one node per person; a guard warns when adding a person whose ID already exists (endogamy). Never store the same person twice.
+- **Endogamy display:** each person rendered once; the second Spence line is shown as a convergence (Allan ⚭ Ella) + the explicit "two paths to the root" list — not redrawn as parallel duplicate cards.
+- **Images:** only attach a portrait if the source **identifies** the person; never misidentified or AI-generated likenesses; family photos need consent. Verify licensing (Wikimedia PD-old, LAC, Provincial Archives).
+- **Privacy:** keep the repo a **private local artifact** (no remote); never publish living people; gate on the per-person `privacy` field.
+- **Accuracy:** every fact needs a source or an explicit "verify" flag; hobbyist data always marked; watch name-collision hazards (multiple James/George Setters, two Halletts).
+- **Scope:** collateral branches capped; depth reserved for the spine and notable figures.
+
 ## Deliverables
-- `data/family-tree.json` — structured data (single source of truth).
+- `data/family-tree.json` — person-graph data (single source of truth).
+- `build_tree.py` — JSON → HTML generator.
 - `site/index.html` — the readable diagram (mobile-first, self-contained).
 - `docs/*` — research log, sources, methodology, gaps.
 - Wiki page + research-vault routing for ongoing work.

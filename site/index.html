@@ -1,391 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>deVries · Spence Family Tree</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --crimson:#8C1F28;
-    --crimson-deep:#6E141C;
-    --cream:#FAF6EE;
-    --cream-card:#FFFDF7;
-    --ink:#2A2220;
-    --muted:#7A6E66;
-    --line:#B9A793;
-    --gold:#C9A24B;
-    --spence-a:#7A3B2E;   /* Root A accent */
-    --spence-b:#2E5E6E;   /* Root B accent */
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    background:var(--cream);
-    color:var(--ink);
-    font-family:'EB Garamond',Georgia,serif;
-    padding:24px 16px 60px;
-    line-height:1.45;
-  }
-  header{text-align:center;margin-bottom:8px;}
-  header h1{
-    font-family:'Cinzel',serif;font-weight:700;
-    font-size:clamp(24px,5vw,40px);letter-spacing:.5px;
-    color:var(--crimson);margin-bottom:4px;
-  }
-  header p.sub{font-size:clamp(14px,3vw,17px);color:var(--muted);font-style:italic;}
-  .rule{height:2px;background:linear-gradient(90deg,transparent,var(--crimson),transparent);margin:18px auto;max-width:420px;}
-  .legend{
-    display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
-    font-size:13px;color:var(--muted);margin:4px 0 20px;
-  }
-  .legend span{display:inline-flex;align-items:center;gap:6px;}
-  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;}
-  .dot.a{background:var(--spence-a);}
-  .dot.b{background:var(--spence-b);}
-  .tag-verify{background:#EFE3D0;color:#8a6a2f;font-size:11px;padding:1px 7px;border-radius:10px;white-space:nowrap;}
-
-  /* TREE */
-  .tree{max-width:640px;margin:0 auto;position:relative;}
-  .branch-label{
-    font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;
-    color:var(--muted);text-align:center;margin:22px 0 8px;
-  }
-  .branch-label .pill{
-    display:inline-block;padding:3px 12px;border-radius:12px;background:#F0E8DB;color:var(--ink);
-  }
-  .branch-label.a .pill{border-left:4px solid var(--spence-a);}
-  .branch-label.b .pill{border-left:4px solid var(--spence-b);}
-
-  /* connector plumbing */
-  .converge{
-    width:100%;height:44px;position:relative;margin:0;
-  }
-  .converge::before,.converge::after{
-    content:'';position:absolute;width:2px;background:var(--line);top:0;bottom:0;
-  }
-  .converge::before{left:25%;}
-  .converge::after{right:25%;}
-  .converge .horiz{
-    position:absolute;height:2px;background:var(--line);left:25%;right:25%;top:50%;
-  }
-  .converge .drop{
-    position:absolute;left:50%;top:50%;width:2px;height:50%;background:var(--line);
-  }
-
-  .gen{
-    display:flex;gap:14px;justify-content:center;align-items:stretch;
-  }
-  .gen .couple{flex:0 1 300px;min-width:0;}
-  .gen.two .couple{flex:0 1 240px;}
-
-  .card{
-    background:var(--cream-card);border:1px solid var(--line);border-radius:10px;
-    padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.05);
-    position:relative;margin-bottom:6px;
-  }
-  .card .spouse-link{display:flex;align-items:center;gap:8px;}
-  .card .spouse-link .amp{color:var(--gold);font-weight:600;font-size:16px;}
-  .card h3{
-    font-family:'Cinzel',serif;font-size:clamp(13px,3.4vw,16px);font-weight:600;
-    line-height:1.2;color:var(--crimson);
-  }
-  .card h3 .name{display:block;}
-  .card h3 .dates{color:var(--muted);font-size:.85em;font-weight:500;}
-  .card .meta{font-size:clamp(12px,3vw,14px);color:var(--muted);margin-top:3px;}
-  .card .note{font-size:12px;color:var(--muted);margin-top:4px;font-style:italic;}
-  .card.you{
-    border:2px solid var(--crimson);background:#FBF4F0;
-  }
-  .card.you h3{color:var(--crimson-deep);}
-  .card.metis{border-left:4px solid var(--gold);}
-  .card .metis-badge{
-    display:inline-block;background:var(--gold);color:#fff;font-size:10px;
-    font-family:'Cinzel',serif;letter-spacing:1px;padding:1px 7px;border-radius:9px;margin-top:5px;
-  }
-
-  .gen-title{
-    text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;
-    color:var(--muted);margin:6px 0 8px;text-transform:uppercase;
-  }
-
-  .down{
-    text-align:center;color:var(--crimson);font-size:18px;line-height:1;margin:2px 0;
-  }
-
-  details.depth{
-    max-width:640px;margin:30px auto 0;background:#F2EADB;border:1px solid var(--line);
-    border-radius:10px;padding:12px 16px;
-  }
-  details.depth summary{
-    font-family:'Cinzel',serif;font-size:14px;color:var(--crimson);cursor:pointer;
-  }
-  details.depth ul{margin:10px 0 4px 18px;font-size:15px;color:var(--ink);}
-  details.depth li{margin-bottom:6px;}
-  details.depth .sub{color:var(--muted);font-size:13px;}
-
-  .sources{
-    max-width:640px;margin:30px auto 0;padding-top:16px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--muted);
-  }
-  .sources h4{font-family:'Cinzel',serif;color:var(--ink);margin-bottom:6px;font-size:13px;letter-spacing:1px;}
-  .sources p{margin-bottom:5px;}
-  .sources em{color:var(--crimson);}
-
-  @media(max-width:520px){
-    .gen{flex-direction:column;align-items:center;}
-    .gen.two .couple{flex:1 1 100%;width:100%;}
-    .converge::before{left:50%;}
-    .converge::after{display:none;}
-    .converge .horiz{left:50%;right:50%;}
-  }
-</style>
-</head>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#FAF6EE;color:#2A2220;font-family:'EB Garamond',Georgia,serif;padding:24px 16px 60px;line-height:1.45}
+header{text-align:center;margin-bottom:8px}
+header h1{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(24px,5vw,40px);color:#8C1F28;margin-bottom:4px}
+header p.sub{font-size:clamp(14px,3vw,17px);color:#7A6E66;font-style:italic}
+.rule{height:2px;background:linear-gradient(90deg,transparent,#8C1F28,transparent);margin:18px auto;max-width:420px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:13px;color:#7A6E66;margin:4px 0 18px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+.dot.a{background:#7A3B2E}.dot.b{background:#2E5E6E}
+.branch-label{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1.5px;color:#7A6E66;text-align:center;margin:20px 0 8px}
+.branch-label .pill{display:inline-block;padding:3px 12px;border-radius:12px;background:#F0E8DB;color:#2A2220}
+.branch-label.a .pill{border-left:4px solid #7A3B2E}
+.branch-label.b .pill{border-left:4px solid #2E5E6E}
+.tree{max-width:660px;margin:0 auto}
+.gen{display:flex;gap:14px;justify-content:center;align-items:stretch}
+.gen .couple{flex:0 1 300px;min-width:0}
+.gen.two .couple{flex:0 1 245px}
+.card{background:#FFFDF7;border:1px solid #B9A793;border-radius:10px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.05);margin-bottom:6px}
+.spouse-link{display:flex;align-items:center;gap:8px}
+.spouse-link .amp{color:#C9A24B;font-weight:600}
+.card h3{font-family:'Cinzel',serif;font-size:clamp(13px,3.4vw,16px);font-weight:600;line-height:1.2;color:#8C1F28}
+.card h3 .dates{color:#7A6E66;font-size:.85em;font-weight:500}
+.card .note{font-size:clamp(12px,3vw,14px);color:#7A6E66;margin-top:3px;font-style:italic}
+.card.you{border:2px solid #8C1F28;background:#FBF4F0}
+.card.you h3{color:#6E141C}
+.card.metis{border-left:4px solid #C9A24B}
+.metis-badge{display:inline-block;background:#C9A24B;color:#fff;font-size:10px;font-family:'Cinzel',serif;letter-spacing:1px;padding:1px 7px;border-radius:9px;margin-top:5px}
+.down{text-align:center;color:#8C1F28;font-size:18px;line-height:1;margin:2px 0}
+.converge{width:100%;height:44px;position:relative;margin:0}
+.converge::before,.converge::after{content:'';position:absolute;width:2px;background:#B9A793;top:0;bottom:0}
+.converge::before{left:25%}.converge::after{right:25%}
+.converge .horiz{position:absolute;height:2px;background:#B9A793;left:25%;right:25%;top:50%}
+.converge .drop{position:absolute;left:50%;top:50%;width:2px;height:50%;background:#B9A793}
+.gen-title{text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;color:#7A6E66;margin:6px 0 8px;text-transform:uppercase}
+section.fam{max-width:660px;margin:30px auto 0}
+section.fam h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;margin-bottom:10px;border-bottom:2px solid #C9A24B;padding-bottom:6px}
+.famunit{background:#FFFDF7;border:1px solid #B9A793;border-radius:10px;padding:12px 16px;margin-bottom:10px}
+.famunit .head{font-family:'Cinzel',serif;font-size:14px;color:#8C1F28;margin-bottom:6px}
+.famunit ul{margin:4px 0 2px 18px;font-size:14px}
+.famunit li{margin-bottom:3px}
+.famunit .direct{color:#8C1F28;font-weight:600}
+.bridge{background:#EFE3D0;color:#8a6a2f;font-size:13px;padding:6px 12px;border-radius:8px;text-align:center;margin:4px 0;font-style:italic}
+.paths{max-width:660px;margin:24px auto 0}
+.paths h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bottom:2px solid #C9A24B;padding-bottom:6px;margin-bottom:10px}
+.paths ol{margin-left:20px;font-size:15px}
+.paths li{margin-bottom:8px}
+.sources{max-width:660px;margin:26px auto 0;padding-top:14px;border-top:1px solid #B9A793;font-size:13px;color:#7A6E66}
+.sources h4{font-family:'Cinzel',serif;color:#2A2220;margin-bottom:6px;font-size:13px;letter-spacing:1px}
+.sources p{margin-bottom:5px}
+.sources em{color:#8C1F28}
+@media(max-width:520px){.gen{flex-direction:column;align-items:center}.gen.two .couple{flex:1 1 100%;width:100%}.converge::before{left:50%}.converge::after{display:none}.converge .horiz{left:50%;right:50%}}
+</style></head>
 <body>
-
-<header>
-  <h1>deVries · Spence</h1>
-  <p class="sub">Family Tree &middot; Métis Lineage &middot; Red River to Winnipeg</p>
-</header>
-
+<header><h1>deVries · Spence Family Tree</h1><p class="sub">Métis lineage, Red River → Winnipeg (+ Flin Flon migration)</p></header>
 <div class="rule"></div>
-
 <div class="legend">
-  <span><span class="dot a"></span> Spence line A (Peggy)</span>
-  <span><span class="dot b"></span> Spence line B (David)</span>
-  <span><span class="tag-verify">verify</span> Needs primary-source check</span>
+  <span><span class="dot a"></span> Spence line A</span>
+  <span><span class="dot b"></span> Spence line B</span>
+  <span>★ = you &nbsp;·&nbsp; ◈ = notable</span>
 </div>
-
-<div class="tree">
-
-  <div class="branch-label a"><span class="pill">Spence Root A</span></div>
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">James Spence</span><span class="dates">c.1753 &ndash; 1795</span></h3>
-            <p class="note">Orkney-born HBC trader</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Margaret &ldquo;Nestichio&rdquo; Batt</span></h3>
-            <p class="note">Métis &middot; Cree</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS ROOT</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Andrew Setter</span><span class="dates">1777 &ndash; 1870</span></h3>
-            <p class="note">Orkney HBC voyageur</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Margaret &ldquo;Peggy&rdquo; Spence</span><span class="dates">1795 &ndash; 1868</span></h3>
-            <p class="note">daughter of James Spence &amp; Margaret Batt</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">George Setter</span><span class="dates">1815 &ndash; 1899</span></h3>
-            <p class="note">Fort Ellice &rarr; Poplar Point</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Isabella Kennedy</span><span class="dates">1820 &ndash; 1846</span></h3>
-            <p class="note">then Jessie Ellen Campbell (1824&ndash;1912)</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="branch-label b"><span class="pill">Spence Root B</span></div>
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">James Spence</span><span class="dates">c.1780 &ndash; 1857</span></h3>
-            <p class="note">Orkney HBC tailor</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Jane Morwick</span><span class="dates">1794 &ndash; 1874</span></h3>
-            <p class="note">née Morwick, wid. Norquay &middot; Métis</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">David Spence</span><span class="dates">1824 &ndash; 1885</span></h3>
-            <p class="note">MLA Poplar Point 1870&ndash;74 &middot; Métis leader</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Catherine Hallett</span><span class="dates">1824 &ndash; 1880</span></h3>
-            <p class="note">daughter of Henry Hallett &amp; Catherine Parenteau</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Ernest Charles Riggs</span><span class="dates">1859 &ndash; ?</span></h3>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Mary Ann Spence</span><span class="dates">1861 &ndash; 1930</span></h3>
-            <p class="note">daughter of David Spence &amp; Catherine Hallett</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <!-- CONVERGENCE -->
-  <div class="gen-title">The two Spence lines converge here</div>
-  <div class="converge"></div>
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Allan Setter</span></h3>
-            <p class="note">Spence line A</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Ella Alberta Riggs</span></h3>
-            <p class="note">Spence line B &middot; married 31 Mar 1909, Portage la Prairie</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Doris Alberta Setter</span><span class="dates">1912 &ndash;</span></h3>
-            <p class="note">b. 24 Dec 1912, Portage la Prairie</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Lawrence D. Hamilton</span></h3>
-            <p class="note">husband of Doris Setter</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Robert Lau</span></h3>
-            <p class="note">maternal grandfather</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Mavis Hamilton</span></h3>
-            <p class="note">c.1925 &ndash; 1935 &middot; maternal grandmother</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card metis">
-        <div class="spouse-link">
-          <div>
-            <h3><span class="name">Tracy Diane Lau</span></h3>
-            <p class="note">b. 1950s, Flin Flon, MB</p>
-          </div>
-          <span class="amp">&amp;</span>
-          <div>
-            <h3><span class="name">Bryon deVries</span></h3>
-            <p class="note">your parents</p>
-          </div>
-        </div>
-        <span class="metis-badge">MÉTIS</span>
-      </div>
-    </div>
-  </div>
-  <div class="down">↓</div>
-
-  <div class="gen">
-    <div class="couple">
-      <div class="card you">
-        <h3><span class="name">Bayard deVries</span></h3>
-        <p class="meta">Winnipeg, MB &middot; Métis · MMF</p>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<details class="depth">
-  <summary>Deeper ancestors (from your Ancestry tree &middot; <span class="tag-verify">verify vs primary</span>)</summary>
-  <ul>
-    <li><strong>Hallett line:</strong> Henry Hallett (1773&ndash;1844) ⚭ Catherine T. Tenance &rarr; Henry Jr Hallett (1799&ndash;1871) ⚭ Catherine Parenteau (1806&ndash;1857) &middot; Joseph V. Parenteau (1752&ndash;1817) ⚭ Suzanne Cree</li>
-    <li><strong>Morwick line:</strong> James Morwick ⚭ Catherine Dungas (1775&ndash;1817) &rarr; Jane Morwick (1794&ndash;1874)</li>
-    <li><strong>Riggs line:</strong> David J. Riggs Jr (1804&ndash;1850) ⚭ Catherine M. Hendricks &rarr; Harmon M. Riggs (1834&ndash;1874) ⚭ Amelia M. Williams (1830&ndash;1874) &rarr; Ernest C. Riggs</li>
-  </ul>
-</details>
-
+<div class="tree"><div class="branch-label"><span class="pill">⚑ Métis root</span></div><div class="gen"><div class="couple"><div class="card metis"><div class="spouse-link"><div><h3>James Spence Sr <span class='dates'>c1753–1795</span></h3><p class="note">Orkney-born HBC voyageur</p></div><span class="amp">&amp;</span><div><h3>Margaret 'Nestichio' Batt <span class='dates'>1757–1829</span></h3><p class="note">Métis / Cree · THE Métis root</p></div></div><span class="metis-badge">MÉTIS</span></div></div></div><div class="down">↓</div><div class="gen two"><div class="couple"><div class="branch-label a"><span class="pill">Spence line A</span></div><div class="card metis"><div class="spouse-link"><div><h3>Andrew Setter <span class='dates'>1777–1870</span></h3><p class="note">Orkney HBC voyageur</p></div><span class="amp">&amp;</span><div><h3>Margaret 'Peggy' Spence <span class='dates'>1794–1868</span></h3><p class="note">DIRECT · Spence line A</p></div></div><span class="metis-badge">MÉTIS</span></div><div class="down">↓</div><div class="card metis"><h3>George Setter <span class='dates'>1815–1899</span></h3><p class="note">DIRECT · Fort Ellice → Poplar Point</p></div><div class="down">↓</div><div class="bridge">… bridge to Allan Setter (to pin)</div></div><div class="couple"><div class="branch-label b"><span class="pill">Spence line B</span></div><div class="card metis"><div class="spouse-link"><div><h3>James Spence Jr <span class='dates'>c1782–1857</span></h3><p class="note">HBC tailor, Red River 1818</p></div><span class="amp">&amp;</span><div><h3>Jane Morwick <span class='dates'>1794–1874</span></h3><p class="note">née Morwick, wid. Norquay</p></div></div><span class="metis-badge">MÉTIS</span></div><div class="down">↓</div><div class="card metis"><div class="spouse-link"><div><h3>David Spence <span class='dates'>1824–1885</span></h3><p class="note">DIRECT · MLA Poplar Point 1870-74, Convention of Forty rep, JP</p></div><span class="amp">&amp;</span><div><h3>Catherine Hallett <span class='dates'>1824–1880</span></h3><p class="note">dau of Henry Hallett + Catherine Parenteau</p></div></div><span class="metis-badge">MÉTIS</span></div><div class="down">↓</div><div class="card metis"><div class="spouse-link"><div><h3>Ernest Charles Riggs <span class='dates'>1859–</span></h3><p class="note">son of Harmon M. Riggs + Amelia M. Williams</p></div><span class="amp">&amp;</span><div><h3>Mary Ann Spence <span class='dates'>1861–1930</span></h3><p class="note">DIRECT · Spence line B</p></div></div><span class="metis-badge">MÉTIS</span></div></div></div><div class="gen-title">The two Spence lines converge here</div><div class="converge"><div class="horiz"></div><div class="drop"></div></div><div class="gen"><div class="couple"><div class="card metis"><div class="spouse-link"><div><h3>Allan Setter</h3><p class="note">DIRECT · Spence line A · parents (between George Setter & Allan) not yet pinned</p></div><span class="amp">&amp;</span><div><h3>Ella Alberta Riggs <span class='dates'>c1880s–</span></h3><p class="note">DIRECT · Spence line B</p></div></div><span class="metis-badge">MÉTIS</span><p class=note>married 31 Mar 1909, Portage la Prairie</p></div></div></div><div class="down">↓</div><div class="gen"><div class="couple"><div class="card metis"><div class="spouse-link"><div><h3>Doris Alberta Setter <span class='dates'>1912–</span></h3><p class="note">DIRECT · b. 24 Dec 1912, Portage la Prairie</p></div><span class="amp">&amp;</span><div><h3>Lawrence D. Hamilton</h3><p class="note">husband of Doris Setter</p></div></div><span class="metis-badge">MÉTIS</span></div></div></div><div class="down">↓</div><div class="gen"><div class="couple"><div class="card metis"><div class="spouse-link"><div><h3>Robert Lau</h3><p class="note">maternal grandfather</p></div><span class="amp">&amp;</span><div><h3>Mavis Hamilton <span class='dates'>c1925–</span></h3><p class="note">DIRECT · maternal grandmother</p></div></div><span class="metis-badge">MÉTIS</span></div></div></div><div class="down">↓</div><div class="gen"><div class="couple"><div class="card metis"><div class="spouse-link"><div><h3>Tracy Diane Lau <span class='dates'>b.1950s–</span></h3><p class="note">b. Flin Flon MB · DIRECT</p></div><span class="amp">&amp;</span><div><h3>Bryon deVries</h3><p class="note">father</p></div></div><span class="metis-badge">MÉTIS</span></div></div></div><div class="down">↓</div><div class="gen"><div class="couple"><div class="card you"><h3>Bayard deVries ★</h3><p class="note">YOU</p></div></div></div></div>
+<section class="fam"><h2>Full family (by generation)</h2><div class="famunit"><div class="head">James Spence Sr <span style='color:#C9A24B'>⚭</span> Margaret 'Nestichio' Batt</div><ul><li>James Spence Jr <span class='dates'>c1782–1857</span></li><li>Andrew Spence <span class='dates'>1786–</span></li><li>George Spence Sr <span class='dates'>1792–</span></li><li class=direct>Margaret 'Peggy' Spence <span class='dates'>1794–1868</span></li></ul></div><div class="famunit"><div class="head">Andrew Setter <span style='color:#C9A24B'>⚭</span> Margaret 'Peggy' Spence</div><ul><li>James Setter <span class='dates'>1810–</span></li><li>Margaret Setter <span class='dates'>1813–</span></li><li class=direct>George Setter <span class='dates'>1815–1899</span></li><li>Isabella 'Bella' Setter <span class='dates'>1816–</span></li><li>Elizabeth Setter <span class='dates'>1822–</span></li><li>Ann Setter <span class='dates'>1825–</span></li><li>Mary Setter <span class='dates'>1830–</span></li><li>Thomas Alexander Setter <span class='dates'>1831–</span></li><li>John Setter <span class='dates'>1832–</span></li><li>Catherine Setter <span class='dates'>1837–</span></li></ul></div><div class="famunit"><div class="head">George Setter <span style='color:#C9A24B'>⚭</span> Isabella Kennedy</div><ul><li>John James Setter <span class='dates'>1837–</span></li><li>Caroline Setter <span class='dates'>1840–</span></li><li>Elizabeth Setter <span class='dates'>1842–</span></li><li>Duncan Richard Setter <span class='dates'>1852–</span></li><li>Colin Campbell Setter <span class='dates'>1854–</span></li><li>Roderick McKenzie Setter <span class='dates'>1856–</span></li><li>Alexander Hunter Murray Setter <span class='dates'>1858–</span></li><li>George William Setter <span class='dates'>1861–1874</span></li><li>Ellen Madeleine 'Nellie' Setter <span class='dates'>1861–1874</span></li></ul></div><div class="famunit"><div class="head">James Spence Jr <span style='color:#C9A24B'>⚭</span> Jane Morwick</div><ul><li class=direct>David Spence <span class='dates'>1824–1885</span></li><li>Joseph Spence <span class='dates'>1826–</span></li><li>Catherine Spence <span class='dates'>1829–</span></li></ul></div><div class="famunit"><div class="head">David Spence <span style='color:#C9A24B'>⚭</span> Catherine Hallett</div><ul><li>John 'Jake' Spence <span class='dates'>1848–</span></li><li>Ellen Anderson Spence <span class='dates'>1853–</span></li><li>Charles David Spence <span class='dates'>1857–</span></li><li>Jane Spence <span class='dates'>1859–</span></li><li class=direct>Mary Ann Spence <span class='dates'>1861–1930</span></li><li>Harriet Spence <span class='dates'>1863–</span></li><li>William 'Bill' Spence <span class='dates'>1866–</span></li></ul></div><div class="famunit"><div class="head">Ernest Charles Riggs <span style='color:#C9A24B'>⚭</span> Mary Ann Spence</div><ul><li class=direct>Ella Alberta Riggs <span class='dates'>c1880s–</span></li></ul></div><div class="famunit"><div class="head">Allan Setter <span style='color:#C9A24B'>⚭</span> Ella Alberta Riggs</div><ul><li class=direct>Doris Alberta Setter <span class='dates'>1912–</span></li></ul></div><div class="famunit"><div class="head">Doris Alberta Setter <span style='color:#C9A24B'>⚭</span> Lawrence D. Hamilton</div><ul><li class=direct>Mavis Hamilton <span class='dates'>c1925–</span></li></ul></div><div class="famunit"><div class="head">Robert Lau <span style='color:#C9A24B'>⚭</span> Mavis Hamilton</div><ul><li class=direct>Tracy Diane Lau <span class='dates'>b.1950s–</span></li></ul></div><div class="famunit"><div class="head">Tracy Diane Lau <span style='color:#C9A24B'>⚭</span> Bryon deVries</div><ul><li class=direct>Bayard deVries <span style=color:#C9A24B>★</span></li></ul></div><div class="famunit"><div class="head">Elizabeth Setter <span style='color:#C9A24B'>⚭</span> Premier John Norquay</div><ul><li style="color:#B9A793">(no children recorded)</li></ul></div></section>
+<div class="paths"><h2>Your two paths to the Métis root</h2><ol><li>Bayard → Tracy Lau → Mavis Hamilton → Doris Setter → Allan Setter → (George Setter bridge, unpinned) → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt</li><li>Bayard → Tracy Lau → Mavis Hamilton → Doris Setter → Ella Alberta Riggs → Mary Ann Spence → David Spence (MLA) → James Spence Jr → James Spence Sr + Margaret Batt</li></ol></div>
 <div class="sources">
-  <h4>Sources</h4>
-  <p>Red River Ancestry (redriverancestry.ca) family pages: James Spence (1753), Andrew Setter (1777), George Setter (1815), James Spence (c.1780), David Spence (1824).</p>
-  <p>Manitoba Vital Statistics Index: <em>Allan Setter ⚭ Ella Alberta Riggs</em> (31 Mar 1909, reg 1909,001530); <em>Doris Alberta Setter</em> (b. 24 Dec 1912, reg 1912,004481).</p>
-  <p>Ancestry DNA tree (family screenshots, Aug 2026) &middot; family knowledge (Tracy Lau, Mavis Hamilton line).</p>
-  <p><em>Note:</em> Hobbyist and family-tree data should be verified against scrip, census, and parish records before final publication.</p>
+<h4>Sources & verification</h4>
+<p><em>Red River Ancestry</em> (redriverancestry.ca): James Spence (1753), Andrew Setter (1777), George Setter (1815), James Spence (c1780), David Spence (1824).</p>
+<p><em>Manitoba Vital Statistics Index:</em> Allan Setter ⚭ Ella Alberta Riggs (31 Mar 1909, reg 1909,001530); Doris Alberta Setter (b. 24 Dec 1912, reg 1912,004481).</p>
+<p><em>Ancestry DNA tree</em> (family screenshots, Aug 2026) · family knowledge.</p>
+<p>Hobbyist/family-tree data is flagged and should be verified against scrip, census, and parish records. Never fabricated; living people's details not published.</p>
+<h4>Open items</h4><ul style="margin-left:18px;font-size:13px"><li>Pin intermediate Setter generations between George Setter (1815) and Allan Setter</li><li>Confirm Doris Setter's birth mother = Ella (Riggs) Setter (vital stats DetailView)</li><li>Locate Setter→Hamilton marriage (may be Saskatchewan, Flin Flon area)</li><li>Expand deVries paternal side (Bryon's family) — needs family input</li><li>Verify app-date discrepancies vs primary (e.g. Catherine Hallett 1824-1887 vs 1824-1880)</li></ul>
 </div>
-
-</body>
-</html>
+</body></html>
