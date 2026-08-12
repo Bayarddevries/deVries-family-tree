@@ -183,7 +183,7 @@ fam.append('</section>')
 story_html=[]
 if DATA.get("stories"):
     story_html.append('<section class="stories"><h2>Stories &amp; Profiles</h2>')
-    for pid in ["P001","P002","P007","P030","P022","P051","P067","P049","P046"]:
+    for pid in ["P001","P002","P079","P007","P030","P022","P051","P067","P049","P046"]:
         s=DATA["stories"].get(pid)
         if not s: continue
         src=f'<a class="srclink" href="{esc(s["source"])}" target="_blank" rel="noopener">source ↗</a>' if s.get("source") else ""

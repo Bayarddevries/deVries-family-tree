@@ -9,19 +9,19 @@
   "people": [
     {
       "id": "P080",
-      "name": "Cree matriarch (Batt)",
+      "name": "Cree matriarch (Nikawiy)",
       "metis": true,
       "privacy": "deceased",
-      "note": "unnamed Cree mother of Margaret 'Nestichio' Batt · the matrilineal Indigenous/Métis root of this line"
+      "note": "unnamed Cree mother of Margaret 'Nestichio' Batt · 'Nikawiy' = Cree for 'my mother' · the matrilineal Indigenous/Métis root"
     },
     {
       "id": "P079",
       "name": "Isaac Batt",
-      "birth": "1730",
+      "birth": "c1725",
       "death": "1791",
       "metis": false,
       "privacy": "deceased",
-      "note": "English HBC inland trader ~20 yrs · father of Margaret 'Nestichio' Batt · killed 1791 near Manchester House"
+      "note": "English HBC fur-trader · b. c1725 Hertfordshire, England · d. 1791 near Manchester House · father of Margaret 'Nestichio' Batt"
     },
     {
       "id": "P001",
@@ -636,6 +636,20 @@
       "privacy": "deceased",
       "note": "Manitoba's first Métis premier (1878-87) · via Elizabeth Setter",
       "highlight": true
+    },
+    {
+      "id": "P081",
+      "name": "Dantzick Batt",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "Isaac Batt's father (genealogy source, verify)"
+    },
+    {
+      "id": "P082",
+      "name": "Sarah Lindsel",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "Isaac Batt's mother (genealogy source, verify)"
     }
   ],
   "unions": [
@@ -807,6 +821,15 @@
         "P078",
         "P049"
       ]
+    },
+    {
+      "id": "U16",
+      "spouse1": "P081",
+      "spouse2": "P082",
+      "children": [
+        "P079"
+      ],
+      "note": "verify vs DCB (Stanstead Abbots, c1725)"
     }
   ],
   "paths_to_root": [
@@ -864,6 +887,11 @@
       "title": "Mavis Irene (Hamilton) Lau",
       "text": "Born 1 Sep 1933 in Tisdale SK; moved to Flin Flon at 6. Only daughter of six children. A remarkable seamstress, knitter, cross-stitcher, curler, golfer and bridge player; worked at Sears in Flin Flon until retirement.",
       "source": "https://www.tributearchive.com/obituaries/18111241/mavis-lau"
+    },
+    "P079": {
+      "title": "Isaac Batt — English fur-trader, your Métis gateway",
+      "text": "Isaac Batt (c1725-1791) was an English Hudson's Bay Company trader born in Hertfordshire, England. He contracted with the HBC in 1754 as a labourer at York Factory (£10/yr) and rose to be an experienced inland canoeman, steersman and trader. He travelled inland under the personal guidance of leading Cree chiefs (Wapinesiw, Matonabbee) and worked alongside Samuel Hearne trying to establish Cumberland House. Illiterate, he never rose past £20/yr as literate juniors outranked him; in 1775 he briefly deserted to rival 'Pedlar' traders, returning in 1777. He had a Cree family by 1777 — his daughter Margaret 'Nestichio' Batt is the Métis root of this line. He died in summer 1791 near Manchester House, shot through the head by an Indian guide during a buffalo hunt, the first HBC servant killed by Indians in the Saskatchewan area. James Spence Sr's 1795 will left legacies to 'his Indian Wife Nestichio, daughter of the deceased Isaac Batt' and their four children, confirming the link in primary records.",
+      "source": "https://www.biographi.ca/en/bio/batt_isaac_4E.html"
     }
   }
 }
