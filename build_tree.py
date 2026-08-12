@@ -40,65 +40,159 @@ def yrs(pid):
     return ""
 
 # =========================================================
-# TREE CANVAS LAYOUT (precomputed; JS renders it)
+# FULL EXTENDED TREE LAYOUT (all unions, all people)
+# descendant chart from the deepest Métis root (U16)
 # =========================================================
-NODE_W, NODE_H = 180, 96          # couple box
-P_W, P_H = 128, 56                # person box
+NODE_W, NODE_H = 200, 92          # couple box
+P_W, P_H = 132, 58                # person box
 ROW_H = 150
-COL_GAP = 56
+GAP = 26
 
-# structure: id -> (row, pids, kind, [children])
-NODES = {
-    "root":   (0, ["P001","P002"], "couple", ["a1","b1"]),
-    "a1":     (1, ["P007","P006"], "couple", ["a2"]),
-    "b1":     (1, ["P003","P029"], "couple", ["b2"]),
-    "a2":     (2, ["P010","P018"], "couple", ["a3"]),
-    "b2":     (2, ["P030","P033"], "couple", ["b3"]),
-    "a3":     (3, ["P025","P060"], "couple", ["conv"]),
-    "b3":     (3, ["P041","P038"], "couple", ["conv"]),
-    "conv":   (4, ["P043","P042"], "couple", ["doris"]),
-    "doris":  (5, ["P044","P045"], "couple", ["mavis"]),
-    "mavis":  (6, ["P047","P046"], "couple", ["tracy"]),
-    "tracy":  (7, ["P048","P049"], "couple", ["bay","ash"]),
-    "bay":    (8, ["P050","P088"], "couple", ["grover"]),
-    "ash":    (8, ["P083","P084"], "couple", []),
-    "grover": (9, ["P089"], "person", []),
-}
-YOU_NODES = {"bay"}
+by_union = {u["id"]: u for u in UNIONS}
 
-def width(kind): return NODE_W if kind == "couple" else P_W
-def height(kind): return NODE_H if kind == "couple" else P_H
+def spouse_unions(pid):
+    return [u for u in UNIONS if pid in (u["spouse1"], u["spouse2"])]
 
-COL_A, COL_B = 0, NODE_W + COL_GAP
-CENTER = (COL_A + COL_B) / 2
-POS = {
-    "root": CENTER - NODE_W/2, "a1": COL_A, "b1": COL_B,
-    "a2": COL_A, "b2": COL_B, "a3": COL_A, "b3": COL_B,
-    "conv": CENTER - NODE_W/2, "doris": CENTER - NODE_W/2,
-    "mavis": CENTER - NODE_W/2, "tracy": CENTER - NODE_W/2,
-    "bay": CENTER - NODE_W/2 - 95, "ash": CENTER + 95 - NODE_W/2 + 40,
-    "grover": CENTER - NODE_W/2 - 95 + (NODE_W-P_W)/2,
-}
-minx = min(POS.values())
-maxrow = max(r for r, *_ in [v for v in NODES.values()])
-CANVAS_W = max(POS[n] + width(NODES[n][2]) for n in NODES) - minx + 60
-CANVAS_H = (maxrow + 1) * ROW_H + 40
+def parent_unions(pid):
+    return [u for u in UNIONS if pid in u["children"]]
 
-TREE_NODES = []
-for nid, (row, pids, kind, kids) in NODES.items():
-    x = POS[nid] - minx + 30
-    y = row * ROW_H + 20
-    TREE_NODES.append({
-        "id": nid, "x": round(x), "y": round(y),
-        "w": width(kind), "h": height(kind), "kind": kind, "pids": pids,
-        "you": nid in YOU_NODES,
-    })
-TREE_EDGES = []
-for nid, (row, pids, kind, kids) in NODES.items():
-    for c in kids:
-        TREE_EDGES.append([nid, c])
+# --- descendant-reachable set: unions reached via child->spouse edges ---
+desc = set()
+def mark_desc(u_id):
+    if u_id in desc: return
+    desc.add(u_id)
+    for c in by_union[u_id]["children"]:
+        for fu in spouse_unions(c):
+            if fu["id"] != u_id: mark_desc(fu["id"])
+mark_desc("U16")
 
-TREE = {"nodes": TREE_NODES, "edges": TREE_EDGES, "w": CANVAS_W, "h": CANVAS_H}
+# --- ownership pass: assign each union to the branch that reaches it first ---
+# (side branches = spouse-parent unions NOT in the descendant set, i.e. in-laws)
+owner = {}
+def assign(u_id, row):
+    u = by_union[u_id]
+    for c in u["children"]:
+        for fu in spouse_unions(c):
+            if fu["id"] != u_id and fu["id"] not in owner:
+                owner[fu["id"]] = u_id
+                assign(fu["id"], row+2)
+    for pid in (u["spouse1"], u["spouse2"]):
+        for pu in parent_unions(pid):
+            if pu["id"] != u_id and pu["id"] not in desc and pu["id"] not in owner:
+                owner[pu["id"]] = u_id
+                assign(pu["id"], row+1)
+owner["U16"] = None
+assign("U16", 0)
+
+# --- subtree block width (memoized, cycle-guarded) ---
+WID, IN_PROG = {}, set()
+def swidth(u_id):
+    if u_id in WID: return WID[u_id]
+    if u_id in IN_PROG: return P_W   # cycle guard (spouse/parent loops)
+    IN_PROG.add(u_id)
+    u = by_union[u_id]
+    # children block
+    cw_total = 0
+    for c in u["children"]:
+        fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
+        cw = P_W
+        if fams:
+            cw = max(P_W, sum(swidth(fu["id"]) for fu in fams) + GAP*(len(fams)-1))
+        cw_total += cw + GAP
+    cw_total = max(cw_total - GAP, 0)
+    # spouse-parent side branches
+    def side(pid):
+        pus = [pu for pu in parent_unions(pid) if pu["id"] != u_id and owner.get(pu["id"]) == u_id]
+        if not pus: return 0
+        return sum(swidth(pu["id"]) for pu in pus) + GAP*(len(pus)-1)
+    left = side(u["spouse1"]); right = side(u["spouse2"])
+    total = cw_total
+    if left: total += GAP + left
+    if right: total += GAP + right
+    IN_PROG.discard(u_id)
+    WID[u_id] = max(total, NODE_W)
+    return WID[u_id]
+
+# --- recursive placement ---
+TNODES, TEDGES = [], []
+visited_u = set()
+
+def place_union(u_id, x_center, row):
+    if u_id in visited_u: return
+    visited_u.add(u_id)
+    u = by_union[u_id]
+    bw = swidth(u_id)
+    nid = "u_" + u_id
+    TNODES.append({"id": nid, "x": round(x_center - NODE_W/2, 1), "y": row*ROW_H,
+                   "w": NODE_W, "h": NODE_H, "kind": "couple", "pids": [u["spouse1"], u["spouse2"]],
+                   "you": u_id == "U17"})
+
+    def side_blocks(pid):
+        return [(pu, swidth(pu["id"])) for pu in parent_unions(pid)
+                if pu["id"] != u_id and owner.get(pu["id"]) == u_id and pu["id"] not in visited_u]
+
+    left = side_blocks(u["spouse1"]); right = side_blocks(u["spouse2"])
+    left_w = sum(w for _, w in left) + GAP*max(0, len(left)-1)
+    right_w = sum(w for _, w in right) + GAP*max(0, len(right)-1)
+
+    # children columns
+    cols = []
+    for c in u["children"]:
+        fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
+        fuv = [fu for fu in fams if fu["id"] not in visited_u]
+        fv  = [fu for fu in spouse_unions(c) if fu["id"] != u_id and fu["id"] not in fuv and fu["id"] in visited_u]
+        cw = P_W
+        if fuv:
+            cw = max(P_W, sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1))
+        cols.append((c, cw, fuv, fv))
+    children_total = sum(cw for _, cw, _, _ in cols) + GAP*max(0, len(cols)-1)
+
+    # center everything inside bw
+    span = left_w + children_total + right_w + GAP*(bool(left) + bool(right))
+    off = max((bw - span)/2, 0)
+    lx = x_center - children_total/2 - left_w - (GAP if left else 0) + off
+    cx = x_center - children_total/2 + off
+    rx = x_center + children_total/2 + (GAP if right else 0) + off
+
+    # left side branches (spouse1's parents)
+    for pu, pw in left:
+        place_union(pu["id"], lx + pw/2, row+1)
+        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "side": "left"})
+        lx += pw + GAP
+    # children
+    x = cx
+    for c, cw, fuv, fv in cols:
+        ccx = x + cw/2
+        cid = "p_" + c
+        TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
+                       "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
+        TEDGES.append([nid, cid])
+        if fuv:
+            total = sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1)
+            fx = ccx - total/2
+            for fu in fuv:
+                place_union(fu["id"], fx + swidth(fu["id"])/2, row+2)
+                TEDGES.append([cid, "u_" + fu["id"]])
+                fx += swidth(fu["id"]) + GAP
+        elif fv:  # convergence: dashed link to already-rendered family
+            TEDGES.append({"from": cid, "to": "u_" + fv[0]["id"], "dashed": True})
+        x += cw + GAP
+    # right side branches (spouse2's parents)
+    for pu, pw in right:
+        place_union(pu["id"], rx + pw/2, row+1)
+        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "side": "right"})
+        rx += pw + GAP
+
+ROOT_UNION = "U16"   # Dantzick Batt ⚭ Sarah Lindsel (deepest root in data)
+place_union(ROOT_UNION, 0, 0)
+
+# canvas bounds
+minx = min(n["x"] for n in TNODES); miny = 0
+maxx = max(n["x"] + n["w"] for n in TNODES)
+maxy = max(n["y"] + n["h"] for n in TNODES)
+for n in TNODES: n["x"] -= minx
+TREE = {"nodes": TNODES, "edges": TEDGES,
+        "w": int(maxx - minx + 60), "h": int(maxy + 60)}
 
 # =========================================================
 # TIMELINE
@@ -239,6 +333,8 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
 .cnode .n2{font-size:13px;color:var(--gold);line-height:1.15}
 .cnode .years{font-size:10px;color:var(--muted);margin-top:2px;font-style:italic}
 .cnode.person .n1{font-size:12.5px}
+.cnode.long .n1,.cnode.long .n3{font-size:10px}
+.cnode.long.person .n1{font-size:11px}
 .cnode .m{display:inline-block;background:var(--gold);color:#241D2E;font-size:8px;font-weight:700;
   letter-spacing:1px;padding:1px 5px;border-radius:7px;margin-top:3px;align-self:center}
 canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
@@ -345,14 +441,19 @@ function drawTree(){
   svg.appendChild(defs);
   const edgeSet=new Map();
   T.edges.forEach(e=>{
-    const a=T.nodes.find(n=>n.id===e[0]),b=T.nodes.find(n=>n.id===e[1]);
+    const a=T.nodes.find(n=>n.id===e[0]||n.id===e.from),b=T.nodes.find(n=>n.id===e[1]||n.id===e.to);
     if(!a||!b)return;
-    const x1=a.x+a.w/2,y1=a.y+a.h,x2=b.x+b.w/2,y2=b.y;
+    const dashed=!!e.dashed;
+    let x1=a.x+a.w/2;
+    if(e.side==='left')x1=a.x;
+    if(e.side==='right')x1=a.x+a.w;
+    const y1=a.y+a.h,x2=b.x+b.w/2,y2=b.y;
     const my=(y1+y2)/2;
     [[x1,y1,x1,my],[x1,my,x2,my],[x2,my,x2,y2]].forEach(seg=>{
       const l=document.createElementNS('http://www.w3.org/2000/svg','line');
       l.setAttribute('x1',seg[0]);l.setAttribute('y1',seg[1]);l.setAttribute('x2',seg[2]);l.setAttribute('y2',seg[3]);
-      l.setAttribute('stroke','url(#lg)');l.setAttribute('stroke-width','2.5');
+      l.setAttribute('stroke',dashed?'#D4A853':'url(#lg)');l.setAttribute('stroke-width',dashed?'2':'2.5');
+      if(dashed)l.setAttribute('stroke-dasharray','5,5');
       svg.appendChild(l);
     });
   });
@@ -373,6 +474,7 @@ function drawTree(){
       if(p1.metis)h+='<span class="m">MÉTIS</span>';
     }
     div.innerHTML=h;
+    if(p1.name.length>17||(p2&&p2.name.length>17))div.classList.add('long');
     div.addEventListener('click',()=>openSheet(n.pids));
     canvas.appendChild(div);
   });
@@ -383,6 +485,15 @@ function fit(){
   const cw=wrap.clientWidth,ch=wrap.clientHeight;
   scale=Math.min(cw/(T.w+40),ch/(T.h+40),1.15);scale=Math.max(scale,.25);
   tx=(cw-T.w*scale)/2;ty=(ch-T.h*scale)/2;applyTransform();
+}
+function zoomToYou(){
+  const n=T.nodes.find(x=>x.you);
+  if(!n)return fit();
+  const cw=wrap.clientWidth,ch=wrap.clientHeight;
+  scale=0.8;
+  tx=cw/2-(n.x+n.w/2)*scale;
+  ty=ch/2-(n.y+n.h/2)*scale;
+  applyTransform();
 }
 // pan/zoom
 const ptrs=new Map();
@@ -421,7 +532,7 @@ document.getElementById('zin').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.client
 document.getElementById('zout').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.clientHeight/2,1/1.35);
 document.getElementById('zfit').onclick=fit;
 window.addEventListener('resize',()=>{if(scale<=0.01)fit();});
-setTimeout(fit,60);
+setTimeout(zoomToYou,60);
 
 /* ---------- helpers ---------- */
 function escH(s){const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;}
@@ -438,7 +549,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     const tab=t.dataset.tab;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const v=document.getElementById('view-'+tab);v.classList.add('active');
-    if(tab==='tree')setTimeout(fit,60);
+    if(tab==='tree')setTimeout(zoomToYou,60);
   });
 });
 
