@@ -16,6 +16,41 @@ DATA = json.load(open(os.path.join(HERE, "data", "family-tree.json")))
 PEOPLE = {p["id"]: p for p in DATA["people"]}
 UNIONS = DATA["unions"]
 STORIES = DATA.get("stories", {})
+# Expanded stories (kept here so data/family-tree.json stays untouched).
+# Facts sourced from the research: vital-stats registrations, redriverancestry.ca,
+# and the MMF/RRMNHC research files already in the data.
+STORIES.update({
+ "P042": {"title": "Ella Alberta Riggs — where the two lines meet",
+   "text": "Ella (b. c1880s) was the daughter of Ernest C. Riggs and Mary Ann Spence. Through her mother she carries Spence line B: Mary Ann was the daughter of David Spence (Métis MLA and Convention of Forty delegate) and Catherine Hallett. Ella married Alan Setter on 31 Mar 1909 at Portage la Prairie (reg. 1909,001530). Because Alan descends from line A (Peggy Spence), Ella is the point where Bayard's two Spence lines converge. Their daughter Doris inherited her mother's middle name, 'Alberta'. [Verify Ella's exact birth year vs vital records.]",
+   "source": "vital stats reg. 1909,001530"},
+ "P044": {"title": "Doris Alberta Setter — the bridge to the Hamiltons",
+   "text": "Doris (b. 24 Dec 1912, Portage la Prairie; reg. 1912,004481; d. 23 Apr 2006) was the daughter of Alan Setter and Ella Alberta Riggs. On 29 Dec 1932 she married Lawrence Donald Hamilton at Tisdale, Saskatchewan. Their only daughter, Mavis Irene, was born 1 Sep 1933 in Tisdale and became the mother of Bayard's mother, Tracy. Doris is the hinge joining the Setter/Spence family to the Hamilton line.",
+   "source": "vital stats regs 1912,004481; SK marriage record 1932"},
+ "P045": {"title": "Lawrence Donald Hamilton — the Flin Flon connection",
+   "text": "Lawrence (b. 15 Jun 1912, Tisdale SK; d. 5 Feb 1984, Flin Flon MB) was the son of Guy Wentworth Hamilton and Ethel Rose King. He married Doris Setter in 1932. The family moved to Flin Flon, Manitoba, in 1939 (when Mavis was six), which is how Bayard's maternal line came to Flin Flon. Also recorded as 'Laurence'.",
+   "source": "family research; Flin Flon move c.1939"},
+ "P043": {"title": "Alan Setter — Spence line A",
+   "text": "Alan (b. 22 Oct 1884, R.M. Portage la Prairie; reg. 1884,005103; d. 1964; also spelled 'Sutter') was the son of Roderick McKenzie Setter and Sarah Ann Howrie. Roderick was the son of George Setter and Jessie Ellen Campbell. Alan's marriage to Ella Alberta Riggs in 1909 is the meeting point of the two Spence lines. He was Bayard's great-grandfather.",
+   "source": "vital stats reg. 1884,005103"},
+ "P033": {"title": "Catherine Hallett — wife of the MLA",
+   "text": "Catherine Hallett (1824\u20131880) was the daughter of Henry Hallett and Catherine Parenteau. She married David Spence on 15 Feb 1844 at St. John's parish, Red River. In 1876, as a Métis family, she and David received Métis scrip. Their daughter Mary Ann Spence became the grandmother of Ella Riggs. [Verify the Catherine Hallett death date: 1880 vs 1887.]",
+   "source": "parish record 1844; scrip 1876"},
+ "P029": {"title": "Jane Morwick — grandmother of a Premier",
+   "text": "Jane Morwick (1794\u20131874) was a widow (née Morwick, previously married into the Norquay family) when she married James Spence Jr. She is the grandmother of Premier John Norquay, Manitoba's first Méis Premier, who was raised in the Spence household. Through Jane and James Jr, their son David Spence continued the family's public life in Red River.",
+   "source": "family research; Norquay genealogy"},
+ "P010": {"title": "George Setter — the middle bridge",
+   "text": "George Setter (1815\u20131899) was the son of Andrew Setter (an Orkney HBC voyageur) and Peggy Spence (a daughter of James Spence Sr and Margaret 'Nestichio' Batt). He married Isabella Kennedy (d. 1846), then Jessie Ellen Campbell. His son Roderick McKenzie Setter (by Jessie) carried line A down to Alan Setter.",
+   "source": "redriverancestry.ca; family research"},
+ "P007": {"title": "Andrew Setter — the Orkney voyageur",
+   "text": "Andrew Setter (1777\u20131870) was born in Westray, Orkney and joined the Hudson's Bay Company at York Factory in 1800. On 28 Jan 1821 he married Peggy Spence at Beaver Creek, baptised by Rev. John West. Their son George carried the family's Métis lineage forward. Andrew's line is the paternal thread that joined the Spence family.",
+   "source": "HBC records; Rev. John West baptism 1821"},
+ "P019": {"title": "Jessie Ellen Campbell — second wife, and a key correction",
+   "text": "Jessie Ellen Campbell (1824\u20131912) married George Setter after Isabella Kennedy's death in 1846, and was the mother of Roderick McKenzie Setter. The research corrects an earlier assumption: Roderick was Jessie's son, NOT Isabella's. This matters because it pins line A's descent through Jessie. [Line A ancestress = Jessie Ellen Campbell.]",
+   "source": "family research; corrected lineage"},
+ "P025": {"title": "Roderick McKenzie Setter — completing line A",
+   "text": "Roderick McKenzie Setter (b. 1856) was the son of George Setter and Jessie Ellen Campbell. He married Sarah Ann Howrie, and their son Alan Setter (b. 1884) closed line A end-to-end. Primary records (vital stats reg. 1884,005103) confirm Alan as Roderick and Sarah's son, completing the Spence-to-Setter descent to Bayard.",
+   "source": "vital stats reg. 1884,005103"},
+})
 PROJ = DATA["project"]
 
 def load_image(rel):
@@ -316,6 +351,7 @@ var chart = window.f3.createChart('#FamilyChart', D.tree.fcData);
 chart.setCardHtml().setCardDisplay([["name"],["years"]]);
 chart.setAncestryDepth(30).setProgenyDepth(30);
 chart.setShowSiblingsOfMain(true);
+chart.setDuplicateBranchToggle(true);   // lets you collapse the two converging branches
 chart.setTransitionTime(350);
 // tap a card -> profile sheet
 document.getElementById('FamilyChart').addEventListener('click', function(ev){
@@ -510,7 +546,7 @@ FT_CSS = """
 #FamilyChart .card-main .card-inner{background:#3A2C1E;outline:2px solid #D4A853;border-radius:10px}
 #FamilyChart .card-label{color:#F2EBD9!important;font-family:'Cinzel',serif}
 #FamilyChart .person-icon{color:#D4A853}
-#FamilyChart .main_svg .link{stroke:#7A6D96!important}
+#FamilyChart .main_svg .link{stroke:#FFD873!important;stroke-width:4px!important;opacity:1}
 #FamilyChart .card[data-id="P050"] .card-inner{outline:2px solid #D4A853;border-radius:10px}
 #FamilyChart .f3-card-duplicate-tag{color:#9a8fc0;background:#2a2438;border-radius:6px;font-size:10px}
 #FamilyChart .f3-nav-cont input{background:#16141c!important;color:#F2EBD9!important;border:1px solid #3a3346!important;border-radius:8px!important}
