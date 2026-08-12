@@ -49,14 +49,22 @@
     {"id":"P040","name":"William 'Bill' Spence","birth":"1866","metis":true,"privacy":"deceased"},
     {"id":"P041","name":"Ernest Charles Riggs","birth":"1859","metis":true,"privacy":"deceased","note":"son of Harmon M. Riggs + Amelia M. Williams"},
     {"id":"P042","name":"Ella Alberta Riggs","birth":"c1880s","metis":true,"privacy":"deceased","note":"DIRECT · Spence line B"},
-    {"id":"P043","name":"Allan Setter","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · parents (between George Setter & Allan) not yet pinned"},
-    {"id":"P044","name":"Doris Alberta Setter","birth":"1912","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912, Portage la Prairie"},
-    {"id":"P045","name":"Lawrence D. Hamilton","metis":false,"privacy":"deceased","note":"husband of Doris Setter"},
-    {"id":"P046","name":"Mavis Hamilton","birth":"c1925","metis":true,"privacy":"deceased","note":"DIRECT · maternal grandmother"},
+    {"id":"P043","name":"Alan Setter","birth":"1884","death":"1964","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · also spelled 'Sutter' · parents (between George Setter & Alan) not yet pinned"},
+    {"id":"P044","name":"Doris A. Setter","birth":"1912","death":"c2010","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912, Portage la Prairie · also 'Doris Alberta Setter'"},
+    {"id":"P045","name":"Laurence D. Hamilton","birth":"1912","death":"1984","metis":false,"privacy":"deceased","note":"husband of Doris Setter · also 'Lawrence'"},
+    {"id":"P046","name":"Mavis Irene Hamilton","birth":"c1925","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · maternal grandmother · one of 6 Hamilton siblings"},
     {"id":"P047","name":"Robert Lau","metis":false,"privacy":"deceased","note":"maternal grandfather"},
     {"id":"P048","name":"Tracy Diane Lau","birth":"b.1950s","metis":true,"privacy":"living","note":"b. Flin Flon MB · DIRECT"},
     {"id":"P049","name":"Bryon deVries","metis":false,"privacy":"living","note":"father"},
     {"id":"P050","name":"Bayard deVries","metis":true,"privacy":"living","note":"YOU","you":true},
+    {"id":"P052","name":"Elwyn Setter","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
+    {"id":"P053","name":"Erma Ann Setter","birth":"1910","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
+    {"id":"P054","name":"Clayton N. Setter","birth":"1917","death":"1975","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
+    {"id":"P055","name":"Alan Guy Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
+    {"id":"P056","name":"Daniel Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
+    {"id":"P057","name":"Patrick Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
+    {"id":"P058","name":"Wesley C. Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
+    {"id":"P059","name":"Harley Hamilton","birth":"1934","death":"2001","metis":false,"privacy":"deceased","note":"son of Doris + Laurence"},
     {"id":"P051","name":"Premier John Norquay","birth":"1841","death":"1889","metis":true,"privacy":"deceased","note":"Manitoba's first Métis premier (1878-87) · via Elizabeth Setter","highlight":true}
   ],
   "unions": [
@@ -66,15 +74,15 @@
     {"id":"U04","spouse1":"P003","spouse2":"P029","children":["P030","P031","P032"]},
     {"id":"U05","spouse1":"P030","spouse2":"P033","children":["P034","P035","P036","P037","P038","P039","P040"]},
     {"id":"U06","spouse1":"P041","spouse2":"P038","children":["P042"]},
-    {"id":"U07","spouse1":"P043","spouse2":"P042","children":["P044"]},
-    {"id":"U08","spouse1":"P044","spouse2":"P045","children":["P046"]},
+    {"id":"U07","spouse1":"P043","spouse2":"P042","children":["P052","P053","P044","P054"]},
+    {"id":"U08","spouse1":"P044","spouse2":"P045","children":["P055","P056","P046","P057","P058","P059"]},
     {"id":"U09","spouse1":"P047","spouse2":"P046","children":["P048"]},
     {"id":"U10","spouse1":"P048","spouse2":"P049","children":["P050"]},
     {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"}
   ],
   "paths_to_root": [
-    "Bayard → Tracy Lau → Mavis Hamilton → Doris Setter → Allan Setter → (George Setter bridge, unpinned) → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
-    "Bayard → Tracy Lau → Mavis Hamilton → Doris Setter → Ella Alberta Riggs → Mary Ann Spence → David Spence (MLA) → James Spence Jr → James Spence Sr + Margaret Batt"
+    "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → (George Setter bridge, unpinned) → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
+    "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Ella Alberta Riggs → Mary Ann Spence → David Spence (MLA) → James Spence Jr → James Spence Sr + Margaret Batt"
   ],
   "open_items": [
     "Pin intermediate Setter generations between George Setter (1815) and Allan Setter",
