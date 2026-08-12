@@ -31,7 +31,8 @@
     {"id":"P022","name":"Elizabeth Setter","birth":"1842","metis":true,"privacy":"deceased","note":"→ married Premier John Norquay"},
     {"id":"P023","name":"Duncan Richard Setter","birth":"1852","metis":true,"privacy":"deceased"},
     {"id":"P024","name":"Colin Campbell Setter","birth":"1854","metis":true,"privacy":"deceased"},
-    {"id":"P025","name":"Roderick McKenzie Setter","birth":"1856","metis":true,"privacy":"deceased"},
+    {"id":"P025","name":"Roderick McKenzie Setter","birth":"1856","metis":true,"privacy":"deceased","note":"son of George Setter · m. Sarah Ann Howrie"},
+    {"id":"P060","name":"Sarah Ann Howrie","birth":"c1859","metis":true,"privacy":"deceased","note":"also 'Hourie' · wife of Roderick McKenzie Setter"},
     {"id":"P026","name":"Alexander Hunter Murray Setter","birth":"1858","metis":true,"privacy":"deceased"},
     {"id":"P027","name":"George William Setter","birth":"1861","death":"1874","metis":true,"privacy":"deceased","note":"twin, d. age 13"},
     {"id":"P028","name":"Ellen Madeleine 'Nellie' Setter","birth":"1861","death":"1874","metis":true,"privacy":"deceased","note":"twin, d. age 13"},
@@ -49,7 +50,7 @@
     {"id":"P040","name":"William 'Bill' Spence","birth":"1866","metis":true,"privacy":"deceased"},
     {"id":"P041","name":"Ernest Charles Riggs","birth":"1859","metis":true,"privacy":"deceased","note":"son of Harmon M. Riggs + Amelia M. Williams"},
     {"id":"P042","name":"Ella Alberta Riggs","birth":"c1880s","metis":true,"privacy":"deceased","note":"DIRECT · Spence line B"},
-    {"id":"P043","name":"Alan Setter","birth":"1884","death":"1964","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · also spelled 'Sutter' · parents (between George Setter & Alan) not yet pinned"},
+    {"id":"P043","name":"Alan Setter","birth":"1884","death":"1964","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie"},
     {"id":"P044","name":"Doris A. Setter","birth":"1912","death":"c2010","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912, Portage la Prairie · also 'Doris Alberta Setter'"},
     {"id":"P045","name":"Laurence D. Hamilton","birth":"1912","death":"1984","metis":false,"privacy":"deceased","note":"husband of Doris Setter · also 'Lawrence'"},
     {"id":"P046","name":"Mavis Irene Hamilton","birth":"c1925","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · maternal grandmother · one of 6 Hamilton siblings"},
@@ -78,14 +79,14 @@
     {"id":"U08","spouse1":"P044","spouse2":"P045","children":["P055","P056","P046","P057","P058","P059"]},
     {"id":"U09","spouse1":"P047","spouse2":"P046","children":["P048"]},
     {"id":"U10","spouse1":"P048","spouse2":"P049","children":["P050"]},
-    {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"}
+    {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"},
+    {"id":"U12","spouse1":"P025","spouse2":"P060","children":["P043"]}
   ],
   "paths_to_root": [
-    "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → (George Setter bridge, unpinned) → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
+    "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → Roderick McKenzie Setter (1856) + Sarah Ann Howrie → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
     "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Ella Alberta Riggs → Mary Ann Spence → David Spence (MLA) → James Spence Jr → James Spence Sr + Margaret Batt"
   ],
   "open_items": [
-    "Pin intermediate Setter generations between George Setter (1815) and Allan Setter",
     "Confirm Doris Setter's birth mother = Ella (Riggs) Setter (vital stats DetailView)",
     "Locate Setter→Hamilton marriage (may be Saskatchewan, Flin Flon area)",
     "Expand deVries paternal side (Bryon's family) — needs family input",
