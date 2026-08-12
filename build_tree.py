@@ -134,8 +134,10 @@ PERS, FAMS, TEDGES = [], [], []
 visited_u = set()
 
 def add_person(pid, x, y, you):
-    PERS.append({"id": "p_" + pid, "pid": pid, "x": round(x, 1), "y": y,
+    nid = "b" + str(len(PERS))
+    PERS.append({"id": nid, "pid": pid, "x": round(x, 1), "y": y,
                  "w": P_W, "h": P_H, "you": you})
+    return nid
 
 def place_union(u_id, x_center, row):
     if u_id in visited_u: return
@@ -146,11 +148,11 @@ def place_union(u_id, x_center, row):
     # spouse pair (two boxes, marriage gap between)
     b1x = x_center - P_W - GAP2/2
     b2x = x_center + GAP2/2
-    add_person(u["spouse1"], b1x, row*ROW_H, you and u["spouse1"] == "P050")
-    add_person(u["spouse2"], b2x, row*ROW_H, you and u["spouse2"] == "P050")
-    fam = {"u": u_id, "s1": u["spouse1"], "s2": u["spouse2"],
+    n1 = add_person(u["spouse1"], b1x, row*ROW_H, you and u["spouse1"] == "P050")
+    n2 = add_person(u["spouse2"], b2x, row*ROW_H, you and u["spouse2"] == "P050")
+    fam = {"u": u_id, "s1": n1, "s2": n2,
            "s1x": b1x + P_W/2, "s2x": b2x + P_W/2, "x": x_center, "y": row*ROW_H,
-           "children": []}   # children: (pid, box_center_x)
+           "children": []}   # children: box ids (geometry recomputed after sweep)
     FAMS.append(fam)
 
     # children columns
@@ -184,25 +186,25 @@ def place_union(u_id, x_center, row):
             fx = ccx - total/2
             for fu in fuv:
                 fcx = fx + swidth(fu["id"])/2
-                place_union(fu["id"], fcx, row+1)
-                # child box center = which spouse slot the child occupies
-                if c == fu["spouse1"]: cbc = fcx - P_W/2 - GAP2/2
-                else: cbc = fcx + P_W/2 + GAP2/2
-                fam["children"].append((c, cbc))
+                ret = place_union(fu["id"], fcx, row+1)
+                # child box = whichever spouse slot the child occupies in fu
+                child_box = ret["s1"] if c == fu["spouse1"] else ret["s2"]
+                fam["children"].append(child_box)
                 fx += swidth(fu["id"]) + GAP
         elif fv:
-            add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
-            fam["children"].append((c, ccx))
-            TEDGES.append({"from": "p_" + c, "to": "fam_" + fv[0]["id"], "dashed": True})
+            cid = add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
+            fam["children"].append(cid)
+            TEDGES.append({"from": cid, "to": "fam_" + fv[0]["id"], "dashed": True})
         else:
-            add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
-            fam["children"].append((c, ccx))
+            cid = add_person(c, ccx - P_W/2, (row+1)*ROW_H, False)
+            fam["children"].append(cid)
         x += cw + GAP
     # in-law unions (upward stub from this family's marriage center)
     for pu, pw in inlaws:
         place_union(pu["id"], ix + pw/2, row-1)
         TEDGES.append({"from": "fam_" + u_id, "to": "fam_" + pu["id"], "up": True})
         ix += pw + GAP
+    return {"s1": n1, "s2": n2}
 
 ROOT_UNION = "U16"
 place_union(ROOT_UNION, 0, 0)
@@ -247,9 +249,16 @@ minx = min(n["x"] for n in PERS)
 maxx = max(n["x"] + n["w"] for n in PERS)
 maxy = max(n["y"] + n["h"] for n in PERS)
 for n in PERS: n["x"] -= (minx - 130)
+
+# recompute family geometry from the FINAL box positions (sweep + gutter applied)
+bybox = {n["id"]: n for n in PERS}
 for f in FAMS:
-    f["x"] -= (minx - 130); f["s1x"] -= (minx - 130); f["s2x"] -= (minx - 130)
-    f["children"] = [(pid, cx - (minx - 130)) for pid, cx in f["children"]]
+    n1, n2 = bybox[f["s1"]], bybox[f["s2"]]
+    f["s1x"] = n1["x"] + P_W/2
+    f["s2x"] = n2["x"] + P_W/2
+    f["x"] = (f["s1x"] + f["s2x"])/2
+    f["y"] = n1["y"]
+    f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid in f["children"]]
 TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
         "pw": P_W, "ph": P_H, "rowh": ROW_H,
         "w": int(maxx - minx + 190), "h": int(maxy + 60)}
