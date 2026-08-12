@@ -132,9 +132,11 @@ f15["children"] = [(marg_b, f01["s2x"])]                 # Margaret hangs under 
 # row 3: the two Spence lines split into two columns
 f02, andrew_b, peggy_b = add_couple("U02", -COL, 3)
 f04, jamesj_b, jane_b  = add_couple("U04",  COL, 3)
-# U01's rail drops to Andrew (U02), Peggy (U02) and JamesJr (U04); George Sr is a leaf
+# U01's rail drops to its real children: Peggy (U02 spouse2), JamesJr (U04) + George Sr leaf.
+# NOTE: Andrew SETTER is Peggy's HUSBAND, not a child of James Sr - he stays in couple U02
+# and the Setter kids descend from U02, so JamesJr/Andrew/Setters are SEPARATE lines.
 george_sr = leaf_boxes(by_union["U01"], 3, 0)          # George Spence Sr leaf at center
-f01["children"] = [(andrew_b, f02["s1x"]), (peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
+f01["children"] = [(peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
 
 # row 4: line A = George's two marriages; line B = David
 f03, george_b1, isab_b = add_couple("U03", -COL-230, 4)
