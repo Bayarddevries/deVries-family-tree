@@ -40,53 +40,44 @@ def yrs(pid):
     return ""
 
 # =========================================================
-# FAMILYTREE JS LAYOUT MODEL
-# The classic descendant chart is rendered by BALKAN FamilyTree JS,
-# a purpose-built genealogy library, from parent/partner links.
-# The library cannot lay out pedigree collapse (both Spence lines converge
-# at Alan + Ella), so Ella's parent links are cut for LAYOUT only; her card
-# carries a note naming her parents. The data itself is untouched.
+# FAMILY-CHART (donatso, d3-based) DATA MODEL
+# The descendant chart is rendered by the family-chart library, which
+# handles multiple marriages AND converging lines (the cousin-marriage at
+# Alan + Ella, where both partners descend from James Sr + Batt) without
+# crashing. Full data, no cuts.
 # =========================================================
 FEMALE = {"P080","P002","P006","P009","P011","P012","P013","P014","P017","P018","P019","P021","P022","P028","P029","P032","P033","P035","P037","P038","P039","P042","P044","P046","P048","P053","P060","P062","P063","P064","P066","P068","P070","P072","P073","P074","P075","P076","P082","P083","P088","P090"}
 
-def build_ft_nodes():
+def build_fc_data():
     by_id = {p["id"]: p for p in DATA["people"]}
-    idmap, nodes = {}, []
-    def add(pid):
-        nid = len(nodes) + 1
-        nodes.append({"id": nid, "name": by_id[pid]["name"],
-                      "gender": 2 if pid in FEMALE else 1, "pids": [], "ref": pid})
-        idmap[pid] = nid
-        return nid
-    for p in DATA["people"]:
-        add(p["id"])
+    rels = {pid: {"parents": [], "spouses": [], "children": []} for pid in by_id}
     for u in UNIONS:
         s1, s2 = u["spouse1"], u["spouse2"]
-        n1, n2 = idmap[s1], idmap[s2]
-        if n2 not in nodes[n1-1]["pids"]: nodes[n1-1]["pids"].append(n2)
-        if n1 not in nodes[n2-1]["pids"]: nodes[n2-1]["pids"].append(n1)
-        mid = s1 if s1 in FEMALE else s2
-        fid = s2 if s1 in FEMALE else s1
+        if s2 not in rels[s1]["spouses"]: rels[s1]["spouses"].append(s2)
+        if s1 not in rels[s2]["spouses"]: rels[s2]["spouses"].append(s1)
         for c in u["children"]:
-            nodes[idmap[c]-1]["mid"] = idmap[mid]
-            nodes[idmap[c]-1]["fid"] = idmap[fid]
-            nodes[idmap[mid]-1]["gender"] = 2
-            nodes[idmap[fid]-1]["gender"] = 1
-    # Mixed layout on Lawrence + Bryon: renders each in BOTH their birth
-    # family (Hamilton / deVries) and their married family (Doris / Tracy),
-    # so the in-law sibling families stay in the tree. Ella stays cut (see
-    # below) because her two families share an ancestor (James Sr + Batt)
-    # and the library's link renderer overflows on that cousin-marriage.
-    for pid in ("P045", "P049"):                    # Lawrence, Bryon
-        nodes[idmap[pid]-1]["layout"] = 1           # FamilyTree.mixed
-    # layout-only cut: Ella's parent links (cousin-marriage); note on her card
-    e = nodes[idmap["P042"]-1]
-    e.pop("mid", None); e.pop("fid", None)
-    e["note"] = "daughter of Ernest Riggs \u26AC Mary Ann Spence (Riggs \u00B7 Spence line)"
-    nodes[idmap["P050"]-1]["cssClass"] = "you"     # highlight Bayard
-    return nodes
+            if c not in by_id: continue
+            if s1 not in rels[c]["parents"]: rels[c]["parents"].append(s1)
+            if s2 not in rels[c]["parents"]: rels[c]["parents"].append(s2)
+            if c not in rels[s1]["children"]: rels[s1]["children"].append(c)
+            if c not in rels[s2]["children"]: rels[s2]["children"].append(c)
+    def yrs(p):
+        b, dd = p.get("birth",""), p.get("death","")
+        if b and dd: return f"{b}\u2013{dd}"
+        if b: return f"b. {b}"
+        return ""
+    out = []
+    for pid, p in by_id.items():
+        out.append({
+            "id": pid,
+            "data": {"gender": "F" if pid in FEMALE else "M", "name": p["name"],
+                     "years": yrs(p), "you": bool(p.get("you")),
+                     "metis": bool(p.get("metis")), "note": p.get("note", p.get("notes",""))},
+            "rels": rels[pid],
+        })
+    return out
 
-TREE = {"ftNodes": build_ft_nodes()}
+TREE = {"fcData": build_fc_data()}
 
 
 # =========================================================
@@ -149,7 +140,7 @@ APP = r"""
 
 <main>
   <section id="view-tree" class="view active">
-    <div id="ftree"></div>
+    <div id="FamilyChart" class="f3"></div>
     <div class="zbtns">
       <button class="zbtn" id="zin">+</button>
       <button class="zbtn" id="zout">−</button>
@@ -320,43 +311,36 @@ const P = D.people;
 const byName = {};
 P.forEach(p=>byName[p.name.toLowerCase()]=p);
 
-/* ---------- tree canvas ---------- */
-// ---- FamilyTree JS: classic descendant chart ----
-const FT_NODES = D.tree.ftNodes;
-var family = new FamilyTree(document.getElementById("ftree"), {
-  nodes: FT_NODES,
-  nodeBinding: {field_0: "name", field_1: "note"},
-  anim: {duration: 0},
-  enableSearch: true,
-  searchFields: ["name"],
-  scaleInitial: 0.5,
-  editForm: {readOnly: true},
-  nodeTreeMenu: false,
-  nodeMouseClick: function(sender, args){
-    if(args.node && args.node.ref) openSheet([args.node.ref]);
-    return false;
-  }
-});
-document.getElementById('zin').onclick=()=>family.zoomIn();
-document.getElementById('zout').onclick=()=>family.zoomOut();
-// fit that ignores nodes the layout dropped (NaN coords) - family.fit() NaNs
-// because the boundary is computed over those dropped nodes.
-function fitGood(){
-  const f=family, svg=f.getSvg();
-  let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
-  for(const k in f.nodes){ const n=f.nodes[k];
-    if(n.x===undefined||isNaN(n.x)||isNaN(n.y))continue;
-    if(n.x<minX)minX=n.x; if(n.x+n.w>maxX)maxX=n.x+n.w;
-    if(n.y<minY)minY=n.y; if(n.y+n.h>maxY)maxY=n.y+n.h; }
-  if(minX===1e9)return;
-  const pad=30, W=f.width(), H=f.height();
-  const w=maxX-minX, h=maxY-minY;
-  const sc=Math.min((W-2*pad)/w,(H-2*pad)/h);
-  svg.setAttribute('viewBox',((minX-pad)+' '+(minY-pad)+' '+(w+2*pad)+' '+(h+2*pad)));
+/* ---------- family-chart tree ---------- */
+var chart = window.f3.createChart('#FamilyChart', D.tree.fcData);
+chart.setCardHtml().setCardDisplay([["name"],["years"]]);
+chart.setAncestryDepth(30).setProgenyDepth(30);
+chart.setShowSiblingsOfMain(true);
+chart.setTransitionTime(350);
+// tap a card -> profile sheet
+document.getElementById('FamilyChart').addEventListener('click', function(ev){
+  var card = ev.target.closest('.card');
+  if(card && card.dataset.id){ ev.preventDefault(); openSheet([card.dataset.id.replace(/--x\d+$/,'')]); }
+}, true);
+function chartReset(){ try{ chart.updateTree({tree_position:'fit', transition_time:350}); }catch(e){} }
+// in-tree search: finds ANY of the 91 people and centres on them
+try{
+  chart.setPersonDropdown(function(d){ return d.data.name; }, {
+    placeholder:'Find someone…',
+    onSelect:function(id){ try{ chart.updateMainId(id); chart.updateTree({tree_position:'main_to_middle', transition_time:400}); }catch(e){} }
+  });
+}catch(e){}
+chart.updateTree({initial:true, tree_position:'fit'});
+// zoom buttons
+var zsvg = document.getElementById('FamilyChart').querySelector('svg');
+function zoomBy(f){
+  if(!zsvg || !zsvg.__zoom) return;
+  try{ var t=d3.zoomTransform(zsvg);
+    d3.select(zsvg).transition().duration(200).call(zsvg.__zoom.transform, d3.zoomIdentity.translate(t.x,t.y).scale(t.k*f)); }catch(e){}
 }
-document.getElementById('zfit').onclick=fitGood;
-family.onInit(function(){ try{ fitGood(); }catch(e){} });
-setTimeout(function(){ if(!family._initialized){ try{ family.draw(); fitGood(); }catch(e){ console.log('FT kick:', e.message); } } }, 700);
+document.getElementById('zin').onclick=()=>zoomBy(1.25);
+document.getElementById('zout').onclick=()=>zoomBy(0.8);
+document.getElementById('zfit').onclick=chartReset;
 
 function escH(s){const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;}
 function yrs(p){const b=p.birth,dd=p.death;
@@ -372,7 +356,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     const tab=t.dataset.tab;
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const v=document.getElementById('view-'+tab);v.classList.add('active');
-    if(tab==='tree')setTimeout(()=>{try{family.fit();}catch(e){}},60);
+    if(tab==='tree')setTimeout(()=>{try{chartReset();}catch(e){}},80);
   });
 });
 
@@ -508,7 +492,7 @@ HTML = f"""<!DOCTYPE html>
 <style>{CSS}</style><style>@@FT_CSS@@</style>
 </head><body>
 {APP.replace('[[TITLE]]', esc(PROJ['title'])).replace('[[SUBTITLE]]', esc(PROJ['focus']))}
-<script src="assets/familytree.min.js"></script>
+<script src="assets/d3.min.js"></script><script src="assets/family-chart.js"></script>
 <script>
 const __DATA__ = {json_blob};
 {JS.replace('__DATA__', '__DATA__')}
@@ -516,20 +500,27 @@ const __DATA__ = {json_blob};
 </body></html>"""
 
 FT_CSS = """
-#ftree{position:absolute;inset:58px 0 62px;background:var(--bg,#16141c)}
-#ftree .node rect{fill:#241D2E!important;stroke:#3a3346!important;stroke-width:1}
-#ftree .node text{fill:#F2EBD9!important;font-family:'Cinzel',serif!important}
-#ftree .node.you rect{fill:#3A2C1E!important;stroke:#D4A853!important;stroke-width:2.5!important}
-#ftree .node.you text{fill:#F5D78E!important}
-#ftree .bft-link,#ftree line.link,#ftree path.link{stroke:#7A6D96!important}
-#ftree .bft-search{background:transparent!important;border:none!important}
-#ftree .bft-search input{background:#16141c!important;color:#F2EBD9!important;border:1px solid #3a3346!important;border-radius:8px!important}
-#ftree .bft-button{background:#241D2E!important;color:#F2EBD9!important;border:1px solid #3a3346!important}
-#ftree .bft-fill,#ftree .bft-svg{background:var(--bg,#16141c)!important}
+/* ---- family-chart dark theme ---- */
+.f3{background:transparent;color:#F2EBD9;font-family:'EB Garamond',serif}
+#FamilyChart{position:absolute;inset:58px 0 62px;background:var(--bg,#16141c)}
+#FamilyChart .card{background:#241D2E;border:1px solid #3a3346;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.45)}
+#FamilyChart .card-inner{color:#F2EBD9}
+#FamilyChart .card-male .card-inner{background:#2a3350}
+#FamilyChart .card-female .card-inner{background:#463a4e}
+#FamilyChart .card-main .card-inner{background:#3A2C1E;outline:2px solid #D4A853;border-radius:10px}
+#FamilyChart .card-label{color:#F2EBD9!important;font-family:'Cinzel',serif}
+#FamilyChart .person-icon{color:#D4A853}
+#FamilyChart .main_svg .link{stroke:#7A6D96!important}
+#FamilyChart .card[data-id="P050"] .card-inner{outline:2px solid #D4A853;border-radius:10px}
+#FamilyChart .f3-card-duplicate-tag{color:#9a8fc0;background:#2a2438;border-radius:6px;font-size:10px}
+#FamilyChart .f3-nav-cont input{background:#16141c!important;color:#F2EBD9!important;border:1px solid #3a3346!important;border-radius:8px!important}
 """
-HTML = HTML.replace("@@FT_CSS@@", FT_CSS)
-FT_LIB = open(os.path.join(HERE, "site", "assets", "familytree.min.js")).read()
-HTML = HTML.replace('<script src="assets/familytree.min.js"></script>', "<script>" + FT_LIB + "</script>")
+D3_LIB = open(os.path.join(HERE, "site", "assets", "d3.min.js")).read()
+FC_LIB = open(os.path.join(HERE, "site", "assets", "family-chart.js")).read()
+FC_CSS = open(os.path.join(HERE, "site", "assets", "family-chart.css")).read()
+HTML = HTML.replace("@@FT_CSS@@", FC_CSS + "\n" + FT_CSS)
+HTML = HTML.replace('<script src="assets/d3.min.js"></script>', "<script>" + D3_LIB + "</script>")
+HTML = HTML.replace('<script src="assets/family-chart.js"></script>', "<script>" + FC_LIB + "</script>")
 out = os.path.join(HERE, "site", "index.html")
 os.makedirs(os.path.dirname(out), exist_ok=True)
 open(out, "w").write(HTML)
