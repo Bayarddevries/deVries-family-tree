@@ -81,9 +81,12 @@ tree.append("</ul></li>")
 # Convergence — marriage of the two branches
 tree.append(li(couple("P043","P042","★ The two lines converge · Alan Setter ⚭ Ella Riggs, m. 31 Mar 1909, Portage la Prairie")))
 
+# Hamilton branch — Lawrence's parents (before the Doris+Lawrence couple)
+tree.append(li(couple("P061","P062","Hamilton branch · Lawrence's parents · Guy Wentworth Hamilton ⚭ Ethel Rose King")))
+
 # Trunk down to Bayard
 trunk = li(
-    couple("P044","P045","Doris A. Setter ⚭ Laurence D. Hamilton"),
+    couple("P044","P045","Doris A. Setter ⚭ Lawrence D. Hamilton"),
     li(
         couple("P047","P046","Robert Lau · Mavis Irene Hamilton"),
         li(

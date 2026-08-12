@@ -51,9 +51,9 @@
     {"id":"P041","name":"Ernest Charles Riggs","birth":"1859","metis":true,"privacy":"deceased","note":"son of Harmon M. Riggs + Amelia M. Williams"},
     {"id":"P042","name":"Ella Alberta Riggs","birth":"c1880s","metis":true,"privacy":"deceased","note":"DIRECT · Spence line B"},
     {"id":"P043","name":"Alan Setter","birth":"1884","death":"1964","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie"},
-    {"id":"P044","name":"Doris A. Setter","birth":"1912","death":"c2010","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912, Portage la Prairie · also 'Doris Alberta Setter'"},
-    {"id":"P045","name":"Laurence D. Hamilton","birth":"1912","death":"1984","metis":false,"privacy":"deceased","note":"husband of Doris Setter · also 'Lawrence'"},
-    {"id":"P046","name":"Mavis Irene Hamilton","birth":"c1925","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · maternal grandmother · one of 6 Hamilton siblings"},
+    {"id":"P044","name":"Doris A. Setter","birth":"1912","death":"2006","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912 Portage la Prairie · m. Lawrence 29 Dec 1932 Tisdale SK · d. 23 Apr 2006"},
+    {"id":"P045","name":"Lawrence Donald Hamilton","birth":"1912","death":"1984","metis":false,"privacy":"deceased","note":"b. 15 Jun 1912 Tisdale SK · d. 5 Feb 1984 Flin Flon · son of Guy Wentworth Hamilton + Ethel Rose King · also 'Laurence'"},
+    {"id":"P046","name":"Mavis Irene Hamilton","birth":"1933","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6"},
     {"id":"P047","name":"Robert Lau","metis":false,"privacy":"deceased","note":"maternal grandfather"},
     {"id":"P048","name":"Tracy Diane Lau","birth":"b.1950s","metis":true,"privacy":"living","note":"b. Flin Flon MB · DIRECT"},
     {"id":"P049","name":"Bryon deVries","metis":false,"privacy":"living","note":"father"},
@@ -65,7 +65,13 @@
     {"id":"P056","name":"Daniel Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
     {"id":"P057","name":"Patrick Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
     {"id":"P058","name":"Wesley C. Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
-    {"id":"P059","name":"Harley Hamilton","birth":"1934","death":"2001","metis":false,"privacy":"deceased","note":"son of Doris + Laurence"},
+    {"id":"P059","name":"Harley Hamilton","birth":"1934","death":"2001","metis":false,"privacy":"deceased","note":"son of Doris + Lawrence"},
+    {"id":"P061","name":"Guy Wentworth Hamilton","birth":"1882","death":"1946","metis":false,"privacy":"deceased","note":"b. 26 Nov 1882 Beautiful Plains MB · d. 13 Jun 1946 Tisdale SK · Lawrence's father"},
+    {"id":"P062","name":"Ethel Rose King","birth":"1892","death":"1982","metis":false,"privacy":"deceased","note":"b. 17 Apr 1892 Neche ND, USA · d. 16 Jun 1982 SK · Lawrence's mother"},
+    {"id":"P063","name":"Jean Margaret Hamilton","birth":"1915","death":"2000","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
+    {"id":"P064","name":"Madeleine Phyllis Hamilton","birth":"1918","death":"2004","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
+    {"id":"P065","name":"William Morrison Hamilton","birth":"1926","death":"1991","metis":false,"privacy":"deceased","note":"brother of Lawrence"},
+    {"id":"P066","name":"Vivian Ethel Hamilton","birth":"1930","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
     {"id":"P051","name":"Premier John Norquay","birth":"1841","death":"1889","metis":true,"privacy":"deceased","note":"Manitoba's first Métis premier (1878-87) · via Elizabeth Setter","highlight":true}
   ],
   "unions": [
@@ -80,7 +86,8 @@
     {"id":"U09","spouse1":"P047","spouse2":"P046","children":["P048"]},
     {"id":"U10","spouse1":"P048","spouse2":"P049","children":["P050"]},
     {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"},
-    {"id":"U12","spouse1":"P025","spouse2":"P060","children":["P043"]}
+    {"id":"U12","spouse1":"P025","spouse2":"P060","children":["P043"]},
+    {"id":"U13","spouse1":"P061","spouse2":"P062","children":["P045","P063","P064","P065","P066"]}
   ],
   "paths_to_root": [
     "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → Roderick McKenzie Setter (1856) + Sarah Ann Howrie → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
