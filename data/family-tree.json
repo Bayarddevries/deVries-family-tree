@@ -256,7 +256,7 @@
       "death": "1874",
       "metis": true,
       "privacy": "deceased",
-      "note": "née Morwick, wid. Norquay"
+      "note": "née Morwick, wid. Norquay · grandmother of Premier John Norquay"
     },
     {
       "id": "P030",
@@ -265,7 +265,7 @@
       "death": "1885",
       "metis": true,
       "privacy": "deceased",
-      "note": "DIRECT · MLA Poplar Point 1870-74, Convention of Forty rep, JP",
+      "note": "FIRST MLA Poplar Point 1870-74 · Convention of Forty delegate (Ste. Anne's) · m. Catherine Hallett 1844 · d.1885 (accidental shooting)",
       "highlight": true
     },
     {
@@ -289,35 +289,39 @@
       "death": "1880",
       "metis": true,
       "privacy": "deceased",
-      "note": "dau of Henry Hallett + Catherine Parenteau"
+      "note": "dau. of Henry Hallett + Catherine Parenteau · m. David Spence 15 Feb 1844 · scrip 1876 · d.1880"
     },
     {
       "id": "P034",
       "name": "John 'Jake' Spence",
       "birth": "1848",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. Ellen McNab"
     },
     {
       "id": "P035",
       "name": "Ellen Anderson Spence",
       "birth": "1853",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. George Brown"
     },
     {
       "id": "P036",
       "name": "Charles David Spence",
       "birth": "1857",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. 'Eliza' Foulds"
     },
     {
       "id": "P037",
       "name": "Jane Spence",
       "birth": "1859",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. William Folster"
     },
     {
       "id": "P038",
@@ -333,14 +337,16 @@
       "name": "Harriet Spence",
       "birth": "1863",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. Peter Henry Wishart"
     },
     {
       "id": "P040",
       "name": "William 'Bill' Spence",
       "birth": "1866",
       "metis": true,
-      "privacy": "deceased"
+      "privacy": "deceased",
+      "note": "m. Martha McNab"
     },
     {
       "id": "P041",
@@ -943,9 +949,9 @@
       "source": "https://www.redriverancestry.ca/SETTER-ANDREW-1777.php"
     },
     "P030": {
-      "title": "David Spence — politician & MLA",
-      "text": "Born 1824 at Red River. A Métis leader: delegate for St. Anne's/Poplar Point to the 1870 Convention of Forty, first MLA for Poplar Point 1870-74, and a Justice of the Peace. With his wife Catherine he claimed Half-breed Scrip in 1875. Father of 7, home base Poplar Point / Portage la Prairie.",
-      "source": "https://www.redriverancestry.ca/SPENCE-DAVID-1834.php"
+      "title": "David Spence — MLA, Convention of Forty delegate, Métis leader",
+      "text": "David Spence (b. 5 Sep 1824, St. John's parish; d. 16 Sep 1885) was a Scottish Half-Breed, son of James Spence and his second wife Jane Morwick, both Métis — his mother was grandmother to Manitoba's first Premier, John Norquay. He married Catherine Hallett on 15 Feb 1844 at St. John's (daughter of Henry Hallett and Catherine Parenteau). He represented St. Anne's at the 1870 Convention of Forty, and in 1877 the family moved to lot #62 at Poplar Point. He was elected the first MLA from Poplar Point on 27 Dec 1870 and served 1870-74, also serving as Justice of the Peace for Poplar Point and Marquette. Métis scrip was issued to David and Catherine on 2 Oct 1876. Catherine died in 1880. David was accidentally shot in his own home by a neighbour who thought the rifle was unloaded, and died of the wound on 16 Sep 1885.",
+      "source": "https://www.metismuseum.ca/media/document.php/12539.Convention%20of%20Forty%20revised.pdf"
     },
     "P022": {
       "title": "Elizabeth Setter — married a Premier",
