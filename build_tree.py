@@ -9,10 +9,19 @@ Output is self-contained (inline CSS, no external JS fetch) and mobile-first.
 Usage: python3 build_tree.py
 """
 import json, os, html as H
+import base64
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = json.load(open(os.path.join(HERE, "data", "family-tree.json")))
 PEOPLE = {p["id"]: p for p in DATA["people"]}
+
+# Base64-embed portraits so the single HTML file is self-contained.
+def load_image(rel):
+    p = os.path.join(HERE, "site", "assets", rel)
+    if not os.path.exists(p): return None
+    with open(p, "rb") as f:
+        return "data:image/jpeg;base64," + base64.b64encode(f.read()).decode()
+IMG = {"P030": load_image("david-spence.jpg"), "P051": load_image("john-norquay.jpg")}
 
 def esc(s): return H.escape(str(s))
 
@@ -30,7 +39,8 @@ def card(pid, role="", note=None, metis_badge=True):
     stars = ' <span class="star">★</span>' if p.get("you") else (' <span class="star">◈</span>' if p.get("highlight") else '')
     badge = ' <span class="m">MÉTIS</span>' if (metis_badge and (p.get("metis") or (p.get("you")))) else ''
     note_html = f"<div class='role'>{esc(note or p.get('note',''))}</div>" if (note or p.get("note")) else ""
-    return f'<div class="{cls}">{pn(pid)}{stars}{badge}{note_html}</div>'
+    img = f'<img class="portrait" src="{IMG[pid]}" alt="portrait">' if pid in IMG else ""
+    return f'<div class="{cls}">{img}{pn(pid)}{stars}{badge}{note_html}</div>'
 
 def couple(pid1, pid2, note=None):
     amp = '<span class="amp">⚭</span>'
@@ -131,7 +141,8 @@ if DATA.get("stories"):
         s = DATA["stories"].get(pid)
         if not s: continue
         name = PEOPLE[pid]["name"]
-        story_html.append(f'<details><summary>{esc(s["title"])} <span class="who">· {esc(name)}</span></summary><p>{esc(s["text"])}</p></details>')
+        src = f'<a class="srclink" href="{esc(s["source"])}" target="_blank" rel="noopener">source ↗</a>' if s.get("source") else ""
+        story_html.append(f'<details><summary>{esc(s["title"])} <span class="who">· {esc(name)}</span></summary><p>{esc(s["text"])}</p>{src}</details>')
     story_html.append('</section>')
 
 # =========================================================
@@ -179,6 +190,7 @@ header p.sub{font-size:clamp(14px,3vw,17px);color:#7A6E66;font-style:italic}
 .node.you{border-color:#8C1F28;border-left-width:4px;border-left-color:#8C1F28;background:#FBF4F0}
 .node .m{display:inline-block;background:#C9A24B;color:#fff;font-size:9px;font-family:'Cinzel',serif;letter-spacing:1px;padding:1px 6px;border-radius:8px;vertical-align:middle;margin-left:4px}
 .node .role{font-size:12px;color:#7A6E66;font-style:italic;margin-top:2px;max-width:230px}
+.node .portrait{width:52px;height:72px;object-fit:cover;border-radius:6px;border:1px solid #B9A793;float:left;margin:0 9px 4px 0;display:block}
 .couple{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .couple .amp{color:#C9A24B;font-weight:700;font-size:16px}
 .branchlabel{font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;color:#7A6E66;margin:4px 0 2px}
@@ -199,6 +211,8 @@ section.fam h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bo
 .stories summary{cursor:pointer;padding:10px 14px;font-family:'Cinzel',serif;font-size:14px;color:#8C1F28;font-weight:600}
 .stories summary .who{color:#7A6E66;font-weight:400;font-size:12px}
 .stories details p{padding:0 14px 12px;font-size:15px;color:#2A2220;line-height:1.5}
+.stories .srclink{display:inline-block;margin:0 0 12px 14px;font-size:13px;color:#8C1F28;text-decoration:none;border:1px solid #C9A24B;padding:3px 10px;border-radius:14px;background:#FBF4F0}
+.stories .srclink:hover{background:#C9A24B;color:#fff}
 .paths h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bottom:2px solid #C9A24B;padding-bottom:6px;margin-bottom:10px}
 .paths ol{margin-left:20px;font-size:15px}.paths li{margin-bottom:8px}
 .sources{max-width:720px;margin:28px auto 0;padding-top:14px;border-top:1px solid #B9A793;font-size:13px;color:#7A6E66}
