@@ -68,7 +68,7 @@
     {
       "id": "P006",
       "name": "Margaret 'Peggy' Spence",
-      "birth": "1794",
+      "birth": "1795",
       "death": "1868",
       "metis": true,
       "privacy": "deceased",
@@ -104,7 +104,7 @@
       "death": "1899",
       "metis": true,
       "privacy": "deceased",
-      "note": "DIRECT · Fort Ellice → Poplar Point"
+      "note": "son of Andrew Setter + Peggy Spence · m1 Isabella Kennedy, m2 Jessie Ellen Campbell"
     },
     {
       "id": "P011",
@@ -170,7 +170,7 @@
       "death": "1912",
       "metis": true,
       "privacy": "deceased",
-      "note": "2nd wife of George Setter"
+      "note": "2nd wife of George Setter (m. after Isabella d.1846) · mother of Roderick McKenzie Setter"
     },
     {
       "id": "P020",
@@ -214,7 +214,7 @@
       "birth": "1856",
       "metis": true,
       "privacy": "deceased",
-      "note": "son of George Setter · m. Sarah Ann Howrie"
+      "note": "son of George Setter + Jessie Ellen Campbell · m. Sarah Ann Howrie · DIRECT (line A)"
     },
     {
       "id": "P060",
@@ -566,7 +566,7 @@
       "birth": "1936",
       "metis": false,
       "privacy": "deceased",
-      "note": "first-born son · b. Ee, Friesland, Netherlands"
+      "note": "b. Ee, Friesland, Netherlands · note: birth year 1936 vs brother Leonard b.1932 (verify eldest)"
     },
     {
       "id": "P070",
@@ -660,7 +660,7 @@
     {
       "id": "P083",
       "name": "Ashley deVries",
-      "metis": false,
+      "metis": true,
       "privacy": "living",
       "note": "Bayard's sister · m. Noel Brown"
     },
@@ -702,7 +702,7 @@
     {
       "id": "P089",
       "name": "Grover deVries",
-      "metis": false,
+      "metis": true,
       "privacy": "living",
       "note": "Bayard & Paula's son"
     },
@@ -765,13 +765,7 @@
       "children": [
         "P020",
         "P021",
-        "P022",
-        "P023",
-        "P024",
-        "P025",
-        "P026",
-        "P027",
-        "P028"
+        "P022"
       ]
     },
     {
@@ -920,6 +914,20 @@
         "P086",
         "P087"
       ]
+    },
+    {
+      "id": "U19",
+      "spouse1": "P010",
+      "spouse2": "P019",
+      "children": [
+        "P023",
+        "P024",
+        "P025",
+        "P026",
+        "P027",
+        "P028"
+      ],
+      "note": "2nd wife of George Setter; the 6 children born 1852-1861"
     }
   ],
   "paths_to_root": [
@@ -930,22 +938,26 @@
     "Confirm Doris Setter's birth mother = Ella (Riggs) Setter (vital stats DetailView)",
     "Locate Setter→Hamilton marriage (may be Saskatchewan, Flin Flon area)",
     "Expand deVries paternal side (Bryon's family) — needs family input",
-    "Verify app-date discrepancies vs primary (e.g. Catherine Hallett 1824-1887 vs 1824-1880)"
+    "Verify app-date discrepancies vs primary (e.g. Catherine Hallett 1824-1887 vs 1824-1880)",
+    "Identify the Cree matriarch 'Nikawiy' (mother of Margaret Batt) - nation/tribe only via oral tradition",
+    "Pin Guy Wentworth Hamilton's parents (FamilySearch login-walled)",
+    "Verify Isaac Batt's English parents (Dantzick Batt + Sarah Lindsel) vs DCB (names Sarah Fowler as his wife)",
+    "Verify the Setter->Hamilton marriage (likely Saskatchewan, Flin Flon border area)"
   ],
   "stories": {
     "P001": {
       "title": "James Spence Sr — Orkney fur trader",
-      "text": "Born c1753 in Birsay, Orkney. Came to York Factory in 1773 as an HBC labourer and inland voyageur ('a fine fellow and a good canoe man'). Left in charge of Buckingham House in 1793, the HBC's most westerly post at the time. Died there aged 42 in 1795, leaving Margaret pregnant with their fourth child.",
+      "text": "Born c1753 in Birsay, Orkney. Came to York Factory in 1773 as an HBC labourer and inland voyageur ('a fine fellow and a good canoe man'). Left in charge of Buckingham House in 1793, the HBC's most westerly post at the time. Died there aged 42 in 1795, leaving Margaret pregnant with their fourth child [Verify vs primary records.]",
       "source": "https://www.redriverancestry.ca/SPENCE-JAMES-1753.php"
     },
     "P002": {
       "title": "Margaret 'Nestichio' Batt — the Métis matriarch",
-      "text": "Born 1757, daughter of Isaac Batt (1730-1791), an English HBC inland trader, and an unnamed Cree woman — the matrilineal Métis root of this line. She grew up in the fur-trade world of York Factory, where the young Orkney voyageur James Spence began courting her when she was 16. Family oral tradition (preserved in several written versions since the 1800s) tells that as a girl she was kidnapped by the Blackfeet and her mother asked James to rescue her; after many failed attempts he succeeded using a relay of horses, then waited until she was older to marry her. By 1782 they were partners and had four children: James, Andrew, George, and Margaret 'Peggy' (your direct ancestor, born 1796 just after James Sr died at Buckingham House). Widowed at 38 and pregnant, she raised the four children, returning to York Factory then the Red River Settlement. In 1821 all her children married at Red River — including Peggy to Andrew Setter, joining the Spence and Setter lines. Margaret died in 1829 at Red River Settlement. NOTE: the kidnapping tale is a cherished oral tradition, not a primary record; a variant says it was her daughter Peggy who was rescued by Andrew Setter.",
+      "text": "Born 1757, daughter of Isaac Batt (c1725-1791), an English HBC inland trader, and an unnamed Cree woman — the matrilineal Métis root of this line. She grew up in the fur-trade world of York Factory, where the young Orkney voyageur James Spence began courting her when she was 16. Family oral tradition (preserved in several written versions since the 1800s) tells that as a girl she was kidnapped by the Blackfeet and her mother asked James to rescue her; after many failed attempts he succeeded using a relay of horses, then waited until she was older to marry her. Over the years they had four children: James, Andrew, George, and Margaret 'Peggy' (your direct ancestor, born 1795/96 just after James Sr died at Buckingham House). Widowed at 38 and pregnant, she raised the four children, returning to York Factory then the Red River Settlement. In 1821 all her children married at Red River — including Peggy to Andrew Setter, joining the Spence and Setter lines. Margaret died in 1829 at Red River Settlement. NOTE: the kidnapping tale is a cherished oral tradition, not a primary record; a variant says it was her daughter Peggy who was rescued by Andrew Setter [Verify vs primary records.]",
       "source": "https://www.redriverancestry.ca/SPENCE-JAMES-1753.php"
     },
     "P007": {
       "title": "Andrew Setter — Orkney voyageur",
-      "text": "Born 1777 in Westray, Orkney; joined the HBC at York Factory in 1800 as a labourer. For 18 years he voyaged inland. In 1821 Rev. John West baptised and married him to Margaret Spence at Beaver Creek — the first HBC clergyman's marriage west of Red River. Retired to St Andrews Parish in 1823.",
+      "text": "Born 1777 in Westray, Orkney; joined the HBC at York Factory in 1800 as a labourer. For 18 years he voyaged inland. In 1821 Rev. John West baptised and married him to Margaret Spence at Beaver Creek — the first HBC clergyman's marriage west of Red River. Retired to St Andrews Parish in 1823 [Verify vs primary records.]",
       "source": "https://www.redriverancestry.ca/SETTER-ANDREW-1777.php"
     },
     "P030": {
@@ -955,12 +967,12 @@
     },
     "P022": {
       "title": "Elizabeth Setter — married a Premier",
-      "text": "Daughter of George Setter; in 1862 married John Norquay, who in 1878 became Manitoba's first Métis Premier. Through her, this family connects to Manitoba's provincial founding.",
+      "text": "Daughter of George Setter; in 1862 married John Norquay, who in 1878 became Manitoba's first Métis Premier. Through her, this family connects to Manitoba's provincial founding [Verify vs primary records.]",
       "source": "https://www.redriverancestry.ca/SETTER-GEORGE-1815.php"
     },
     "P051": {
       "title": "Premier John Norquay — cousin by marriage",
-      "text": "Manitoba's first Métis Premier (1878-87). Married Elizabeth Setter, daughter of George Setter. A towering figure in early Manitoba politics.",
+      "text": "Manitoba's first Métis Premier (1878-87). Married Elizabeth Setter, daughter of George Setter. A towering figure in early Manitoba politics [Verify vs primary records.]",
       "source": "https://www.redriverancestry.ca/NORQUAY-JOHN-1841.php"
     },
     "P067": {
