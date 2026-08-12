@@ -84,6 +84,9 @@ tree.append(li(couple("P043","P042","★ The two lines converge · Alan Setter �
 # Hamilton branch — Lawrence's parents (before the Doris+Lawrence couple)
 tree.append(li(couple("P061","P062","Hamilton branch · Lawrence's parents · Guy Wentworth Hamilton ⚭ Ethel Rose King")))
 
+# deVries branch — Bryon's parents (before the Tracy+Bryon couple)
+tree.append(li(couple("P067","P068","deVries branch · Bryon's parents · Gerhard De Vries ⚭ Geeske Oltrop (Ochre River MB, Dutch/Friesland)")))
+
 # Trunk down to Bayard
 trunk = li(
     couple("P044","P045","Doris A. Setter ⚭ Lawrence D. Hamilton"),

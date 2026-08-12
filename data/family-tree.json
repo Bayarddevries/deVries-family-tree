@@ -56,7 +56,7 @@
     {"id":"P046","name":"Mavis Irene Hamilton","birth":"1933","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6"},
     {"id":"P047","name":"Robert Lau","metis":false,"privacy":"deceased","note":"maternal grandfather"},
     {"id":"P048","name":"Tracy Diane Lau","birth":"b.1950s","metis":true,"privacy":"living","note":"b. Flin Flon MB · DIRECT"},
-    {"id":"P049","name":"Bryon deVries","metis":false,"privacy":"living","note":"father"},
+    {"id":"P049","name":"Bryon Edward deVries","birth":"1954","death":"2019","metis":false,"privacy":"deceased","note":"father · b. 17 Jul 1954 · d. 13 Oct 2019 · HR Director Sunrise School Division · son of Gerhard de Vries + Geeske Oltrop"},
     {"id":"P050","name":"Bayard deVries","metis":true,"privacy":"living","note":"YOU","you":true},
     {"id":"P052","name":"Elwyn Setter","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
     {"id":"P053","name":"Erma Ann Setter","birth":"1910","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
@@ -72,6 +72,18 @@
     {"id":"P064","name":"Madeleine Phyllis Hamilton","birth":"1918","death":"2004","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
     {"id":"P065","name":"William Morrison Hamilton","birth":"1926","death":"1991","metis":false,"privacy":"deceased","note":"brother of Lawrence"},
     {"id":"P066","name":"Vivian Ethel Hamilton","birth":"1930","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
+    {"id":"P067","name":"Gerhard De Vries","metis":false,"privacy":"deceased","note":"paternal grandfather · Dutch (Friesland) · homesteaded Lake Dauphin/Turtle River, Ochre River MB"},
+    {"id":"P068","name":"Geeske Oltrop","metis":false,"privacy":"deceased","note":"paternal grandmother · 'Geske' · m. Gerhard 4 Oct 1929 Ochre River MB"},
+    {"id":"P069","name":"John 'Johann' de Vries","birth":"1936","metis":false,"privacy":"deceased","note":"first-born son · b. Ee, Friesland, Netherlands"},
+    {"id":"P070","name":"Tina de Vries","metis":false,"privacy":"deceased","note":"m. Brenner"},
+    {"id":"P071","name":"Leonard De Vries","birth":"1932","death":"2016","metis":false,"privacy":"deceased","note":"dairy farmer, Ochre River"},
+    {"id":"P072","name":"Etta de Vries","metis":false,"privacy":"deceased","note":"m. Hodges"},
+    {"id":"P073","name":"Annie 'Antje' de Vries","metis":false,"privacy":"deceased","note":"m. Boerchers"},
+    {"id":"P074","name":"Margaret de Vries","metis":false,"privacy":"deceased","note":"m. Brink"},
+    {"id":"P075","name":"Mary de Vries","metis":false,"privacy":"deceased","note":"m. McKean"},
+    {"id":"P076","name":"Helen de Vries","metis":false,"privacy":"deceased","note":"m. Claeys"},
+    {"id":"P077","name":"Herman de Vries","metis":false,"privacy":"deceased","note":"brother of Bryon"},
+    {"id":"P078","name":"Gerald de Vries","metis":false,"privacy":"deceased","note":"brother of Bryon"},
     {"id":"P051","name":"Premier John Norquay","birth":"1841","death":"1889","metis":true,"privacy":"deceased","note":"Manitoba's first Métis premier (1878-87) · via Elizabeth Setter","highlight":true}
   ],
   "unions": [
@@ -87,7 +99,8 @@
     {"id":"U10","spouse1":"P048","spouse2":"P049","children":["P050"]},
     {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"},
     {"id":"U12","spouse1":"P025","spouse2":"P060","children":["P043"]},
-    {"id":"U13","spouse1":"P061","spouse2":"P062","children":["P045","P063","P064","P065","P066"]}
+    {"id":"U13","spouse1":"P061","spouse2":"P062","children":["P045","P063","P064","P065","P066"]},
+    {"id":"U14","spouse1":"P067","spouse2":"P068","children":["P069","P070","P071","P072","P073","P074","P075","P076","P077","P078","P049"]}
   ],
   "paths_to_root": [
     "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → Roderick McKenzie Setter (1856) + Sarah Ann Howrie → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
