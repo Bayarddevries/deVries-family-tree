@@ -120,6 +120,21 @@ for u in DATA["unions"]:
 fam.append('</section>')
 
 # =========================================================
+# STORIES & PROFILES
+# =========================================================
+story_html = []
+if DATA.get("stories"):
+    story_html.append('<section class="stories"><h2>Stories &amp; Profiles</h2>')
+    # order: oldest-first by generation depth (compute via unions is complex; use fixed order)
+    order = ["P001","P002","P007","P030","P022","P051","P067","P049","P046"]
+    for pid in order:
+        s = DATA["stories"].get(pid)
+        if not s: continue
+        name = PEOPLE[pid]["name"]
+        story_html.append(f'<details><summary>{esc(s["title"])} <span class="who">· {esc(name)}</span></summary><p>{esc(s["text"])}</p></details>')
+    story_html.append('</section>')
+
+# =========================================================
 # PATHS + SOURCES
 # =========================================================
 paths = "".join(f"<li>{esc(p)}</li>" for p in DATA["paths_to_root"])
@@ -178,6 +193,12 @@ section.fam h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bo
 .famunit .direct{color:#8C1F28;font-weight:600}
 .famunit .muted{color:#B9A793;font-style:italic}
 .paths{max-width:720px;margin:26px auto 0}
+.stories{max-width:720px;margin:30px auto 0}
+.stories h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bottom:2px solid #C9A24B;padding-bottom:6px;margin-bottom:10px}
+.stories details{background:#FFFDF7;border:1px solid #B9A793;border-left:4px solid #C9A24B;border-radius:9px;margin-bottom:8px;overflow:hidden}
+.stories summary{cursor:pointer;padding:10px 14px;font-family:'Cinzel',serif;font-size:14px;color:#8C1F28;font-weight:600}
+.stories summary .who{color:#7A6E66;font-weight:400;font-size:12px}
+.stories details p{padding:0 14px 12px;font-size:15px;color:#2A2220;line-height:1.5}
 .paths h2{font-family:'Cinzel',serif;font-size:18px;color:#8C1F28;border-bottom:2px solid #C9A24B;padding-bottom:6px;margin-bottom:10px}
 .paths ol{margin-left:20px;font-size:15px}.paths li{margin-bottom:8px}
 .sources{max-width:720px;margin:28px auto 0;padding-top:14px;border-top:1px solid #B9A793;font-size:13px;color:#7A6E66}
@@ -202,6 +223,7 @@ HTML = f"""<!DOCTYPE html>
 </div>
 {tree_html}
 {''.join(fam)}
+{''.join(story_html)}
 <div class="paths"><h2>Your two paths to the Métis root</h2><ol>{paths}</ol></div>
 {sources}
 </body></html>"""

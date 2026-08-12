@@ -7,100 +7,783 @@
     "updated": "2026-08-12"
   },
   "people": [
-    {"id":"P001","name":"James Spence Sr","birth":"c1753","death":"1795","metis":false,"privacy":"deceased","note":"Orkney-born HBC voyageur"},
-    {"id":"P002","name":"Margaret 'Nestichio' Batt","birth":"1757","death":"1829","metis":true,"privacy":"deceased","note":"Métis / Cree · THE Métis root"},
-    {"id":"P003","name":"James Spence Jr","birth":"c1782","death":"1857","metis":true,"privacy":"deceased","note":"HBC tailor, Red River 1818"},
-    {"id":"P004","name":"Andrew Spence","birth":"1786","metis":true,"privacy":"deceased"},
-    {"id":"P005","name":"George Spence Sr","birth":"1792","metis":true,"privacy":"deceased","note":"Ancestor of Grove family of Selkirk"},
-    {"id":"P006","name":"Margaret 'Peggy' Spence","birth":"1794","death":"1868","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A"},
-    {"id":"P007","name":"Andrew Setter","birth":"1777","death":"1870","metis":false,"privacy":"deceased","note":"Orkney HBC voyageur"},
-    {"id":"P008","name":"James Setter","birth":"1810","metis":true,"privacy":"deceased"},
-    {"id":"P009","name":"Margaret Setter","birth":"1813","metis":true,"privacy":"deceased"},
-    {"id":"P010","name":"George Setter","birth":"1815","death":"1899","metis":true,"privacy":"deceased","note":"DIRECT · Fort Ellice → Poplar Point"},
-    {"id":"P011","name":"Isabella 'Bella' Setter","birth":"1816","metis":true,"privacy":"deceased"},
-    {"id":"P012","name":"Elizabeth Setter","birth":"1822","metis":true,"privacy":"deceased"},
-    {"id":"P013","name":"Ann Setter","birth":"1825","metis":true,"privacy":"deceased"},
-    {"id":"P014","name":"Mary Setter","birth":"1830","metis":true,"privacy":"deceased"},
-    {"id":"P015","name":"Thomas Alexander Setter","birth":"1831","metis":true,"privacy":"deceased"},
-    {"id":"P016","name":"John Setter","birth":"1832","metis":true,"privacy":"deceased"},
-    {"id":"P017","name":"Catherine Setter","birth":"1837","metis":true,"privacy":"deceased"},
-    {"id":"P018","name":"Isabella Kennedy","birth":"1820","death":"1846","metis":true,"privacy":"deceased"},
-    {"id":"P019","name":"Jessie Ellen Campbell","birth":"1824","death":"1912","metis":true,"privacy":"deceased","note":"2nd wife of George Setter"},
-    {"id":"P020","name":"John James Setter","birth":"1837","metis":true,"privacy":"deceased"},
-    {"id":"P021","name":"Caroline Setter","birth":"1840","metis":true,"privacy":"deceased"},
-    {"id":"P022","name":"Elizabeth Setter","birth":"1842","metis":true,"privacy":"deceased","note":"→ married Premier John Norquay"},
-    {"id":"P023","name":"Duncan Richard Setter","birth":"1852","metis":true,"privacy":"deceased"},
-    {"id":"P024","name":"Colin Campbell Setter","birth":"1854","metis":true,"privacy":"deceased"},
-    {"id":"P025","name":"Roderick McKenzie Setter","birth":"1856","metis":true,"privacy":"deceased","note":"son of George Setter · m. Sarah Ann Howrie"},
-    {"id":"P060","name":"Sarah Ann Howrie","birth":"c1859","metis":true,"privacy":"deceased","note":"also 'Hourie' · wife of Roderick McKenzie Setter"},
-    {"id":"P026","name":"Alexander Hunter Murray Setter","birth":"1858","metis":true,"privacy":"deceased"},
-    {"id":"P027","name":"George William Setter","birth":"1861","death":"1874","metis":true,"privacy":"deceased","note":"twin, d. age 13"},
-    {"id":"P028","name":"Ellen Madeleine 'Nellie' Setter","birth":"1861","death":"1874","metis":true,"privacy":"deceased","note":"twin, d. age 13"},
-    {"id":"P029","name":"Jane Morwick","birth":"1794","death":"1874","metis":true,"privacy":"deceased","note":"née Morwick, wid. Norquay"},
-    {"id":"P030","name":"David Spence","birth":"1824","death":"1885","metis":true,"privacy":"deceased","note":"DIRECT · MLA Poplar Point 1870-74, Convention of Forty rep, JP","highlight":true},
-    {"id":"P031","name":"Joseph Spence","birth":"1826","metis":true,"privacy":"deceased"},
-    {"id":"P032","name":"Catherine Spence","birth":"1829","metis":true,"privacy":"deceased"},
-    {"id":"P033","name":"Catherine Hallett","birth":"1824","death":"1880","metis":true,"privacy":"deceased","note":"dau of Henry Hallett + Catherine Parenteau"},
-    {"id":"P034","name":"John 'Jake' Spence","birth":"1848","metis":true,"privacy":"deceased"},
-    {"id":"P035","name":"Ellen Anderson Spence","birth":"1853","metis":true,"privacy":"deceased"},
-    {"id":"P036","name":"Charles David Spence","birth":"1857","metis":true,"privacy":"deceased"},
-    {"id":"P037","name":"Jane Spence","birth":"1859","metis":true,"privacy":"deceased"},
-    {"id":"P038","name":"Mary Ann Spence","birth":"1861","death":"1930","metis":true,"privacy":"deceased","note":"DIRECT · Spence line B"},
-    {"id":"P039","name":"Harriet Spence","birth":"1863","metis":true,"privacy":"deceased"},
-    {"id":"P040","name":"William 'Bill' Spence","birth":"1866","metis":true,"privacy":"deceased"},
-    {"id":"P041","name":"Ernest Charles Riggs","birth":"1859","metis":true,"privacy":"deceased","note":"son of Harmon M. Riggs + Amelia M. Williams"},
-    {"id":"P042","name":"Ella Alberta Riggs","birth":"c1880s","metis":true,"privacy":"deceased","note":"DIRECT · Spence line B"},
-    {"id":"P043","name":"Alan Setter","birth":"1884","death":"1964","metis":true,"privacy":"deceased","note":"DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie"},
-    {"id":"P044","name":"Doris A. Setter","birth":"1912","death":"2006","metis":true,"privacy":"deceased","note":"DIRECT · b. 24 Dec 1912 Portage la Prairie · m. Lawrence 29 Dec 1932 Tisdale SK · d. 23 Apr 2006"},
-    {"id":"P045","name":"Lawrence Donald Hamilton","birth":"1912","death":"1984","metis":false,"privacy":"deceased","note":"b. 15 Jun 1912 Tisdale SK · d. 5 Feb 1984 Flin Flon · son of Guy Wentworth Hamilton + Ethel Rose King · also 'Laurence'"},
-    {"id":"P046","name":"Mavis Irene Hamilton","birth":"1933","death":"2020","metis":true,"privacy":"deceased","note":"DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6"},
-    {"id":"P047","name":"Robert Lau","metis":false,"privacy":"deceased","note":"maternal grandfather"},
-    {"id":"P048","name":"Tracy Diane Lau","birth":"b.1950s","metis":true,"privacy":"living","note":"b. Flin Flon MB · DIRECT"},
-    {"id":"P049","name":"Bryon Edward deVries","birth":"1954","death":"2019","metis":false,"privacy":"deceased","note":"father · b. 17 Jul 1954 · d. 13 Oct 2019 · HR Director Sunrise School Division · son of Gerhard de Vries + Geeske Oltrop"},
-    {"id":"P050","name":"Bayard deVries","metis":true,"privacy":"living","note":"YOU","you":true},
-    {"id":"P052","name":"Elwyn Setter","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
-    {"id":"P053","name":"Erma Ann Setter","birth":"1910","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
-    {"id":"P054","name":"Clayton N. Setter","birth":"1917","death":"1975","metis":true,"privacy":"deceased","note":"child of Alan Setter + Ella Riggs"},
-    {"id":"P055","name":"Alan Guy Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
-    {"id":"P056","name":"Daniel Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
-    {"id":"P057","name":"Patrick Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
-    {"id":"P058","name":"Wesley C. Hamilton","metis":false,"privacy":"living","note":"son of Doris + Laurence"},
-    {"id":"P059","name":"Harley Hamilton","birth":"1934","death":"2001","metis":false,"privacy":"deceased","note":"son of Doris + Lawrence"},
-    {"id":"P061","name":"Guy Wentworth Hamilton","birth":"1882","death":"1946","metis":false,"privacy":"deceased","note":"b. 26 Nov 1882 Beautiful Plains MB · d. 13 Jun 1946 Tisdale SK · Lawrence's father"},
-    {"id":"P062","name":"Ethel Rose King","birth":"1892","death":"1982","metis":false,"privacy":"deceased","note":"b. 17 Apr 1892 Neche ND, USA · d. 16 Jun 1982 SK · Lawrence's mother"},
-    {"id":"P063","name":"Jean Margaret Hamilton","birth":"1915","death":"2000","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
-    {"id":"P064","name":"Madeleine Phyllis Hamilton","birth":"1918","death":"2004","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
-    {"id":"P065","name":"William Morrison Hamilton","birth":"1926","death":"1991","metis":false,"privacy":"deceased","note":"brother of Lawrence"},
-    {"id":"P066","name":"Vivian Ethel Hamilton","birth":"1930","metis":false,"privacy":"deceased","note":"sister of Lawrence"},
-    {"id":"P067","name":"Gerhard De Vries","metis":false,"privacy":"deceased","note":"paternal grandfather · Dutch (Friesland) · homesteaded Lake Dauphin/Turtle River, Ochre River MB"},
-    {"id":"P068","name":"Geeske Oltrop","metis":false,"privacy":"deceased","note":"paternal grandmother · 'Geske' · m. Gerhard 4 Oct 1929 Ochre River MB"},
-    {"id":"P069","name":"John 'Johann' de Vries","birth":"1936","metis":false,"privacy":"deceased","note":"first-born son · b. Ee, Friesland, Netherlands"},
-    {"id":"P070","name":"Tina de Vries","metis":false,"privacy":"deceased","note":"m. Brenner"},
-    {"id":"P071","name":"Leonard De Vries","birth":"1932","death":"2016","metis":false,"privacy":"deceased","note":"dairy farmer, Ochre River"},
-    {"id":"P072","name":"Etta de Vries","metis":false,"privacy":"deceased","note":"m. Hodges"},
-    {"id":"P073","name":"Annie 'Antje' de Vries","metis":false,"privacy":"deceased","note":"m. Boerchers"},
-    {"id":"P074","name":"Margaret de Vries","metis":false,"privacy":"deceased","note":"m. Brink"},
-    {"id":"P075","name":"Mary de Vries","metis":false,"privacy":"deceased","note":"m. McKean"},
-    {"id":"P076","name":"Helen de Vries","metis":false,"privacy":"deceased","note":"m. Claeys"},
-    {"id":"P077","name":"Herman de Vries","metis":false,"privacy":"deceased","note":"brother of Bryon"},
-    {"id":"P078","name":"Gerald de Vries","metis":false,"privacy":"deceased","note":"brother of Bryon"},
-    {"id":"P051","name":"Premier John Norquay","birth":"1841","death":"1889","metis":true,"privacy":"deceased","note":"Manitoba's first Métis premier (1878-87) · via Elizabeth Setter","highlight":true}
+    {
+      "id": "P001",
+      "name": "James Spence Sr",
+      "birth": "c1753",
+      "death": "1795",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "Orkney-born HBC voyageur"
+    },
+    {
+      "id": "P002",
+      "name": "Margaret 'Nestichio' Batt",
+      "birth": "1757",
+      "death": "1829",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "Métis / Cree · THE Métis root"
+    },
+    {
+      "id": "P003",
+      "name": "James Spence Jr",
+      "birth": "c1782",
+      "death": "1857",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "HBC tailor, Red River 1818"
+    },
+    {
+      "id": "P004",
+      "name": "Andrew Spence",
+      "birth": "1786",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P005",
+      "name": "George Spence Sr",
+      "birth": "1792",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "Ancestor of Grove family of Selkirk"
+    },
+    {
+      "id": "P006",
+      "name": "Margaret 'Peggy' Spence",
+      "birth": "1794",
+      "death": "1868",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · Spence line A"
+    },
+    {
+      "id": "P007",
+      "name": "Andrew Setter",
+      "birth": "1777",
+      "death": "1870",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "Orkney HBC voyageur"
+    },
+    {
+      "id": "P008",
+      "name": "James Setter",
+      "birth": "1810",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P009",
+      "name": "Margaret Setter",
+      "birth": "1813",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P010",
+      "name": "George Setter",
+      "birth": "1815",
+      "death": "1899",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · Fort Ellice → Poplar Point"
+    },
+    {
+      "id": "P011",
+      "name": "Isabella 'Bella' Setter",
+      "birth": "1816",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P012",
+      "name": "Elizabeth Setter",
+      "birth": "1822",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P013",
+      "name": "Ann Setter",
+      "birth": "1825",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P014",
+      "name": "Mary Setter",
+      "birth": "1830",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P015",
+      "name": "Thomas Alexander Setter",
+      "birth": "1831",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P016",
+      "name": "John Setter",
+      "birth": "1832",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P017",
+      "name": "Catherine Setter",
+      "birth": "1837",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P018",
+      "name": "Isabella Kennedy",
+      "birth": "1820",
+      "death": "1846",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P019",
+      "name": "Jessie Ellen Campbell",
+      "birth": "1824",
+      "death": "1912",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "2nd wife of George Setter"
+    },
+    {
+      "id": "P020",
+      "name": "John James Setter",
+      "birth": "1837",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P021",
+      "name": "Caroline Setter",
+      "birth": "1840",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P022",
+      "name": "Elizabeth Setter",
+      "birth": "1842",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "→ married Premier John Norquay"
+    },
+    {
+      "id": "P023",
+      "name": "Duncan Richard Setter",
+      "birth": "1852",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P024",
+      "name": "Colin Campbell Setter",
+      "birth": "1854",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P025",
+      "name": "Roderick McKenzie Setter",
+      "birth": "1856",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "son of George Setter · m. Sarah Ann Howrie"
+    },
+    {
+      "id": "P060",
+      "name": "Sarah Ann Howrie",
+      "birth": "c1859",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "also 'Hourie' · wife of Roderick McKenzie Setter"
+    },
+    {
+      "id": "P026",
+      "name": "Alexander Hunter Murray Setter",
+      "birth": "1858",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P027",
+      "name": "George William Setter",
+      "birth": "1861",
+      "death": "1874",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "twin, d. age 13"
+    },
+    {
+      "id": "P028",
+      "name": "Ellen Madeleine 'Nellie' Setter",
+      "birth": "1861",
+      "death": "1874",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "twin, d. age 13"
+    },
+    {
+      "id": "P029",
+      "name": "Jane Morwick",
+      "birth": "1794",
+      "death": "1874",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "née Morwick, wid. Norquay"
+    },
+    {
+      "id": "P030",
+      "name": "David Spence",
+      "birth": "1824",
+      "death": "1885",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · MLA Poplar Point 1870-74, Convention of Forty rep, JP",
+      "highlight": true
+    },
+    {
+      "id": "P031",
+      "name": "Joseph Spence",
+      "birth": "1826",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P032",
+      "name": "Catherine Spence",
+      "birth": "1829",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P033",
+      "name": "Catherine Hallett",
+      "birth": "1824",
+      "death": "1880",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "dau of Henry Hallett + Catherine Parenteau"
+    },
+    {
+      "id": "P034",
+      "name": "John 'Jake' Spence",
+      "birth": "1848",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P035",
+      "name": "Ellen Anderson Spence",
+      "birth": "1853",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P036",
+      "name": "Charles David Spence",
+      "birth": "1857",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P037",
+      "name": "Jane Spence",
+      "birth": "1859",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P038",
+      "name": "Mary Ann Spence",
+      "birth": "1861",
+      "death": "1930",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · Spence line B"
+    },
+    {
+      "id": "P039",
+      "name": "Harriet Spence",
+      "birth": "1863",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P040",
+      "name": "William 'Bill' Spence",
+      "birth": "1866",
+      "metis": true,
+      "privacy": "deceased"
+    },
+    {
+      "id": "P041",
+      "name": "Ernest Charles Riggs",
+      "birth": "1859",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "son of Harmon M. Riggs + Amelia M. Williams"
+    },
+    {
+      "id": "P042",
+      "name": "Ella Alberta Riggs",
+      "birth": "c1880s",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · Spence line B"
+    },
+    {
+      "id": "P043",
+      "name": "Alan Setter",
+      "birth": "1884",
+      "death": "1964",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie"
+    },
+    {
+      "id": "P044",
+      "name": "Doris A. Setter",
+      "birth": "1912",
+      "death": "2006",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · b. 24 Dec 1912 Portage la Prairie · m. Lawrence 29 Dec 1932 Tisdale SK · d. 23 Apr 2006"
+    },
+    {
+      "id": "P045",
+      "name": "Lawrence Donald Hamilton",
+      "birth": "1912",
+      "death": "1984",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "b. 15 Jun 1912 Tisdale SK · d. 5 Feb 1984 Flin Flon · son of Guy Wentworth Hamilton + Ethel Rose King · also 'Laurence'"
+    },
+    {
+      "id": "P046",
+      "name": "Mavis Irene Hamilton",
+      "birth": "1933",
+      "death": "2020",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6"
+    },
+    {
+      "id": "P047",
+      "name": "Robert Lau",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "maternal grandfather"
+    },
+    {
+      "id": "P048",
+      "name": "Tracy Diane Lau",
+      "birth": "b.1950s",
+      "metis": true,
+      "privacy": "living",
+      "note": "b. Flin Flon MB · DIRECT"
+    },
+    {
+      "id": "P049",
+      "name": "Bryon Edward deVries",
+      "birth": "1954",
+      "death": "2019",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "father · b. 17 Jul 1954 · d. 13 Oct 2019 · HR Director Sunrise School Division · son of Gerhard de Vries + Geeske Oltrop"
+    },
+    {
+      "id": "P050",
+      "name": "Bayard deVries",
+      "metis": true,
+      "privacy": "living",
+      "note": "YOU",
+      "you": true
+    },
+    {
+      "id": "P052",
+      "name": "Elwyn Setter",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "child of Alan Setter + Ella Riggs"
+    },
+    {
+      "id": "P053",
+      "name": "Erma Ann Setter",
+      "birth": "1910",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "child of Alan Setter + Ella Riggs"
+    },
+    {
+      "id": "P054",
+      "name": "Clayton N. Setter",
+      "birth": "1917",
+      "death": "1975",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "child of Alan Setter + Ella Riggs"
+    },
+    {
+      "id": "P055",
+      "name": "Alan Guy Hamilton",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Doris + Laurence"
+    },
+    {
+      "id": "P056",
+      "name": "Daniel Hamilton",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Doris + Laurence"
+    },
+    {
+      "id": "P057",
+      "name": "Patrick Hamilton",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Doris + Laurence"
+    },
+    {
+      "id": "P058",
+      "name": "Wesley C. Hamilton",
+      "metis": false,
+      "privacy": "living",
+      "note": "son of Doris + Laurence"
+    },
+    {
+      "id": "P059",
+      "name": "Harley Hamilton",
+      "birth": "1934",
+      "death": "2001",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "son of Doris + Lawrence"
+    },
+    {
+      "id": "P061",
+      "name": "Guy Wentworth Hamilton",
+      "birth": "1882",
+      "death": "1946",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "b. 26 Nov 1882 Beautiful Plains MB · d. 13 Jun 1946 Tisdale SK · Lawrence's father"
+    },
+    {
+      "id": "P062",
+      "name": "Ethel Rose King",
+      "birth": "1892",
+      "death": "1982",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "b. 17 Apr 1892 Neche ND, USA · d. 16 Jun 1982 SK · Lawrence's mother"
+    },
+    {
+      "id": "P063",
+      "name": "Jean Margaret Hamilton",
+      "birth": "1915",
+      "death": "2000",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "sister of Lawrence"
+    },
+    {
+      "id": "P064",
+      "name": "Madeleine Phyllis Hamilton",
+      "birth": "1918",
+      "death": "2004",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "sister of Lawrence"
+    },
+    {
+      "id": "P065",
+      "name": "William Morrison Hamilton",
+      "birth": "1926",
+      "death": "1991",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "brother of Lawrence"
+    },
+    {
+      "id": "P066",
+      "name": "Vivian Ethel Hamilton",
+      "birth": "1930",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "sister of Lawrence"
+    },
+    {
+      "id": "P067",
+      "name": "Gerhard De Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "paternal grandfather · Dutch (Friesland) · homesteaded Lake Dauphin/Turtle River, Ochre River MB"
+    },
+    {
+      "id": "P068",
+      "name": "Geeske Oltrop",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "paternal grandmother · 'Geske' · m. Gerhard 4 Oct 1929 Ochre River MB"
+    },
+    {
+      "id": "P069",
+      "name": "John 'Johann' de Vries",
+      "birth": "1936",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "first-born son · b. Ee, Friesland, Netherlands"
+    },
+    {
+      "id": "P070",
+      "name": "Tina de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. Brenner"
+    },
+    {
+      "id": "P071",
+      "name": "Leonard De Vries",
+      "birth": "1932",
+      "death": "2016",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "dairy farmer, Ochre River"
+    },
+    {
+      "id": "P072",
+      "name": "Etta de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. Hodges"
+    },
+    {
+      "id": "P073",
+      "name": "Annie 'Antje' de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. Boerchers"
+    },
+    {
+      "id": "P074",
+      "name": "Margaret de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. Brink"
+    },
+    {
+      "id": "P075",
+      "name": "Mary de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. McKean"
+    },
+    {
+      "id": "P076",
+      "name": "Helen de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "m. Claeys"
+    },
+    {
+      "id": "P077",
+      "name": "Herman de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "brother of Bryon"
+    },
+    {
+      "id": "P078",
+      "name": "Gerald de Vries",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "brother of Bryon"
+    },
+    {
+      "id": "P051",
+      "name": "Premier John Norquay",
+      "birth": "1841",
+      "death": "1889",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "Manitoba's first Métis premier (1878-87) · via Elizabeth Setter",
+      "highlight": true
+    }
   ],
   "unions": [
-    {"id":"U01","spouse1":"P001","spouse2":"P002","children":["P003","P004","P005","P006"]},
-    {"id":"U02","spouse1":"P007","spouse2":"P006","children":["P008","P009","P010","P011","P012","P013","P014","P015","P016","P017"]},
-    {"id":"U03","spouse1":"P010","spouse2":"P018","children":["P020","P021","P022","P023","P024","P025","P026","P027","P028"]},
-    {"id":"U04","spouse1":"P003","spouse2":"P029","children":["P030","P031","P032"]},
-    {"id":"U05","spouse1":"P030","spouse2":"P033","children":["P034","P035","P036","P037","P038","P039","P040"]},
-    {"id":"U06","spouse1":"P041","spouse2":"P038","children":["P042"]},
-    {"id":"U07","spouse1":"P043","spouse2":"P042","children":["P052","P053","P044","P054"]},
-    {"id":"U08","spouse1":"P044","spouse2":"P045","children":["P055","P056","P046","P057","P058","P059"]},
-    {"id":"U09","spouse1":"P047","spouse2":"P046","children":["P048"]},
-    {"id":"U10","spouse1":"P048","spouse2":"P049","children":["P050"]},
-    {"id":"U11","spouse1":"P022","spouse2":"P051","children":[],"note":"Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"},
-    {"id":"U12","spouse1":"P025","spouse2":"P060","children":["P043"]},
-    {"id":"U13","spouse1":"P061","spouse2":"P062","children":["P045","P063","P064","P065","P066"]},
-    {"id":"U14","spouse1":"P067","spouse2":"P068","children":["P069","P070","P071","P072","P073","P074","P075","P076","P077","P078","P049"]}
+    {
+      "id": "U01",
+      "spouse1": "P001",
+      "spouse2": "P002",
+      "children": [
+        "P003",
+        "P004",
+        "P005",
+        "P006"
+      ]
+    },
+    {
+      "id": "U02",
+      "spouse1": "P007",
+      "spouse2": "P006",
+      "children": [
+        "P008",
+        "P009",
+        "P010",
+        "P011",
+        "P012",
+        "P013",
+        "P014",
+        "P015",
+        "P016",
+        "P017"
+      ]
+    },
+    {
+      "id": "U03",
+      "spouse1": "P010",
+      "spouse2": "P018",
+      "children": [
+        "P020",
+        "P021",
+        "P022",
+        "P023",
+        "P024",
+        "P025",
+        "P026",
+        "P027",
+        "P028"
+      ]
+    },
+    {
+      "id": "U04",
+      "spouse1": "P003",
+      "spouse2": "P029",
+      "children": [
+        "P030",
+        "P031",
+        "P032"
+      ]
+    },
+    {
+      "id": "U05",
+      "spouse1": "P030",
+      "spouse2": "P033",
+      "children": [
+        "P034",
+        "P035",
+        "P036",
+        "P037",
+        "P038",
+        "P039",
+        "P040"
+      ]
+    },
+    {
+      "id": "U06",
+      "spouse1": "P041",
+      "spouse2": "P038",
+      "children": [
+        "P042"
+      ]
+    },
+    {
+      "id": "U07",
+      "spouse1": "P043",
+      "spouse2": "P042",
+      "children": [
+        "P052",
+        "P053",
+        "P044",
+        "P054"
+      ]
+    },
+    {
+      "id": "U08",
+      "spouse1": "P044",
+      "spouse2": "P045",
+      "children": [
+        "P055",
+        "P056",
+        "P046",
+        "P057",
+        "P058",
+        "P059"
+      ]
+    },
+    {
+      "id": "U09",
+      "spouse1": "P047",
+      "spouse2": "P046",
+      "children": [
+        "P048"
+      ]
+    },
+    {
+      "id": "U10",
+      "spouse1": "P048",
+      "spouse2": "P049",
+      "children": [
+        "P050"
+      ]
+    },
+    {
+      "id": "U11",
+      "spouse1": "P022",
+      "spouse2": "P051",
+      "children": [],
+      "note": "Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"
+    },
+    {
+      "id": "U12",
+      "spouse1": "P025",
+      "spouse2": "P060",
+      "children": [
+        "P043"
+      ]
+    },
+    {
+      "id": "U13",
+      "spouse1": "P061",
+      "spouse2": "P062",
+      "children": [
+        "P045",
+        "P063",
+        "P064",
+        "P065",
+        "P066"
+      ]
+    },
+    {
+      "id": "U14",
+      "spouse1": "P067",
+      "spouse2": "P068",
+      "children": [
+        "P069",
+        "P070",
+        "P071",
+        "P072",
+        "P073",
+        "P074",
+        "P075",
+        "P076",
+        "P077",
+        "P078",
+        "P049"
+      ]
+    }
   ],
   "paths_to_root": [
     "Bayard → Tracy Lau → Mavis Irene Hamilton → Doris A. Setter → Alan Setter (1884-1964) → Roderick McKenzie Setter (1856) + Sarah Ann Howrie → George Setter 1815 → Andrew Setter → Peggy Spence → James Spence Sr + Margaret Batt",
@@ -111,5 +794,43 @@
     "Locate Setter→Hamilton marriage (may be Saskatchewan, Flin Flon area)",
     "Expand deVries paternal side (Bryon's family) — needs family input",
     "Verify app-date discrepancies vs primary (e.g. Catherine Hallett 1824-1887 vs 1824-1880)"
-  ]
+  ],
+  "stories": {
+    "P001": {
+      "title": "James Spence Sr — Orkney fur trader",
+      "text": "Born c1753 in Birsay, Orkney. Came to York Factory in 1773 as an HBC labourer and inland voyageur ('a fine fellow and a good canoe man'). Left in charge of Buckingham House in 1793, the HBC's most westerly post at the time. Died there aged 42 in 1795, leaving Margaret pregnant with their fourth child."
+    },
+    "P002": {
+      "title": "Margaret 'Nestichio' Batt — the Métis matriarch",
+      "text": "Daughter of Isaac Batt, an English inland trader, and a Cree woman. Family story: as a young girl she was kidnapped by the Blackfeet; James Spence rescued her using a relay of horses, then waited to court her until she came of age. She became the Métis root of this family, dying at Red River in 1829."
+    },
+    "P007": {
+      "title": "Andrew Setter — Orkney voyageur",
+      "text": "Born 1777 in Westray, Orkney; joined the HBC at York Factory in 1800 as a labourer. For 18 years he voyaged inland. In 1821 Rev. John West baptised and married him to Margaret Spence at Beaver Creek — the first HBC clergyman's marriage west of Red River. Retired to St Andrews Parish in 1823."
+    },
+    "P030": {
+      "title": "David Spence — politician & MLA",
+      "text": "Born 1824 at Red River. A Métis leader: delegate for St. Anne's/Poplar Point to the 1870 Convention of Forty, first MLA for Poplar Point 1870-74, and a Justice of the Peace. With his wife Catherine he claimed Half-breed Scrip in 1875. Father of 7, home base Poplar Point / Portage la Prairie."
+    },
+    "P022": {
+      "title": "Elizabeth Setter — married a Premier",
+      "text": "Daughter of George Setter; in 1862 married John Norquay, who in 1878 became Manitoba's first Métis Premier. Through her, this family connects to Manitoba's provincial founding."
+    },
+    "P051": {
+      "title": "Premier John Norquay — cousin by marriage",
+      "text": "Manitoba's first Métis Premier (1878-87). Married Elizabeth Setter, daughter of George Setter. A towering figure in early Manitoba politics."
+    },
+    "P067": {
+      "title": "Gerhard & Geeske De Vries — Dutch settlers",
+      "text": "Dutch immigrants from Friesland, Netherlands. Married 4 Oct 1929 in Ochre River MB; homesteaded on the south shore of Lake Dauphin in the Turtle River District. Raised 11 children on the farm."
+    },
+    "P049": {
+      "title": "Bryon Edward deVries — HR Director, family man",
+      "text": "Born 17 Jul 1954; died 13 Oct 2019. Director of Human Resources at Sunrise School Division (and previously WRHA). Remembered for hosting Sunday family dinners for 20+ years, coaching soccer, and his devotion to helping anyone."
+    },
+    "P046": {
+      "title": "Mavis Irene (Hamilton) Lau",
+      "text": "Born 1 Sep 1933 in Tisdale SK; moved to Flin Flon at 6. Only daughter of six children. A remarkable seamstress, knitter, cross-stitcher, curler, golfer and bridge player; worked at Sears in Flin Flon until retirement."
+    }
+  }
 }
