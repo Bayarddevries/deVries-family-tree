@@ -41,12 +41,12 @@ def yrs(pid):
 
 # =========================================================
 # FULL EXTENDED TREE LAYOUT (all unions, all people)
-# descendant chart from the deepest Métis root (U16)
+# generation-lane descendant chart from the deepest root (U16)
 # =========================================================
-NODE_W, NODE_H = 200, 92          # couple box
-P_W, P_H = 132, 58                # person box
-ROW_H = 150
-GAP = 26
+NODE_W, NODE_H = 176, 82          # couple box
+P_W, P_H = 112, 50                # leaf person box
+ROW_H = 134
+GAP = 10
 
 by_union = {u["id"]: u for u in UNIONS}
 
@@ -56,7 +56,29 @@ def spouse_unions(pid):
 def parent_unions(pid):
     return [u for u in UNIONS if pid in u["children"]]
 
-# --- descendant-reachable set: unions reached via child->spouse edges ---
+# --- generation depth: unions + people, root U16 = depth 0 ---
+depth = {"U16": 0}
+def propagate():
+    changed = True
+    while changed:
+        changed = False
+        for u in UNIONS:
+            ud = depth.get(u["id"])
+            if ud is None: continue
+            for pid in (u["spouse1"], u["spouse2"]):
+                if depth.get(pid) != ud: depth[pid] = ud; changed = True
+            for c in u["children"]:
+                if depth.get(c) != ud + 1: depth[c] = ud + 1; changed = True
+                for fu in spouse_unions(c):
+                    if fu["id"] != u["id"] and depth.get(fu["id"]) != ud + 1:
+                        depth[fu["id"]] = ud + 1; changed = True
+            for pid in (u["spouse1"], u["spouse2"]):
+                for pu in parent_unions(pid):
+                    if pu["id"] != u["id"] and depth.get(pu["id"]) != ud - 1:
+                        depth[pu["id"]] = ud - 1; changed = True
+propagate()
+
+# --- descendant-reachable set ---
 desc = set()
 def mark_desc(u_id):
     if u_id in desc: return
@@ -66,133 +88,161 @@ def mark_desc(u_id):
             if fu["id"] != u_id: mark_desc(fu["id"])
 mark_desc("U16")
 
-# --- ownership pass: assign each union to the branch that reaches it first ---
-# (side branches = spouse-parent unions NOT in the descendant set, i.e. in-laws)
-owner = {}
-def assign(u_id, row):
+# --- ownership: each union rendered once, under the branch that reaches it first ---
+owner, in_prog = {}, set()
+def assign(u_id):
+    if u_id in owner or u_id in in_prog: return
+    in_prog.add(u_id)
     u = by_union[u_id]
     for c in u["children"]:
         for fu in spouse_unions(c):
             if fu["id"] != u_id and fu["id"] not in owner:
+                assign(fu["id"])
                 owner[fu["id"]] = u_id
-                assign(fu["id"], row+2)
     for pid in (u["spouse1"], u["spouse2"]):
         for pu in parent_unions(pid):
             if pu["id"] != u_id and pu["id"] not in desc and pu["id"] not in owner:
+                assign(pu["id"])
                 owner[pu["id"]] = u_id
-                assign(pu["id"], row+1)
+    in_prog.discard(u_id)
+assign("U16")
 owner["U16"] = None
-assign("U16", 0)
 
 # --- subtree block width (memoized, cycle-guarded) ---
 WID, IN_PROG = {}, set()
 def swidth(u_id):
     if u_id in WID: return WID[u_id]
-    if u_id in IN_PROG: return P_W   # cycle guard (spouse/parent loops)
+    if u_id in IN_PROG: return P_W
     IN_PROG.add(u_id)
     u = by_union[u_id]
-    # children block
-    cw_total = 0
+    w = 0
     for c in u["children"]:
         fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
         cw = P_W
-        if fams:
-            cw = max(P_W, sum(swidth(fu["id"]) for fu in fams) + GAP*(len(fams)-1))
-        cw_total += cw + GAP
-    cw_total = max(cw_total - GAP, 0)
-    # spouse-parent side branches
-    def side(pid):
-        pus = [pu for pu in parent_unions(pid) if pu["id"] != u_id and owner.get(pu["id"]) == u_id]
-        if not pus: return 0
-        return sum(swidth(pu["id"]) for pu in pus) + GAP*(len(pus)-1)
-    left = side(u["spouse1"]); right = side(u["spouse2"])
-    total = cw_total
-    if left: total += GAP + left
-    if right: total += GAP + right
+        if fams: cw = max(P_W, sum(swidth(fu["id"]) for fu in fams) + GAP*(len(fams)-1))
+        w += cw + GAP
+    # in-law unions (spouse-parents) add width
+    inlaws = [pu for pid in (u["spouse1"], u["spouse2"]) for pu in parent_unions(pid)
+              if pu["id"] != u_id and owner.get(pu["id"]) == u_id]
+    for pu in inlaws: w += swidth(pu["id"]) + GAP
+    w = max(w - GAP, NODE_W)
     IN_PROG.discard(u_id)
-    WID[u_id] = max(total, NODE_W)
-    return WID[u_id]
+    WID[u_id] = w
+    return w
 
-# --- recursive placement ---
+# --- recursive placement (rows = generation depth) ---
 TNODES, TEDGES = [], []
 visited_u = set()
 
-def place_union(u_id, x_center, row):
+def place_union(u_id, x_center):
     if u_id in visited_u: return
     visited_u.add(u_id)
     u = by_union[u_id]
+    row = depth[u_id]
     bw = swidth(u_id)
     nid = "u_" + u_id
     TNODES.append({"id": nid, "x": round(x_center - NODE_W/2, 1), "y": row*ROW_H,
                    "w": NODE_W, "h": NODE_H, "kind": "couple", "pids": [u["spouse1"], u["spouse2"]],
                    "you": u_id == "U17"})
 
-    def side_blocks(pid):
-        return [(pu, swidth(pu["id"])) for pu in parent_unions(pid)
-                if pu["id"] != u_id and owner.get(pu["id"]) == u_id and pu["id"] not in visited_u]
-
-    left = side_blocks(u["spouse1"]); right = side_blocks(u["spouse2"])
-    left_w = sum(w for _, w in left) + GAP*max(0, len(left)-1)
-    right_w = sum(w for _, w in right) + GAP*max(0, len(right)-1)
-
-    # children columns
+    # children columns (their families render in the SAME lane; leaves as person boxes)
     cols = []
     for c in u["children"]:
         fams = [fu for fu in spouse_unions(c) if fu["id"] != u_id and owner.get(fu["id"]) == u_id]
         fuv = [fu for fu in fams if fu["id"] not in visited_u]
-        fv  = [fu for fu in spouse_unions(c) if fu["id"] != u_id and fu["id"] not in fuv and fu["id"] in visited_u]
+        fv  = [fu for fu in fams if fu["id"] in visited_u]
         cw = P_W
-        if fuv:
-            cw = max(P_W, sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1))
+        if fuv: cw = max(P_W, sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1))
         cols.append((c, cw, fuv, fv))
     children_total = sum(cw for _, cw, _, _ in cols) + GAP*max(0, len(cols)-1)
 
-    # center everything inside bw
-    span = left_w + children_total + right_w + GAP*(bool(left) + bool(right))
-    off = max((bw - span)/2, 0)
-    lx = x_center - children_total/2 - left_w - (GAP if left else 0) + off
-    cx = x_center - children_total/2 + off
-    rx = x_center + children_total/2 + (GAP if right else 0) + off
+    # in-law unions at the row ABOVE (spouse-parents)
+    inlaws = [(pu, swidth(pu["id"])) for pid in (u["spouse1"], u["spouse2"])
+              for pu in parent_unions(pid) if pu["id"] != u_id
+              and owner.get(pu["id"]) == u_id and pu["id"] not in visited_u]
+    inlaws_w = sum(w for _, w in inlaws) + GAP*max(0, len(inlaws)-1)
 
-    # left side branches (spouse1's parents)
-    for pu, pw in left:
-        place_union(pu["id"], lx + pw/2, row+1)
-        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "side": "left"})
-        lx += pw + GAP
+    span = children_total + inlaws_w + GAP*(bool(inlaws) and bool(cols))
+    off = max((bw - span)/2, 0)
+    cx = x_center - children_total/2 + off
+    ix = x_center + children_total/2 + (GAP if inlaws and cols else 0) + off
+
     # children
     x = cx
     for c, cw, fuv, fv in cols:
         ccx = x + cw/2
-        cid = "p_" + c
-        TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
-                       "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
-        TEDGES.append([nid, cid])
         if fuv:
             total = sum(swidth(fu["id"]) for fu in fuv) + GAP*(len(fuv)-1)
             fx = ccx - total/2
             for fu in fuv:
-                place_union(fu["id"], fx + swidth(fu["id"])/2, row+2)
-                TEDGES.append([cid, "u_" + fu["id"]])
+                place_union(fu["id"], fx + swidth(fu["id"])/2)
+                TEDGES.append([nid, "u_" + fu["id"]])
                 fx += swidth(fu["id"]) + GAP
-        elif fv:  # convergence: dashed link to already-rendered family
+        elif fv:
+            # convergence: leaf person box + dashed same-lane link to the displayed family
+            cid = "p_" + c
+            TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
+                           "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
+            TEDGES.append([nid, cid])
             TEDGES.append({"from": cid, "to": "u_" + fv[0]["id"], "dashed": True})
+        else:
+            cid = "p_" + c
+            TNODES.append({"id": cid, "x": round(ccx - P_W/2, 1), "y": (row+1)*ROW_H,
+                           "w": P_W, "h": P_H, "kind": "person", "pids": [c], "you": False})
+            TEDGES.append([nid, cid])
         x += cw + GAP
-    # right side branches (spouse2's parents)
-    for pu, pw in right:
-        place_union(pu["id"], rx + pw/2, row+1)
-        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "side": "right"})
-        rx += pw + GAP
+    # in-law unions (upward stub from this union's box)
+    for pu, pw in inlaws:
+        place_union(pu["id"], ix + pw/2)
+        TEDGES.append({"from": nid, "to": "u_" + pu["id"], "up": True})
+        ix += pw + GAP
 
-ROOT_UNION = "U16"   # Dantzick Batt ⚭ Sarah Lindsel (deepest root in data)
-place_union(ROOT_UNION, 0, 0)
+ROOT_UNION = "U16"
+place_union(ROOT_UNION, 0)
 
-# canvas bounds
+# --- resolve same-row overlaps (left-to-right sweep per row) ---
+rows = {}
+for n in TNODES:
+    rows.setdefault(n["y"], []).append(n)
+for y, ns in rows.items():
+    ns.sort(key=lambda n: n["x"])
+    for i in range(1, len(ns)):
+        prev, cur = ns[i-1], ns[i]
+        min_x = prev["x"] + prev["w"] + GAP
+        if cur["x"] < min_x:
+            cur["x"] = round(min_x, 1)
+
+# --- generation lane labels (left column) ---
+bay_depth = depth.get("P050")
+def lane_label(d):
+    if bay_depth is None: return f"gen {d}"
+    rel = bay_depth - d
+    if rel == 0: return "You"
+    if rel == 1: return "Parents"
+    if rel == 2: return "Grandparents"
+    if rel == 3: return "Great-grandparents"
+    if rel >= 4: return f"{rel-2}× great-grandparents"
+    if rel == -1: return "Children"
+    if rel == -2: return "Grandchildren"
+    return f"desc {abs(rel)} gen"
+y_to_depth = {}
+for n in TNODES:
+    nid = n["id"]
+    key = nid[2:]
+    if key in depth:
+        y_to_depth.setdefault(n["y"], depth[key])
+TREE_LANES = [{"y": y, "label": lane_label(y_to_depth[y])} for y in sorted(y_to_depth)]
+
+# shift boxes right to make room for the label column
+for n in TNODES: n["x"] += 130
+
+# canvas bounds (keep a 130px label gutter on the left)
 minx = min(n["x"] for n in TNODES); miny = 0
 maxx = max(n["x"] + n["w"] for n in TNODES)
 maxy = max(n["y"] + n["h"] for n in TNODES)
-for n in TNODES: n["x"] -= minx
-TREE = {"nodes": TNODES, "edges": TEDGES,
-        "w": int(maxx - minx + 60), "h": int(maxy + 60)}
+for n in TNODES: n["x"] -= (minx - 130)
+TREE = {"nodes": TNODES, "edges": TEDGES, "lanes": TREE_LANES,
+        "w": int(maxx - minx + 190), "h": int(maxy + 60)}
 
 # =========================================================
 # TIMELINE
@@ -258,6 +308,7 @@ APP = r"""
       <div id="stage">
         <div id="canvas"></div>
       </div>
+      <div id="lanes"></div>
       <div class="zbtns">
         <button class="zbtn" id="zin">+</button>
         <button class="zbtn" id="zout">−</button>
@@ -320,7 +371,7 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
 .vhead{font-size:17px;color:var(--cream);border-bottom:2px solid var(--gold);padding-bottom:6px;margin-bottom:12px}
 
 /* ---- tree canvas ---- */
-#wrap{position:absolute;inset:0;overflow:hidden;touch-action:none}
+#wrap{position:absolute;inset:0;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}
 #stage{position:absolute;inset:0;overflow:hidden}
 #canvas{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
 .cnode{position:absolute;background:linear-gradient(180deg,var(--surface2),var(--surface));
@@ -337,6 +388,10 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
 .cnode.long.person .n1{font-size:11px}
 .cnode .m{display:inline-block;background:var(--gold);color:#241D2E;font-size:8px;font-weight:700;
   letter-spacing:1px;padding:1px 5px;border-radius:7px;margin-top:3px;align-self:center}
+.lane{position:absolute;left:8px;width:118px;font-family:'Cinzel',serif;font-size:12px;color:var(--muted);
+  line-height:1.15;padding-top:4px;letter-spacing:.3px;pointer-events:none}
+#lanes{position:absolute;left:0;top:0;width:130px;bottom:0;overflow:hidden;pointer-events:none;
+  background:linear-gradient(90deg,rgba(20,18,26,.92) 82%,transparent);z-index:5}
 canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .zbtns{position:absolute;right:12px;bottom:16px;display:flex;flex-direction:column;gap:8px}
 .zbtn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface2);
@@ -444,10 +499,10 @@ function drawTree(){
     const a=T.nodes.find(n=>n.id===e[0]||n.id===e.from),b=T.nodes.find(n=>n.id===e[1]||n.id===e.to);
     if(!a||!b)return;
     const dashed=!!e.dashed;
-    let x1=a.x+a.w/2;
-    if(e.side==='left')x1=a.x;
-    if(e.side==='right')x1=a.x+a.w;
-    const y1=a.y+a.h,x2=b.x+b.w/2,y2=b.y;
+    let x1=a.x+a.w/2, y1=a.y+a.h;
+    const x2=b.x+b.w/2;
+    let y2=b.y;
+    if(e.up){ y1=a.y; y2=b.y+b.h; }        // in-law stub: upward from marriage box
     const my=(y1+y2)/2;
     [[x1,y1,x1,my],[x1,my,x2,my],[x2,my,x2,y2]].forEach(seg=>{
       const l=document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -458,6 +513,7 @@ function drawTree(){
     });
   });
   canvas.appendChild(svg);
+  renderLanes();
   T.nodes.forEach(n=>{
     const p1=people[n.pids[0]],p2=n.pids.length>1?people[n.pids[1]]:null;
     const div=document.createElement('div');
@@ -480,7 +536,26 @@ function drawTree(){
   });
   applyTransform();
 }
-function applyTransform(){canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;}
+function applyTransform(){
+  canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
+  laneEls.forEach(el=>{el.style.top=(ty+el._y*scale)+'px';});
+}
+// generation lane labels: fixed axis on the left, tracks rows vertically
+let laneEls=[];
+function renderLanes(){
+  const host=document.getElementById('lanes');
+  host.innerHTML='';
+  laneEls=[];
+  (T.lanes||[]).forEach(l=>{
+    const d=document.createElement('div');
+    d.className='lane';
+    d._y=l.y;
+    d.textContent=l.label;
+    host.appendChild(d);
+    laneEls.push(d);
+  });
+  applyTransform();
+}
 function fit(){
   const cw=wrap.clientWidth,ch=wrap.clientHeight;
   scale=Math.min(cw/(T.w+40),ch/(T.h+40),1.15);scale=Math.max(scale,.25);
@@ -495,44 +570,82 @@ function zoomToYou(){
   ty=ch/2-(n.y+n.h/2)*scale;
   applyTransform();
 }
-// pan/zoom
-const ptrs=new Map();
-function zoomAt(cx,cy,f){
-  const ns=Math.min(5,Math.max(.2,scale*f));
-  const k=ns/scale;
-  tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;scale=ns;applyTransform();
+// pan/zoom (pointer events; works for touch + mouse)
+function zoomAt(cx, cy, f) {
+  const ns = Math.min(5, Math.max(.2, scale * f));
+  const k = ns / scale;
+  tx = cx - (cx - tx) * k;
+  ty = cy - (cy - ty) * k;
+  scale = ns;
+  applyTransform();
 }
-wrap.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,[e.clientX,e.clientY]);wrap.setPointerCapture(e.pointerId);initial=null;});
-wrap.addEventListener('pointermove',e=>{
-  if(!ptrs.has(e.pointerId))return;
-  ptrs.set(e.pointerId,[e.clientX,e.clientY]);
-  if(ptrs.size===2){
-    const [a,b]=[...ptrs.values()];
-    const d=Math.hypot(a[0]-b[0],a[1]-b[1]);
-    if(initial){zoomAt((a[0]+b[0])/2,(a[1]+b[1])/2,d/initial);}
-    initial=d;
-  }else if(ptrs.size===1&&!initial){
-    const [dx,dy]=e.movement?[e.movementX,e.movementY]:[0,0];
-    tx+=dx;ty+=dy;applyTransform();
+const ptrs = new Map();
+let dragStart = null;      // single-finger pan anchor {x,y,tx,ty}
+let pinchDist = null;      // two-finger pinch distance
+let pinchMid = null;
+
+wrap.addEventListener('pointerdown', e => {
+  ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 1) {
+    dragStart = { x: e.clientX, y: e.clientY, tx: tx, ty: ty };
+  } else if (ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()];
+    pinchDist = Math.hypot(a[0]-b[0], a[1]-b[1]);
+    pinchMid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+    dragStart = null;
   }
 });
-wrap.addEventListener('pointerup',e=>{ptrs.delete(e.pointerId);initial=null;});
-wrap.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);initial=null;});
-wrap.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX-wm(),e.clientY-wh(),Math.exp(-e.deltaY*0.0015));},{passive:false});
-function wm(){return wrap.getBoundingClientRect().left;}
-function wh(){return wrap.getBoundingClientRect().top;}
-let lastTap=0;
-wrap.addEventListener('dblclick',e=>{zoomAt(e.clientX-wm(),e.clientY-wh(),1.8);});
-wrap.addEventListener('touchstart',e=>{
-  const now=Date.now();
-  if(now-lastTap<300){const t=e.touches[0];zoomAt(t.clientX,t.clientY,1.8);}
-  lastTap=now;
-},{passive:true});
+window.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptrs.size === 2 && pinchDist) {
+    const [a, b] = [...ptrs.values()];
+    const d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+    const mid = [(a[0]+b[0])/2, (a[1]+b[1])/2];
+    if (d > 0) zoomAt(mid[0]-wm(), mid[1]-wh(), d/pinchDist);
+    pinchDist = d;
+  } else if (ptrs.size === 1 && dragStart) {
+    tx = dragStart.tx + (e.clientX - dragStart.x);
+    ty = dragStart.ty + (e.clientY - dragStart.y);
+    applyTransform();
+  }
+});
+function endPointer(e) {
+  ptrs.delete(e.pointerId);
+  if (ptrs.size < 2) { pinchDist = null; pinchMid = null; }
+  if (ptrs.size === 0) dragStart = null;
+}
+window.addEventListener('pointerup', endPointer);
+window.addEventListener('pointercancel', endPointer);
+wrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  zoomAt(e.clientX-wm(), e.clientY-wh(), Math.exp(-e.deltaY*0.0015));
+}, { passive: false });
+function wm() { return wrap.getBoundingClientRect().left; }
+function wh() { return wrap.getBoundingClientRect().top; }
+// double-tap to zoom (touch)
+let lastTap = 0;
+wrap.addEventListener('touchend', e => {
+  if (e.changedTouches.length !== 1) return;
+  const now = Date.now();
+  if (now - lastTap < 320) {
+    const t = e.changedTouches[0];
+    zoomAt(t.clientX - wm(), t.clientY - wh(), 1.8);
+    lastTap = 0;
+  } else lastTap = now;
+}, { passive: true });
 document.getElementById('zin').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.clientHeight/2,1.35);
 document.getElementById('zout').onclick=()=>zoomAt(wrap.clientWidth/2,wrap.clientHeight/2,1/1.35);
 document.getElementById('zfit').onclick=fit;
 window.addEventListener('resize',()=>{if(scale<=0.01)fit();});
-setTimeout(zoomToYou,60);
+
+// initial view: center on the "you" family once fonts/layout settle
+function settle(){
+  const doIt = () => { zoomToYou(); };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(doIt,30));
+  setTimeout(doIt, 60);
+}
+settle();
 
 /* ---------- helpers ---------- */
 function escH(s){const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;}
