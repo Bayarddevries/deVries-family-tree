@@ -8,6 +8,22 @@
   },
   "people": [
     {
+      "id": "P080",
+      "name": "Cree matriarch (Batt)",
+      "metis": true,
+      "privacy": "deceased",
+      "note": "unnamed Cree mother of Margaret 'Nestichio' Batt · the matrilineal Indigenous/Métis root of this line"
+    },
+    {
+      "id": "P079",
+      "name": "Isaac Batt",
+      "birth": "1730",
+      "death": "1791",
+      "metis": false,
+      "privacy": "deceased",
+      "note": "English HBC inland trader ~20 yrs · father of Margaret 'Nestichio' Batt · killed 1791 near Manchester House"
+    },
+    {
       "id": "P001",
       "name": "James Spence Sr",
       "birth": "c1753",
@@ -23,7 +39,7 @@
       "death": "1829",
       "metis": true,
       "privacy": "deceased",
-      "note": "Métis / Cree · THE Métis root"
+      "note": "DIRECT · the Métis matriarch · dau. of Isaac Batt + a Cree woman · m. James Spence Sr · d.1829 Red River"
     },
     {
       "id": "P003",
@@ -624,6 +640,14 @@
   ],
   "unions": [
     {
+      "id": "U15",
+      "spouse1": "P079",
+      "spouse2": "P080",
+      "children": [
+        "P002"
+      ]
+    },
+    {
       "id": "U01",
       "spouse1": "P001",
       "spouse2": "P002",
@@ -803,7 +827,7 @@
     },
     "P002": {
       "title": "Margaret 'Nestichio' Batt — the Métis matriarch",
-      "text": "Daughter of Isaac Batt, an English inland trader, and a Cree woman. Family story: as a young girl she was kidnapped by the Blackfeet; James Spence rescued her using a relay of horses, then waited to court her until she came of age. She became the Métis root of this family, dying at Red River in 1829.",
+      "text": "Born 1757, daughter of Isaac Batt (1730-1791), an English HBC inland trader, and an unnamed Cree woman — the matrilineal Métis root of this line. She grew up in the fur-trade world of York Factory, where the young Orkney voyageur James Spence began courting her when she was 16. Family oral tradition (preserved in several written versions since the 1800s) tells that as a girl she was kidnapped by the Blackfeet and her mother asked James to rescue her; after many failed attempts he succeeded using a relay of horses, then waited until she was older to marry her. By 1782 they were partners and had four children: James, Andrew, George, and Margaret 'Peggy' (your direct ancestor, born 1796 just after James Sr died at Buckingham House). Widowed at 38 and pregnant, she raised the four children, returning to York Factory then the Red River Settlement. In 1821 all her children married at Red River — including Peggy to Andrew Setter, joining the Spence and Setter lines. Margaret died in 1829 at Red River Settlement. NOTE: the kidnapping tale is a cherished oral tradition, not a primary record; a variant says it was her daughter Peggy who was rescued by Andrew Setter.",
       "source": "https://www.redriverancestry.ca/SPENCE-JAMES-1753.php"
     },
     "P007": {
