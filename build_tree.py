@@ -68,6 +68,30 @@ _extra_unions2 = [
 for _u in _extra_unions2:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Round 3 additions: one generation deeper (corroborated via FamilySearch / redriverancestry / Find a Grave) ----
+# Engbertus de Vries + Maria Meinders  -> parents of Leewe de Vries
+# David J. Riggs Jr + Catherine Hendricks -> parents of Harmon Miles Riggs
+# William King + Sarah Burke           -> parents of Thomas Allan King
+PEOPLE.setdefault("P105", {"id":"P105","name":"Engbertus de Vries","birth":"1839","death":"","metis":False,"privacy":"deceased",
+  "note":"Leewe de Vries's father (b. 1839, East Frisia, Germany)."})
+PEOPLE.setdefault("P106", {"id":"P106","name":"Maria Geerds Meinders","birth":"1836","death":"1872","metis":False,"privacy":"deceased",
+  "note":"Leewe de Vries's mother (1836-1872)."})
+PEOPLE.setdefault("P107", {"id":"P107","name":"David J. Riggs Jr","birth":"1804","death":"1850","metis":False,"privacy":"deceased",
+  "note":"Harmon Miles Riggs's father (1804-1850); b. Ontario, NY."})
+PEOPLE.setdefault("P108", {"id":"P108","name":"Catherine M. Hendricks","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Harmon Miles Riggs's mother (Catherine M. Hendricks)."})
+PEOPLE.setdefault("P109", {"id":"P109","name":"William King","birth":"1817","death":"1898","metis":False,"privacy":"deceased",
+  "note":"Thomas Allan King's father (1817-1898); Ontario (SD&G) settler line."})
+PEOPLE.setdefault("P110", {"id":"P110","name":"Sarah Burke","birth":"1829","death":"1909","metis":False,"privacy":"deceased",
+  "note":"Thomas Allan King's mother (1829-1909)."})
+_extra_unions3 = [
+  {"id":"U27","spouse1":"P105","spouse2":"P106","children":["P97"]},
+  {"id":"U28","spouse1":"P107","spouse2":"P108","children":["P103"]},
+  {"id":"U29","spouse1":"P109","spouse2":"P110","children":["P101"]},
+]
+for _u in _extra_unions3:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -104,6 +128,13 @@ STORIES.update({
 })
 PROJ = DATA["project"]
 PROJ["title"] = "deVries Lau Family Tree"   # user rename (2026-08-13); data/family-tree.json left untouched
+
+# ---- Al Hamilton NHL story (user-confirmed 2026-08-13) ----
+STORIES.update({
+ "P055": {"title": "Al Hamilton — NHL star from Flin Flon",
+   "text": "Alan Guy 'Al' Hamilton (b. 20 Aug 1946, Flin Flon, MB) was a professional hockey player. He played in the NHL for the New York Rangers and Buffalo Sabres, then became captain of the Edmonton Oilers in the WHA. He played for Team Canada in the 1974 Summit Series against the USSR and still holds the Oilers' WHA records for games (455) and points (311). He came from the great Flin Flon hockey generation (alongside Bobby Clarke). Confirmed as Bayard's maternal great-uncle.",
+   "source": "hockeydb / Wikipedia / Edmonton Oilers records"},
+})
 
 # ---- Feature 4: new research-backed stories + enhancements (2026-08-12) ----
 STORIES.update({
@@ -293,10 +324,8 @@ def lane_label(d):
     return f"desc {abs(rel)} gen"
 TREE_LANES = [{"y": d*ROW_H, "label": lane_label(d)} for d in range(12)]
 
-# shift boxes right to make room for the label column
-for n in PERS: n["x"] += 130
-
-# canvas bounds (keep a 130px label gutter on the left)
+# canvas bounds (no label gutter; the generation sidebar was removed - labels no longer made sense
+# once the tree grew to include in-law and converging branches at mixed depths)
 minx = min(n["x"] for n in PERS)
 maxx = max(n["x"] + n["w"] for n in PERS)
 maxy = max(n["y"] + n["h"] for n in PERS)
@@ -351,7 +380,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110"}
 INFERRED = {"P080","P94","P95"}  # Cree matriarch 'Nikawiy' (oral tradition); Oltrop grandparents (secondary source)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
@@ -423,7 +452,6 @@ APP = r"""
       <div id="stage">
         <div id="canvas"></div>
       </div>
-      <div id="lanes"></div>
       <div class="zbtns">
         <button class="zbtn" id="zin">+</button>
         <button class="zbtn" id="zout">−</button>
@@ -709,7 +737,6 @@ function drawTree(){
     }
   });
   canvas.appendChild(svg);
-  renderLanes();
   T.nodes.forEach(n=>{
     const p=people[n.pid];
     if(!p)return;
@@ -731,22 +758,8 @@ function applyTransform(){
   canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
   laneEls.forEach(el=>{el.style.top=(ty+el._y*scale)+'px';});
 }
-// generation lane labels: fixed axis on the left, tracks rows vertically
+// (generation lane sidebar removed - labels no longer made sense for the grown, multi-branch tree)
 let laneEls=[];
-function renderLanes(){
-  const host=document.getElementById('lanes');
-  host.innerHTML='';
-  laneEls=[];
-  (T.lanes||[]).forEach(l=>{
-    const d=document.createElement('div');
-    d.className='lane';
-    d._y=l.y;
-    d.textContent=l.label;
-    host.appendChild(d);
-    laneEls.push(d);
-  });
-  applyTransform();
-}
 function fit(){
   const cw=wrap.clientWidth,ch=wrap.clientHeight;
   scale=Math.min(cw/(T.w+40),ch/(T.h+40),1.15);scale=Math.max(scale,.25);
