@@ -379,6 +379,48 @@ f10["children"] = [(bay_b, f17["s1x"]), (ash_b, f18["s1x"])]
 f17["children"] = leaf_boxes(by_union["U17"], 11, -300)
 f18["children"] = leaf_boxes(by_union["U18"], 11,  300)
 
+# ---- in-law family side branches (so Hallett/Hourie/Riggs/Parenteau/deVries/Hamilton build out
+#      as their own nodes, connected by 'up' edges where they marry in - same as Hamilton/deVries) ----
+# HOURIE family (line A: Sarah Ann Hourie's parents) - left
+f34, jh_b, mb_b = add_couple("U34", -COL*1.7, 1)     # John Hourie + Margaret Bird
+f33, ph_b, eh_b = add_couple("U33", -COL*1.7, 2)     # Philip Hourie + Euphemia Cook Halcro
+TEDGES.append({"from": "fam_U12", "to": "fam_U33", "up": True})   # Sarah Ann's parents
+TEDGES.append({"from": "fam_U33", "to": "fam_U34", "up": True})   # Philip's parents
+
+# RIGGS family (line B: Ernest Riggs's parents) - right
+f28, drj_b, ch_b = add_couple("U28", COL*1.3, 1)     # David J. Riggs Jr + Catherine Hendricks
+f26, hm_b, aw_b  = add_couple("U26", COL*1.3, 2)     # Harmon Miles Riggs + Amelia Williams
+TEDGES.append({"from": "fam_U06", "to": "fam_U26", "up": True})   # Ernest's parents
+TEDGES.append({"from": "fam_U26", "to": "fam_U28", "up": True})   # Harmon's parents
+
+# HALLETT / PARENTEAU family (line B: Catherine Hallett's parents) - right
+f36, jbp_b, unk_b = add_couple("U36", COL*1.7, 1)    # Jean Baptiste Parenteau + Unknown
+f35, hh_b, cp_b   = add_couple("U35", COL*1.7, 2)    # Henry Hallett Jr + Catherine Parenteau
+TEDGES.append({"from": "fam_U05", "to": "fam_U35", "up": True})   # Catherine Hallett's parents
+TEDGES.append({"from": "fam_U35", "to": "fam_U36", "up": True})   # Catherine Parenteau's father
+
+# deVRIES deeper (Gerhard's parents) - far right
+f27, edv_b, mm_b = add_couple("U27", COL*3.2, 5)     # Engbertus de Vries + Maria Meinders
+f23, ldv_b, tp_b = add_couple("U23", COL*3.2, 6)     # Leewe de Vries + Trienje Pommer
+TEDGES.append({"from": "fam_U14", "to": "fam_U23", "up": True})   # Gerhard's parents
+TEDGES.append({"from": "fam_U23", "to": "fam_U27", "up": True})   # Leewe's parents
+
+# HAMILTON deeper (Guy's parents / John James's line) - far right
+f30, johnh_b, el_b = add_couple("U30", COL*2.9, 3)   # John Hamilton + Eleanor Preston
+f31, jos_b, mbu_b  = add_couple("U31", COL*2.9, 4)   # Joseph Hamilton + Mary Busby
+f24, jjh_b, jb_b   = add_couple("U24", COL*2.9, 5)   # John James Hamilton + Jane Buchanan
+TEDGES.append({"from": "fam_U13", "to": "fam_U24", "up": True})   # Guy's parents
+TEDGES.append({"from": "fam_U24", "to": "fam_U31", "up": True})   # John James's parents
+TEDGES.append({"from": "fam_U31", "to": "fam_U30", "up": True})   # Joseph's parents
+
+# KING / BUCHANAN (Ethel King's parents + Jane Buchanan's parents) - far right
+f32, johnbu_b, iw_b = add_couple("U32", COL*3.8, 3)  # John Buchanan + Isabella Watson (Jane's parents)
+f29, wk_b, sb_b     = add_couple("U29", COL*3.8, 4)  # William King + Sarah Burke
+f25, tak_b, cc_b    = add_couple("U25", COL*3.8, 5)  # Thomas Allan King + Catherine Clark
+TEDGES.append({"from": "fam_U13", "to": "fam_U25", "up": True})   # Ethel's parents
+TEDGES.append({"from": "fam_U25", "to": "fam_U29", "up": True})   # Thomas Allan's parents
+TEDGES.append({"from": "fam_U24", "to": "fam_U32", "up": True})   # Jane Buchanan's parents
+
 # --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
 rows = {}
 for n in PERS:
