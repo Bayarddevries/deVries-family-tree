@@ -106,6 +106,18 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .mpop .chip{font-size:11.5px;padding:3px 9px}
 .mapidle{color:var(--muted);font-size:14px;padding:14px}
 
+/* comments / suggest an edit */
+.comment-fab{position:fixed;right:16px;bottom:78px;width:54px;height:54px;border-radius:50%;border:none;background:var(--gold);color:#241a0c;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:900}
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(10,8,16,.66);display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--line);border-top-left-radius:20px;border-top-right-radius:20px;padding:20px 18px 26px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto}
+.modal-box h3{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:6px}
+.cmuted{font-size:13px;color:var(--muted);line-height:1.45;margin-bottom:14px}
+.cfield{display:block;margin-bottom:12px;font-size:12.5px;color:var(--muted);font-family:'Cinzel',serif;letter-spacing:.4px}
+.cfield input,.cfield textarea{display:block;width:100%;margin-top:5px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--cream);font-size:14.5px;font-family:'EB Garamond',serif;resize:vertical}
+.cbtn{width:100%;background:var(--gold);color:#241a0c;border:none;border-radius:12px;padding:13px;font-family:'Cinzel',serif;font-size:15px;font-weight:700;cursor:pointer}
+.editsuggest{display:block;width:100%;background:var(--surface2);border:1px dashed var(--gold);color:var(--gold);border-radius:12px;padding:11px;margin-bottom:12px;font-size:13.5px;font-family:'Cinzel',serif;cursor:pointer}
+
 /* ---- tab bar ---- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;height:62px;display:flex;background:rgba(20,18,26,.92);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:50}
@@ -211,6 +223,19 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
   <div class="sheet-handle"></div>
   <button class="sheet-close" id="sheetclose">✕</button>
   <div id="sheetbody"></div>
+</div>
+
+<button id="commentbtn" class="comment-fab" aria-label="Share a memory or suggest an edit">💬</button>
+<div id="commentmodal" class="modal">
+  <div class="modal-box">
+    <button class="sheet-close" id="commentclose">✕</button>
+    <h3>Share a memory or suggest an edit</h3>
+    <p class="cmuted">Tell the family something, or flag something that needs correcting. Submitting opens your email app with the message ready to send to the family-tree owner.</p>
+    <label class="cfield">Your name <input id="cname" type="text" placeholder="optional"></label>
+    <label class="cfield">About whom or where <input id="csubject" type="text" placeholder="e.g. David Spence, or Portage la Prairie"></label>
+    <label class="cfield">Your message <textarea id="cmsg" rows="4" placeholder="Write your memory, comment, or correction here..."></textarea></label>
+    <button id="csend" class="cbtn">Send via email</button>
+  </div>
 </div>
 
 <script>
@@ -509,6 +534,26 @@ document.getElementById('mapwrap').addEventListener('click',e=>{
   const c=e.target.closest('.chip'); if(c){openSheet([c.dataset.id]);}
 });
 
+/* ---------- comments / suggest an edit ---------- */
+const COMMENTS_TO='bayarddevries@gmail.com'; // family-tree owner receives the comments
+function openComment(subject){
+  if(subject)document.getElementById('csubject').value=subject;
+  document.getElementById('commentmodal').classList.add('open');
+}
+document.getElementById('commentbtn').addEventListener('click',()=>openComment());
+document.getElementById('commentclose').addEventListener('click',()=>document.getElementById('commentmodal').classList.remove('open'));
+document.getElementById('csend').addEventListener('click',()=>{
+  const name=document.getElementById('cname').value.trim();
+  const subject=document.getElementById('csubject').value.trim();
+  const msg=document.getElementById('cmsg').value.trim();
+  if(!msg){document.getElementById('cmsg').focus();return;}
+  const body=encodeURIComponent('Name: '+(name||'(not given)')+'\nAbout: '+(subject||'(general)')+'\n\n'+msg);
+  const sbj=encodeURIComponent('Family tree: '+(subject||'comment'));
+  window.location.href='mailto:'+COMMENTS_TO+'?subject='+sbj+'&body='+body;
+  document.getElementById('commentmodal').classList.remove('open');
+  document.getElementById('cname').value='';document.getElementById('csubject').value='';document.getElementById('cmsg').value='';
+});
+
 /* ---------- provenance badge + 'how you're related' path ---------- */
 function vBadge(p){
   if(p.vflag==='verified') return '<span class="pflag vflag">✓ primary record</span>';
@@ -582,6 +627,7 @@ function openSheet(ids){
       <div class="smeta">${escH(fmtYears(p))}${p.living?' · living':''}</div></div></div>`;
     if(p.note)h+=`<div class="snote">${escH(p.note)}</div>`;
     h+=pathBlock(p.id);
+    h+=`<button class="editsuggest" data-name="${escH(p.name)}">✏️ Suggest an edit about this person</button>`;
     const s=D.stories[p.id];
     if(s)h+=`<div class="sstory"><p>${escH(s.text)}</p>${s.source?`<a class="srclink" href="${escH(s.source)}" target="_blank" rel="noopener">source ↗</a>`:''}</div>`;
     h+=relativesBlock(null,p.id);
@@ -623,6 +669,8 @@ function chip(id){
 document.getElementById('sheetbody').addEventListener('click',e=>{
   const c=e.target.closest('.chip,.pthchip');
   if(c){const id=c.dataset.id;openSheet([id]);}
+  const es=e.target.closest('.editsuggest');
+  if(es){openComment(es.dataset.name);}
 });
 function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('show');}
 document.getElementById('sheetclose').onclick=closeSheet;
