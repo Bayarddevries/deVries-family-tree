@@ -48,7 +48,7 @@ PEOPLE.setdefault("P97", {"id":"P97","name":"Leewe de Vries","birth":"1862","dea
 PEOPLE.setdefault("P98", {"id":"P98","name":"Trienje Pommer","birth":"1863","death":"1937","metis":False,"privacy":"deceased",
   "note":"Gerhard de Vries's mother (13 Sep 1863, Ditzumerhammrich; d. 17 May 1937, Ste. Rose du Lac, MB)."})
 PEOPLE.setdefault("P99", {"id":"P99","name":"John James Hamilton","birth":"1856","death":"1913","metis":False,"privacy":"deceased",
-  "note":"Guy Wentworth Hamilton's father (b. 1856, Mornington Twp, Ontario; d. 1913, Tisdale SK). Settler line."})
+  "note":"Guy Wentworth Hamilton's father (b. 1856, Mornington Twp, Ontario; d. 1913, Tisdale SK). Irish (Co. Mayo) settler line, not Scottish."})
 PEOPLE.setdefault("P100", {"id":"P100","name":"Jane Buchanan","birth":"1859","death":"1931","metis":False,"privacy":"deceased",
   "note":"Guy Wentworth Hamilton's mother (1859-1931)."})
 PEOPLE.setdefault("P101", {"id":"P101","name":"Thomas Allan King","birth":"1864","death":"1954","metis":False,"privacy":"deceased",
@@ -90,6 +90,30 @@ _extra_unions3 = [
   {"id":"U29","spouse1":"P109","spouse2":"P110","children":["P101"]},
 ]
 for _u in _extra_unions3:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
+# ---- Round 4 additions: Hamilton line deeper (VERIFIED: FamilySearch + 1871 census + 1848 Christian Guardian marriage notice + Find a Grave) ----
+# Joseph Hamilton + Mary Busby      -> parents of John James Hamilton (P99)
+# John Hamilton + Eleanor Preston   -> the Irish immigrant generation (Co. Mayo) -> Joseph Hamilton
+# John Buchanan + Isabella Watson   -> parents of Jane Buchanan (P100)
+PEOPLE.setdefault("P111", {"id":"P111","name":"Joseph Hamilton","birth":"1821","death":"1889","metis":False,"privacy":"deceased",
+  "note":"John James Hamilton's father (1821-1889); married Mary Busby 24 Feb 1848, Mornington, Perth Co., Ontario."})
+PEOPLE.setdefault("P112", {"id":"P112","name":"Mary Busby","birth":"1831","death":"1921","metis":False,"privacy":"deceased",
+  "note":"John James Hamilton's mother (1831-1921)."})
+PEOPLE.setdefault("P113", {"id":"P113","name":"John Hamilton","birth":"1791","death":"1857","metis":False,"privacy":"deceased",
+  "note":"Joseph Hamilton's father; the Irish immigrant generation from Glenedagh, Co. Mayo, Ireland (1791-1857)."})
+PEOPLE.setdefault("P114", {"id":"P114","name":"Eleanor Jane Preston","birth":"1798","death":"1884","metis":False,"privacy":"deceased",
+  "note":"Joseph Hamilton's mother (1798-1884)."})
+PEOPLE.setdefault("P115", {"id":"P115","name":"John Buchanan","birth":"1829","death":"1909","metis":False,"privacy":"deceased",
+  "note":"Jane Buchanan's father (1829/1831-1909), b. Omagh, Co. Tyrone, Ireland; d. Langford/Neepawa, MB."})
+PEOPLE.setdefault("P116", {"id":"P116","name":"Isabella Watson","birth":"1837","death":"1917","metis":False,"privacy":"deceased",
+  "note":"Jane Buchanan's mother (1837-1917); Scottish parents (James Watson Sr & Elizabeth Linnen)."})
+_extra_unions4 = [
+  {"id":"U30","spouse1":"P113","spouse2":"P114","children":["P111"]},
+  {"id":"U31","spouse1":"P111","spouse2":"P112","children":["P99"]},
+  {"id":"U32","spouse1":"P115","spouse2":"P116","children":["P100"]},
+]
+for _u in _extra_unions4:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
 STORIES = DATA.get("stories", {})
@@ -380,7 +404,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116"}
 INFERRED = {"P080","P94","P95"}  # Cree matriarch 'Nikawiy' (oral tradition); Oltrop grandparents (secondary source)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
