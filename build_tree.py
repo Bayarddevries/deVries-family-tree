@@ -15,6 +15,29 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = json.load(open(os.path.join(HERE, "data", "family-tree.json")))
 PEOPLE = {p["id"]: p for p in DATA["people"]}
 UNIONS = DATA["unions"]
+
+# ---- Verified additions (kept here so data/family-tree.json stays untouched) ----
+# James Morwick + Sarah Sabiston -> parents of Jane Morwick (corrects the 'Catherine Dungas' error)
+# Jan Oltrop + Antje Von Lengen  -> parents of Geeske Oltrop (Ochre River MB, Dutch/German line)
+# Sarah Fowler                   -> Isaac Batt's documented English wife (DCB); the Metis line descends from his Cree family
+PEOPLE.setdefault("P92", {"id":"P92","name":"James Morwick","birth":"c1778","death":"1865","metis":False,"privacy":"deceased",
+  "note":"Jane Morwick's father (c.1778-1865), Kirkwall, Orkney. Confirmed via Red River Ancestry + scrip records. Corrects the earlier 'Catherine Dungas' conflation."})
+PEOPLE.setdefault("P93", {"id":"P93","name":"Sarah Sabiston","birth":"1800","death":"1872","metis":False,"privacy":"deceased",
+  "note":"Jane Morwick's mother (1800-1872)."})
+PEOPLE.setdefault("P94", {"id":"P94","name":"Jan 'John' Oltrop","birth":"1885","death":"1973","metis":False,"privacy":"deceased",
+  "note":"Geeske Oltrop's father (1885-1973); Dutch/German line, Ochre River RM, MB."})
+PEOPLE.setdefault("P95", {"id":"P95","name":"Antje Von Lengen","birth":"1885","death":"1961","metis":False,"privacy":"deceased",
+  "note":"Geeske Oltrop's mother (1885-1961)."})
+PEOPLE.setdefault("P96", {"id":"P96","name":"Sarah Fowler","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Isaac Batt's English wife (m. 1761, Stanstead Abbots, England), who stayed in England. The Metis line descends from Batt's Cree family, not her."})
+_extra_unions = [
+  {"id":"U20","spouse1":"P92","spouse2":"P93","children":["P029"]},
+  {"id":"U21","spouse1":"P94","spouse2":"P95","children":["P068"]},
+  {"id":"U22","spouse1":"P079","spouse2":"P96","children":[]},
+]
+for _u in _extra_unions:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -297,8 +320,8 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079"}
-INFERRED = {"P080"}  # Cree matriarch 'Nikawiy' is oral tradition only
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96"}
+INFERRED = {"P080","P94","P95"}  # Cree matriarch 'Nikawiy' (oral tradition); Oltrop grandparents (secondary source)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
 MAP_PLACES = [
@@ -340,7 +363,7 @@ JS_DATA = {
     "people": [{"id": p["id"], "name": p["name"], "birth": p.get("birth"), "death": p.get("death"),
                 "metis": bool(p.get("metis")), "living": p.get("privacy") == "living",
                 "note": p.get("note", ""), "you": bool(p.get("you")),
-                "vflag": ("verified" if p["id"] in VERIFIED else ("inferred" if p["id"] in INFERRED else ""))} for p in DATA["people"]],
+                "vflag": ("verified" if p["id"] in VERIFIED else ("inferred" if p["id"] in INFERRED else ""))} for p in PEOPLE.values()],
     "unions": [{"id": u["id"], "s1": u["spouse1"], "s2": u["spouse2"],
                 "children": u["children"], "note": u.get("note", "")} for u in UNIONS],
     "stories": STORIES,
