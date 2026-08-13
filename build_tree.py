@@ -300,30 +300,29 @@ TIMELINE = [
 VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079"}
 INFERRED = {"P080"}  # Cree matriarch 'Nikawiy' is oral tradition only
 
-# ---- Map: family places & the lines connecting them (offline SVG) ----
-# Coordinates are hand-placed on a simplified canvas (viewBox 1000x640), not cartographic.
+# ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
 MAP_PLACES = [
- {"id":"orkney","name":"Orkney, Scotland","x":52,"y":40,"people":["P001","P007"],
+ {"id":"orkney","name":"Orkney, Scotland","lat":59.048,"lng":-2.969,"people":["P001","P007"],
   "note":"Home island of the HBC founders: James Spence Sr and Andrew Setter were both born in Orkney before coming to Rupert's Land."},
- {"id":"york","name":"York Factory","x":300,"y":62,"people":["P001","P007","P079"],
+ {"id":"york","name":"York Factory","lat":57.003,"lng":-92.302,"people":["P001","P007","P079"],
   "note":"HBC post on Hudson Bay where the fur-trade founders worked: James Spence Sr, Andrew Setter (voyageur) and Isaac Batt."},
- {"id":"flinflon","name":"Flin Flon","x":402,"y":116,"people":["P045","P046"],
+ {"id":"flinflon","name":"Flin Flon","lat":54.768,"lng":-101.864,"people":["P045","P046"],
   "note":"The Hamiltons moved here in 1939, when Mavis was six. This is how the maternal line came to Flin Flon."},
- {"id":"tisdale","name":"Tisdale, SK","x":258,"y":166,"people":["P044","P045","P046"],
+ {"id":"tisdale","name":"Tisdale, SK","lat":52.853,"lng":-104.051,"people":["P044","P045","P046"],
   "note":"Doris Setter married Lawrence Hamilton here (1932); their daughter Mavis was born here in 1933."},
- {"id":"thepas","name":"The Pas","x":470,"y":172,"people":["P079"],
+ {"id":"thepas","name":"The Pas","lat":53.826,"lng":-101.254,"people":["P079"],
   "note":"Isaac Batt traded and travelled inland near here in the 1760s-70s."},
- {"id":"standrews","name":"St. Andrews","x":690,"y":348,"people":["P010","P025"],
+ {"id":"standrews","name":"St. Andrews","lat":50.270,"lng":-96.979,"people":["P010","P025"],
   "note":"Red River parish where the Setter line is recorded in the 1870 census."},
- {"id":"stjohns","name":"St. John's, Red River","x":626,"y":412,"people":["P030","P033"],
+ {"id":"stjohns","name":"St. John's, Red River","lat":49.895,"lng":-97.138,"people":["P030","P033"],
   "note":"Red River. David Spence was born here in 1824 and married Catherine Hallett here in 1844."},
- {"id":"sfx","name":"St. François Xavier","x":564,"y":448,"people":["P051"],
+ {"id":"sfx","name":"St. François Xavier","lat":49.905,"lng":-97.526,"people":["P051"],
   "note":"White Horse Plain - the buffalo-hunt community where the family's Norquay kin lived."},
- {"id":"poplar","name":"Poplar Point","x":504,"y":468,"people":["P030","P010","P025"],
+ {"id":"poplar","name":"Poplar Point","lat":50.040,"lng":-98.002,"people":["P030","P010","P025"],
   "note":"David Spence's home and his MLA constituency; the Setter family farmed here. Both families in the 1870 census."},
- {"id":"highbluff","name":"High Bluff","x":452,"y":488,"people":["P030","P010"],
+ {"id":"highbluff","name":"High Bluff","lat":49.978,"lng":-98.251,"people":["P030","P010"],
   "note":"David Spence applied for Métis scrip here in 1875; George Setter farmed in this area."},
- {"id":"portage","name":"Portage la Prairie","x":390,"y":508,"people":["P041","P038","P043","P042","P044"],
+ {"id":"portage","name":"Portage la Prairie","lat":49.973,"lng":-98.290,"people":["P041","P038","P043","P042","P044"],
   "note":"Ernest Riggs's farm. Allan Setter married Ella Riggs here (1909); their daughter Doris was born here in 1912."},
 ]
 # migration / connection lines through place ids
@@ -399,7 +398,6 @@ APP = r"""
     <h2 class="vhead">Where they lived</h2>
     <div class="mapintro">Tap a place to see the family who lived there. Lines trace the family's journey from the fur trade to the north.</div>
     <div id="mapwrap" class="mapwrap"></div>
-    <div id="mappanel" class="mappanel"><div class="mapidle">Tap a place on the map.</div></div>
   </section>
 </main>
 
@@ -505,22 +503,19 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .tevent .yr{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);font-weight:700}
 .tevent p{font-size:14px;color:var(--txt);line-height:1.4;margin-top:1px}
 
-/* map */
+/* map (Leaflet) */
 .mapintro{font-size:13.5px;color:var(--muted);line-height:1.5;margin:0 4px 12px}
-.mapwrap{background:linear-gradient(180deg,#1B2340,#232C4D);border:1px solid var(--line);border-radius:14px;padding:8px;overflow:hidden}
-.mapimg{width:100%;height:auto;display:block}
-.mlink{fill:none;stroke:var(--gold);stroke-width:3;vector-effect:non-scaling-stroke;opacity:.85}
-.mlink.dash{stroke-dasharray:7 5;stroke:var(--muted)}
-.mlabel{fill:var(--gold);font-size:11px;font-style:italic;text-anchor:middle;opacity:.85}
-.mplace{cursor:pointer}
-.mdot{fill:var(--crimson);stroke:var(--gold);stroke-width:2}
-.mplace:hover .mdot{fill:var(--gold)}
-.mname{fill:var(--cream);font-size:11.5px;text-anchor:middle;font-family:'Cinzel',serif;pointer-events:none}
-.mappanel{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;min-height:64px}
-.mappanel h4{font-family:'Cinzel',serif;color:var(--gold);font-size:16px;margin-bottom:4px}
-.mappanel .mnote{font-size:13.5px;color:var(--txt);line-height:1.45;margin-bottom:10px}
-.mappanel .chips{display:flex;flex-wrap:wrap;gap:6px}
-.mapidle{color:var(--muted);font-size:14px}
+.mapwrap{position:relative;z-index:0;height:460px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#16203a}
+.mapwrap .leaflet-container{background:#16203a;font-family:'EB Garamond',serif}
+.mapwrap .leaflet-popup-content-wrapper{background:var(--surface2);color:var(--cream);border:1px solid var(--gold);border-radius:12px}
+.mapwrap .leaflet-popup-content{margin:12px 14px}
+.mapwrap .leaflet-popup-tip{background:var(--surface2)}
+.leaflet-container a{color:var(--gold)}
+.mpop h4{font-family:'Cinzel',serif;color:var(--gold);font-size:15px;margin-bottom:3px}
+.mpop p{font-size:12.5px;color:var(--txt);line-height:1.4;margin-bottom:8px}
+.mpop .chips{display:flex;flex-wrap:wrap;gap:5px}
+.mpop .chip{font-size:11.5px;padding:3px 9px}
+.mapidle{color:var(--muted);font-size:14px;padding:14px}
 
 /* ---- tab bar ---- */
 .tabbar{position:fixed;left:0;right:0;bottom:0;height:62px;display:flex;background:rgba(20,18,26,.92);
@@ -786,6 +781,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
     const v=document.getElementById('view-'+tab);v.classList.add('active');
     if(tab==='tree')setTimeout(fit,60);
+    if(tab==='map')setTimeout(startMap,60);
   });
 });
 
@@ -830,39 +826,38 @@ D.timeline.forEach(([year,kind,text],i)=>{
   tl.appendChild(d);
 });
 
-/* ---------- map ---------- */
+/* ---------- map (Leaflet) ---------- */
 const MPLACES={};D.mapplaces.forEach(p=>MPLACES[p.id]=p);
+let LEAFLET_MAP=null, mapStarted=false;
 function renderMap(){
-  const wrap=document.getElementById('mapwrap');
-  let svg='<svg viewBox="30 8 690 545" class="mapimg" preserveAspectRatio="xMidYMid meet">';
-  D.maplinks.forEach(lk=>{
-    const pts=lk.p.map(id=>{const p=MPLACES[id];return p.x+','+p.y;}).join(' ');
-    svg+=`<polyline points="${pts}" class="mlink${lk.dash?' dash':''}"></polyline>`;
-    if(lk.label){
-      const a=MPLACES[lk.p[0]], b=MPLACES[lk.p[1]];
-      svg+=`<text x="${(a.x+b.x)/2}" y="${(a.y+b.y)/2-10}" class="mlabel">${escH(lk.label)}</text>`;
-    }
-  });
+  const el=document.getElementById('mapwrap');
+  if(typeof L==='undefined'){ el.innerHTML='<div class="mapidle">Map tiles need an internet connection.</div>'; return; }
+  el.innerHTML='';
+  LEAFLET_MAP=L.map(el,{scrollWheelZoom:false}).setView([52.0,-99.5],6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(LEAFLET_MAP);
+  const core=[];
   D.mapplaces.forEach(p=>{
-    svg+=`<g class="mplace" data-id="${p.id}">
-      <circle cx="${p.x}" cy="${p.y}" r="13" class="mdot"></circle>
-      <text x="${p.x}" y="${p.y+34}" class="mname">${escH(p.name)}</text>
-    </g>`;
+    const chips=p.people.map(id=>`<button class="chip" data-id="${id}">${escH(people[id].name)}</button>`).join('');
+    const html=`<div class="mpop"><h4>${escH(p.name)}</h4><p>${escH(p.note||'')}</p><div class="chips">${chips}</div></div>`;
+    L.circleMarker([p.lat,p.lng],{radius:11,color:'#D4A853',weight:2,fillColor:'#E0525C',fillOpacity:1})
+      .addTo(LEAFLET_MAP).bindPopup(html);
+    if(p.id!=='orkney') core.push([p.lat,p.lng]);
   });
-  svg+='</svg>';
-  wrap.innerHTML=svg;
+  D.maplinks.forEach(lk=>{
+    L.polyline(lk.p.map(id=>[MPLACES[id].lat,MPLACES[id].lng]),
+      {color:'#D4A853',weight:3,opacity:.85,dashArray:lk.dash?'7,6':null}).addTo(LEAFLET_MAP);
+  });
+  // fit to the core MB/SK places (Orkney sits far across the Atlantic)
+  LEAFLET_MAP.fitBounds(core,{padding:[22,22]});
 }
+function startMap(){
+  if(mapStarted){ if(LEAFLET_MAP)LEAFLET_MAP.invalidateSize(); return; }
+  mapStarted=true; renderMap();
+}
+// popup chip clicks open the profile sheet (events bubble up from the popup pane)
 document.getElementById('mapwrap').addEventListener('click',e=>{
-  const g=e.target.closest('.mplace'); if(!g)return;
-  const pl=MPLACES[g.dataset.id];
-  const panel=document.getElementById('mappanel');
-  const chips=pl.people.map(id=>`<button class="chip" data-id="${id}">${escH(people[id].name)}</button>`).join('');
-  panel.innerHTML=`<h4>${escH(pl.name)}</h4><p class="mnote">${escH(pl.note||'')}</p><div class="chips">${chips}</div>`;
-});
-document.getElementById('mappanel').addEventListener('click',e=>{
   const c=e.target.closest('.chip'); if(c){openSheet([c.dataset.id]);}
 });
-renderMap();
 
 /* ---------- provenance badge + 'how you're related' path ---------- */
 function vBadge(p){
@@ -991,6 +986,8 @@ HTML = f"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>{esc(PROJ['title'])}</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>{CSS}</style>
 </head><body>
 {APP.replace('[[TITLE]]', esc(PROJ['title'])).replace('[[SUBTITLE]]', esc(PROJ['focus']))}
