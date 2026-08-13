@@ -174,6 +174,24 @@ _extra_unions7 = [{"id":"U36","spouse1":"P123","spouse2":"P124","children":["P12
 for _u in _extra_unions7:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Hallett collateral: the patriarch + the notable William Peter (VERIFIED 2026-08-13: Barkwell + WikiTree + Red River Ancestry) ----
+# William Peter Hallett is Catherine Hallett's UNCLE (younger brother of her father Henry Jr).
+# Adding Henry Sr + Catherine Crise as parents of BOTH Henry Jr (P121) and William Peter places him properly.
+PEOPLE.setdefault("P125", {"id":"P125","name":"Henry Hallett Sr","birth":"1773","death":"1844","metis":False,"privacy":"deceased",
+  "note":"Hallett patriarch (bapt. 15 Apr 1773, Battersea; d. 9 Mar 1844, St John's). Father of Henry Hallett Jr and William Peter Hallett."})
+PEOPLE.setdefault("P126", {"id":"P126","name":"Catherine Crise (Cree)","birth":"","death":"","metis":True,"privacy":"deceased",
+  "note":"Henry Hallett Sr's wife, mother of Henry Jr. Spelling varies (Crise / Cree / Tenanse) - needs primary confirmation."})
+PEOPLE.setdefault("P127", {"id":"P127","name":"William Peter Hallett","birth":"c1811","death":"1873","metis":True,"privacy":"deceased",
+  "note":"Catherine Hallett's uncle (Henry Jr's younger brother). Buffalo-hunt captain, leader / Chief Scout of the 49th Rangers (Int'l Boundary Commission 1872-73), opponent of Riel in 1869-70. m. Maria Pruden 6 Sep 1841."})
+PEOPLE.setdefault("P128", {"id":"P128","name":"Maria Pruden","birth":"1813","death":"1883","metis":True,"privacy":"deceased",
+  "note":"Wife of William Peter Hallett (m. 6 Sep 1841, Grand Rapids / St Andrews)."})
+_extra_unions8 = [
+  {"id":"U37","spouse1":"P125","spouse2":"P126","children":["P121","P127"]},
+  {"id":"U38","spouse1":"P127","spouse2":"P128","children":[]},
+]
+for _u in _extra_unions8:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -226,6 +244,9 @@ STORIES.update({
  "P119": {"title": "From Orkney and the Shoshoni to Red River",
    "text": "The Hourie line begins with John Hourie (1779-1857), an HBC man from South Ronaldsay in Orkney, Scotland, and Margaret Bird (1787-1847), a Shoshoni 'Snake' woman adopted by Chief Factor James Curtis Bird. Their union is the same Orkney-and-Indigenous meeting that shaped the Spence and Setter lines, the root of the family's Metis heritage.",
    "source": "Red River Ancestry · FamilySearch (Margaret Bird needs primary confirmation)"},
+ "P127": {"title": "Buffalo-hunt captain and the 49th Rangers",
+   "text": "William Peter Hallett (c.1811-1873) was a Metis buffalo-hunt captain and the leader / Chief Scout of the 49th Rangers, the scout corps that guided the International Boundary Commission of 1872-73. A prominent figure in Red River, he was an opponent of Riel during the 1869-70 Resistance. He was the younger brother of Henry Hallett Jr, making him Catherine (Hallett) Spence's uncle.",
+   "source": "Metis Museum / Barkwell bio · WikiTree · Red River Ancestry"},
 })
 
 # ---- Feature 4: new research-backed stories + enhancements (2026-08-12) ----
@@ -398,6 +419,11 @@ f36, jbp_b, unk_b = add_couple("U36", COL*1.7, 1)    # Jean Baptiste Parenteau +
 f35, hh_b, cp_b   = add_couple("U35", COL*1.7, 2)    # Henry Hallett Jr + Catherine Parenteau
 TEDGES.append({"from": "fam_U05", "to": "fam_U35", "up": True})   # Catherine Hallett's parents
 TEDGES.append({"from": "fam_U35", "to": "fam_U36", "up": True})   # Catherine Parenteau's father
+# HALLETT patriarch + William Peter (line B: Henry Jr's parents; William Peter's parents) - right
+f37, hs_b, cc_b  = add_couple("U37", COL*1.9, 0)     # Henry Hallett Sr + Catherine Crise
+f38, wp_b, mp_b  = add_couple("U38", COL*2.3, 0)     # William Peter Hallett + Maria Pruden
+TEDGES.append({"from": "fam_U35", "to": "fam_U37", "up": True})   # Henry Jr's parents
+TEDGES.append({"from": "fam_U38", "to": "fam_U37", "up": True})   # William Peter's parents
 
 # deVRIES deeper (Gerhard's parents) - far right
 f27, edv_b, mm_b = add_couple("U27", COL*3.2, 5)     # Engbertus de Vries + Maria Meinders
@@ -514,8 +540,8 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123"}
-INFERRED = {"P080","P94","P95","P120"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird (all secondary/oral, need primary)
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123","P125","P127","P128"}
+INFERRED = {"P080","P94","P95","P120","P126"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird + Catherine Crise (secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
 MAP_PLACES = [
