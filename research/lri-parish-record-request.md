@@ -13,7 +13,7 @@ I'm working on my family's genealogy and hoping the Louis Riel Institute genealo
 
 Could you help find:
 
-1. **Catherine Parenteau's parentage.** She married Henry Hallett Jr around 1824 at St. John's. We do not yet have a primary record naming her parents. A baptism or marriage entry in the St. John's or St. Boniface parish registers would close this gap.
+1. **Confirm Catherine Parenteau's parentage.** We have now identified her father as **Jean Baptiste Parenteau (from Quebec)**, who married Catherine's mother around the turn of the 1800s. Could you find a **baptism or marriage record for Jean Baptiste Parenteau** in the St. John's or St. Boniface parish registers? That would confirm him as Catherine's father and very likely name her mother, who is still unknown.
 
 2. **The given name of the Cree matriarch** who was the mother of Margaret "Nestichio" Batt (daughter of Isaac Batt). A baptism record for Margaret Batt at St. John's or York Factory might name her mother.
 
