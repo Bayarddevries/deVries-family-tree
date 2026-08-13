@@ -131,6 +131,25 @@ while _ch:
             if _c not in _born: _born.add(_c); _ch=True
 INLAW={_s for _u in UNIONS for _s in (_u["spouse1"],_u["spouse2"]) if _s not in _born}
 
+# ---- Hourie line expansion (VERIFIED 2026-08-13: FamilySearch M81J-6D8 + Find a Grave + 1870 Red River census + Red River Ancestry) ----
+# Correct Sarah Ann Howrie's dates/spelling; add parents + the Orkney patriarch.
+_h=PEOPLE["P060"]; _h["name"]="Sarah Ann Hourie"; _h["birth"]="1860"; _h["death"]="1944"
+_h["note"]="also 'Howrie' · wife of Roderick McKenzie Setter (m. 3 Jan 1879, High Bluff) · b. 8 Dec 1860, d. 19 May 1944 · dau. of Philip Hourie + Euphemia Cook Halcro"
+PEOPLE.setdefault("P117", {"id":"P117","name":"Philip Hourie","birth":"1833","death":"1914","metis":False,"privacy":"deceased",
+  "note":"Sarah Ann Hourie's father (1833-1914)."})
+PEOPLE.setdefault("P118", {"id":"P118","name":"Euphemia Cook Halcro","birth":"1839","death":"1917","metis":False,"privacy":"deceased",
+  "note":"Sarah Ann Hourie's mother (1839-1917)."})
+PEOPLE.setdefault("P119", {"id":"P119","name":"John Hourie","birth":"1779","death":"1857","metis":False,"privacy":"deceased",
+  "note":"Philip Hourie's father; the Orkney patriarch from South Ronaldsay (1779-1857), an HBC man. Same Orkney x Indigenous ethnogenesis as the Spence/Setter lines."})
+PEOPLE.setdefault("P120", {"id":"P120","name":"Margaret Bird","birth":"1787","death":"1847","metis":False,"privacy":"deceased",
+  "note":"Philip Hourie's mother (1787-1847); a Shoshoni / 'Snake' woman adopted by Chief Factor James Curtis Bird. Needs primary confirmation."})
+_extra_unions5 = [
+  {"id":"U33","spouse1":"P117","spouse2":"P118","children":["P060"]},
+  {"id":"U34","spouse1":"P119","spouse2":"P120","children":["P117"]},
+]
+for _u in _extra_unions5:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -419,8 +438,8 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116"}
-INFERRED = {"P080","P94","P95"}  # Cree matriarch 'Nikawiy' (oral tradition); Oltrop grandparents (secondary source)
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119"}
+INFERRED = {"P080","P94","P95","P120"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird (all secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
 MAP_PLACES = [
