@@ -73,6 +73,7 @@ STORIES.update({
    "source": "vital stats reg. 1884,005103"},
 })
 PROJ = DATA["project"]
+PROJ["title"] = "deVries Lau Family Tree"   # user rename (2026-08-13); data/family-tree.json left untouched
 
 # ---- Feature 4: new research-backed stories + enhancements (2026-08-12) ----
 STORIES.update({
@@ -448,7 +449,7 @@ APP = r"""
     <label class="cfield">Your name <input id="cname" type="text" placeholder="optional"></label>
     <label class="cfield">About whom or where <input id="csubject" type="text" placeholder="e.g. David Spence, or Portage la Prairie"></label>
     <label class="cfield">Your message <textarea id="cmsg" rows="4" placeholder="Write your memory, comment, or correction here..."></textarea></label>
-    <button id="csend" class="cbtn">Send via email</button>
+    <div class="cbtns"><button id="ccancel" class="cbtn ghost">Cancel</button><button id="csend" class="cbtn">Send via email</button></div>
   </div>
 </div>
 """
@@ -557,12 +558,14 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .comment-fab{position:fixed;right:16px;bottom:78px;width:54px;height:54px;border-radius:50%;border:none;background:var(--gold);color:#241a0c;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:900}
 .modal{position:fixed;inset:0;z-index:1000;background:rgba(10,8,16,.66);display:none;align-items:flex-end;justify-content:center}
 .modal.open{display:flex}
-.modal-box{background:var(--surface);border:1px solid var(--line);border-top-left-radius:20px;border-top-right-radius:20px;padding:20px 18px 26px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto}
+.modal-box{position:relative;background:var(--surface);border:1px solid var(--line);border-top-left-radius:20px;border-top-right-radius:20px;padding:20px 18px 26px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto}
 .modal-box h3{font-family:'Cinzel',serif;color:var(--gold);font-size:18px;margin-bottom:6px}
 .cmuted{font-size:13px;color:var(--muted);line-height:1.45;margin-bottom:14px}
 .cfield{display:block;margin-bottom:12px;font-size:12.5px;color:var(--muted);font-family:'Cinzel',serif;letter-spacing:.4px}
 .cfield input,.cfield textarea{display:block;width:100%;margin-top:5px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--cream);font-size:14.5px;font-family:'EB Garamond',serif;resize:vertical}
-.cbtn{width:100%;background:var(--gold);color:#241a0c;border:none;border-radius:12px;padding:13px;font-family:'Cinzel',serif;font-size:15px;font-weight:700;cursor:pointer}
+.cbtn{flex:1;background:var(--gold);color:#241a0c;border:none;border-radius:12px;padding:13px;font-family:'Cinzel',serif;font-size:15px;font-weight:700;cursor:pointer}
+.cbtn.ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--line);font-weight:600}
+.cbtns{display:flex;gap:10px;margin-top:2px}
 .editsuggest{display:block;width:100%;background:var(--surface2);border:1px dashed var(--gold);color:var(--gold);border-radius:12px;padding:11px;margin-bottom:12px;font-size:13.5px;font-family:'Cinzel',serif;cursor:pointer}
 
 /* ---- tab bar ---- */
@@ -913,8 +916,14 @@ function openComment(subject){
   if(subject)document.getElementById('csubject').value=subject;
   document.getElementById('commentmodal').classList.add('open');
 }
+function closeComment(){
+  document.getElementById('commentmodal').classList.remove('open');
+  document.getElementById('cname').value='';document.getElementById('csubject').value='';document.getElementById('cmsg').value='';
+}
 document.getElementById('commentbtn').addEventListener('click',()=>openComment());
-document.getElementById('commentclose').addEventListener('click',()=>document.getElementById('commentmodal').classList.remove('open'));
+document.getElementById('commentclose').addEventListener('click',closeComment);
+document.getElementById('ccancel').addEventListener('click',closeComment);
+document.getElementById('commentmodal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeComment(); });
 document.getElementById('csend').addEventListener('click',()=>{
   const name=document.getElementById('cname').value.trim();
   const subject=document.getElementById('csubject').value.trim();
