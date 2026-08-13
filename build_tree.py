@@ -150,6 +150,18 @@ _extra_unions5 = [
 for _u in _extra_unions5:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Catherine Parenteau + Henry Hallett Jr as nodes (so she is findable in the tree) ----
+# Catherine Parenteau was previously only mentioned in Catherine Hallett's (P033) note.
+PEOPLE.setdefault("P121", {"id":"P121","name":"Henry Hallett Jr","birth":"1799","death":"1871","metis":False,"privacy":"deceased",
+  "note":"Catherine Hallett's father (c.1799-1871); married Catherine Parenteau 18 Oct 1824, St. John's."})
+PEOPLE.setdefault("P122", {"id":"P122","name":"Catherine Parenteau","birth":"c1799","death":"1857","metis":True,"privacy":"deceased",
+  "note":"Catherine Hallett's mother (c.1799-1857, Metis). Her OWN parents are the tree's #1 open gap - lead: Joseph V. Parenteau + Suzanne Cree (unverified)."})
+_extra_unions6 = [
+  {"id":"U35","spouse1":"P121","spouse2":"P122","children":["P033"]},
+]
+for _u in _extra_unions6:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -448,7 +460,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122"}
 INFERRED = {"P080","P94","P95","P120"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird (all secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
