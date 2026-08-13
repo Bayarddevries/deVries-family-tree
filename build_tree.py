@@ -116,6 +116,21 @@ _extra_unions4 = [
 for _u in _extra_unions4:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# Paula Fleury (maiden name; user correction 2026-08-13) - she is NOT a deVries by birth.
+# NOTE: P088 is Paula (Bayard's wife). P050 is Bayard himself - do NOT rename P050.
+PEOPLE["P088"]["name"] = "Paula Fleury"
+
+# in-law spouses = people who married INTO the tree (a spouse in a union, but not born into the
+# line - i.e. their own parents are not in the tree). These are rendered with a dashed box so a
+# married-in spouse like Robert Lau isn't mistaken for a blood Hamilton/Setter/etc.
+_born=set(); _ch=True
+while _ch:
+    _ch=False
+    for _u in UNIONS:
+        for _c in _u["children"]:
+            if _c not in _born: _born.add(_c); _ch=True
+INLAW={_s for _u in UNIONS for _s in (_u["spouse1"],_u["spouse2"]) if _s not in _born}
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -447,6 +462,7 @@ JS_DATA = {
     "people": [{"id": p["id"], "name": p["name"], "birth": p.get("birth"), "death": p.get("death"),
                 "metis": bool(p.get("metis")), "living": p.get("privacy") == "living",
                 "note": p.get("note", ""), "you": bool(p.get("you")),
+                "inlaw": p["id"] in INLAW,
                 "vflag": ("verified" if p["id"] in VERIFIED else ("inferred" if p["id"] in INFERRED else ""))} for p in PEOPLE.values()],
     "unions": [{"id": u["id"], "s1": u["spouse1"], "s2": u["spouse2"],
                 "children": u["children"], "note": u.get("note", "")} for u in UNIONS],
@@ -567,6 +583,9 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
   display:flex;flex-direction:column;justify-content:center}
 .cnode:active{transform:scale(.97)}
 .cnode.you{border-color:var(--crimson);box-shadow:0 0 0 2px rgba(224,82,92,.25),0 6px 18px rgba(0,0,0,.4)}
+.cnode.inlaw{border-style:dashed;border-color:var(--muted);opacity:.95}
+.cnode.inlaw .n1{color:var(--muted);font-style:italic}
+.cnode .sp{display:inline-block;margin-top:2px;background:rgba(214,168,83,.14);color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.3px;padding:1px 5px;border-radius:6px}
 .cnode .n1,.cnode .n3{font-family:'Cinzel',serif;font-size:12px;color:var(--cream);line-height:1.2;font-weight:600}
 .cnode .n2{font-size:13px;color:var(--gold);line-height:1.15}
 .cnode .years{font-size:10px;color:var(--muted);margin-top:2px;font-style:italic}
@@ -765,11 +784,12 @@ function drawTree(){
     const p=people[n.pid];
     if(!p)return;
     const div=document.createElement('div');
-    div.className='cnode'+(n.you?' you':'');
+    div.className='cnode'+(n.you?' you':'')+(p.inlaw?' inlaw':'');
     div.style.left=n.x+'px';div.style.top=n.y+'px';div.style.width=n.w+'px';div.style.height=n.h+'px';
     let h='';
     h+=`<div class="n1">${escH(p.name)}</div><div class="years">${escH(yrs(p))}</div>`;
     if(p.metis)h+='<span class="m">MÉTIS</span>';
+    if(p.inlaw)h+='<span class="sp">⚭ married in</span>';
     div.innerHTML=h;
     if(p.name.length>15)div.classList.add('long');
     div.addEventListener('click',()=>openSheet([n.pid]));
