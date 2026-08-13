@@ -51,6 +51,23 @@ STORIES.update({
 })
 PROJ = DATA["project"]
 
+# ---- Feature 4: new research-backed stories + enhancements (2026-08-12) ----
+STORIES.update({
+ "P030": {"title": "David Spence — the farmer who helped found Manitoba",
+   "text": "David Spence (b. 5 Sep 1824, St. John's parish, Red River; d. 16 Sep 1885) was a Scottish Half-Breed, son of James Spence and Jane Morwick (both Métis; his mother was grandmother of Premier John Norquay). He married Catherine Hallett in 1844. In 1870 he sat in the Convention of Forty as delegate for St. Anne's (Poplar Point), and was elected the first MLA for Poplar Point, serving 1870-74, also as justice of the peace. He farmed on River Lot 62 at Poplar Point. His 1875 half-breed scrip affidavit (LAC RG15 v.1324, claim 2764) records his occupation as 'Farmer' and his claim for 160 acres/$160; scrip was issued to him and Catherine on 2 Oct 1876. He died in 1885 after being accidentally shot by a neighbour. Seven children, including Mary Ann, who married Ernest Riggs.",
+   "source": "vital stats + LAC scrip affidavit 2764 (read from scan); Barkwell bio, Metis Museum"},
+ "P033": {"title": "Catherine Hallett — wife of the MLA, and her buffalo-hunt kin",
+   "text": "Catherine Hallett (1824-1880) was the daughter of Henry Hallett and Catherine Parenteau. She married David Spence in 1844 and was a 'half-breed head of a family' on her 1875 scrip affidavit. Her paternal half-uncle, William Peter Hallett (1811-1873), was a documented buffalo-hunt captain: one of the ten elected 'Captains of the Hunt,' leader of the English-speaking Half-Breed buffalo hunt in the 1860s, and Chief Scout of the '49th Rangers' (1872-73). So the family's documented buffalo-hunt connection runs through Catherine's Hallett kin.",
+   "source": "scrip affidavit 2763; Barkwell (Louis Riel Institute) bio of William Peter Hallett"},
+ "P038": {"title": "Mary Ann Spence — the hinge to the Riggs line",
+   "text": "Mary Ann Spence (b. 8 Aug 1861) was the fifth of David Spence and Catherine Hallett's seven children, recorded in the 1870 census at Poplar Point with her family. She married Ernest Charles Riggs at Portage la Prairie (28 Aug 1887, reg 1887,001844). Their daughter Ella Alberta Riggs (b. 14 Sep 1888) married Allan Setter, converging the two Spence lines and passing the Métis heritage down to Bayard.",
+   "source": "1870 census; vital stats reg 1887,001844 & 1888,001992"},
+ "P041": {"title": "Ernest Charles Riggs — the American-born farmer of Portage",
+   "text": "Ernest Charles Riggs (b. 1860, United States) married Mary Ann Spence at Portage la Prairie in 1887. The 1901 census (Portage la Prairie, District Macdonald, LAC RG31 v.1250-1251) shows the household: Ernest, wife Mary A, and children Ernest E, Ella B (your great-grandmother), Roy O, Eva M, Ray H, Elsa G and Stanley D. He was the son of Harmon M. Riggs and Amelia Williams.",
+   "source": "1901 census; vital stats reg 1887,001844"},
+})
+
+
 def load_image(rel):
     p = os.path.join(HERE, "site", "assets", rel)
     if not os.path.exists(p): return None
@@ -257,6 +274,8 @@ TIMELINE = [
     (1812, "h", "Lord Selkirk's first settlers arrive at Red River."),
     (1821, "a", "Peggy Spence marries Andrew Setter at Beaver Creek (28 Jan), baptised/married by Rev. John West."),
     (1824, "a", "David Spence is born at St. John's parish, Red River (5 Sep)."),
+    (1824, "h", "Cuthbert Grant founds Grantown (later St. François Xavier) at White Horse Plain — a centre of the Métis buffalo-hunt economy where the family's Spence and Setter kin lived."),
+    (1840, "h", "The great 1840 summer buffalo hunt: 1,210 Red River carts and 620 hunters leave, returning with meat from ~10,000 buffalo — the world the Red River Métis, including this family, lived in."),
     (1844, "a", "David Spence marries Catherine Hallett at St. John's (15 Feb)."),
     (1861, "a", "Mary Ann Spence is born (8 Aug) — the 5th of David and Catherine's seven children."),
     (1869, "h", "The Red River Resistance begins; Métis block the new lieutenant-governor at Pembina."),
@@ -274,6 +293,13 @@ TIMELINE = [
     (2020, "a", "Mavis Irene Lau dies (26 Aug)."),
 ]
 
+# ---- Feature 2: provenance flags (which facts are primary-verified vs inferred) ----
+# 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
+#              HBC/DCB record, will, marriage/birth registration) located in this research.
+# 'inferred' = oral tradition / uncorroborated / needs verification.
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079"}
+INFERRED = {"P080"}  # Cree matriarch 'Nikawiy' is oral tradition only
+
 # =========================================================
 # EMBEDDED DATA (for the JS app)
 # =========================================================
@@ -281,7 +307,8 @@ JS_DATA = {
     "title": PROJ["title"], "subtitle": PROJ["focus"],
     "people": [{"id": p["id"], "name": p["name"], "birth": p.get("birth"), "death": p.get("death"),
                 "metis": bool(p.get("metis")), "living": p.get("privacy") == "living",
-                "note": p.get("note", ""), "you": bool(p.get("you"))} for p in DATA["people"]],
+                "note": p.get("note", ""), "you": bool(p.get("you")),
+                "vflag": ("verified" if p["id"] in VERIFIED else ("inferred" if p["id"] in INFERRED else ""))} for p in DATA["people"]],
     "unions": [{"id": u["id"], "s1": u["spouse1"], "s2": u["spouse2"],
                 "children": u["children"], "note": u.get("note", "")} for u in UNIONS],
     "stories": STORIES,
@@ -469,6 +496,16 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .srel .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:4px 12px;font-size:13px;color:var(--cream);cursor:pointer}
 .chip:active{border-color:var(--gold)}
+/* provenance badges */
+.pflag{font-size:10px;font-weight:600;letter-spacing:.3px;padding:2px 7px;border-radius:10px;vertical-align:middle;white-space:nowrap}
+.vflag{background:#1d3323;color:#7bd89b;border:1px solid #2f5e3f}
+.iflag{background:#33291d;color:#e0b96a;border:1px solid #5e4a2f}
+/* 'how you're related' path */
+.pathchain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;line-height:1.4}
+.pthchip{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:3px 10px;font-size:12.5px;color:var(--cream);cursor:pointer}
+.pthchip.you{background:var(--gold);color:#241a0c;border-color:var(--gold);font-weight:600}
+.pthchip:active{border-color:var(--gold)}
+.ptharrow{color:var(--gold);font-size:12px}
 .chip.metis{border-color:var(--gold)}
 .chip.you{border-color:var(--crimson);color:var(--crimson)}
 """
@@ -720,7 +757,7 @@ Object.entries(D.stories).forEach(([pid,s],i)=>{
   const card=document.createElement('div');
   card.className='scard';card.style.animationDelay=(i%8)*0.05+'s';
   const src=s.source?`<a class="srclink" href="${escH(s.source)}" target="_blank" rel="noopener">source ↗</a>`:'';
-  card.innerHTML=`<h3>${escH(s.title)}</h3><span class="who">${escH(p.name)}</span><p>${escH(s.text)}</p>${src}`;
+  card.innerHTML=`<h3>${escH(s.title)}</h3><span class="who">${escH(p.name)}</span> ${vBadge(p)}<p>${escH(s.text)}</p>${src}`;
   sl.appendChild(card);
 });
 
@@ -732,6 +769,43 @@ D.timeline.forEach(([year,kind,text],i)=>{
   d.innerHTML=`<div class="yr">${year}</div><p>${escH(text)}</p>`;
   tl.appendChild(d);
 });
+
+/* ---------- provenance badge + 'how you're related' path ---------- */
+function vBadge(p){
+  if(p.vflag==='verified') return '<span class="pflag vflag">✓ primary record</span>';
+  if(p.vflag==='inferred') return '<span class="pflag iflag">⚑ oral tradition</span>';
+  return '';
+}
+// Find the ancestor chain from a person up to Bayard (P050). Returns [Bayard,...,person] or null.
+function ancestryPath(pid){
+  const T='P050';
+  if(pid===T) return null;
+  const pm={};
+  D.unions.forEach(u=>u.children.forEach(c=>{ (pm[c]=pm[c]||[]).push(u.s1,u.s2); }));
+  const q=[T], prev={[T]:null}, seen=new Set([T]);
+  while(q.length){
+    const cur=q.shift();
+    for(const par of (pm[cur]||[])){
+      if(seen.has(par)) continue;
+      seen.add(par); prev[par]=cur; q.push(par);
+    }
+  }
+  if(!(pid in prev)) return null;
+  const out=[]; let c=pid;
+  while(c!=null){ out.unshift(c); c=prev[c]; }
+  return out;
+}
+function pathBlock(pid){
+  const path=ancestryPath(pid);
+  if(!path||path.length<2) return '';
+  const rev=path.slice().reverse(); // person first, Bayard last
+  const chips=rev.map((id,i)=>{
+    const pp=people[id];
+    const arrow=i<rev.length-1?' <span class="ptharrow">→</span>':'';
+    return `<span class="pthchip${pp.you?' you':''}" data-id="${id}">${escH(pp.name)}</span>${arrow}`;
+  }).join('');
+  return `<div class="srel pathblock"><h4>How you're related</h4><div class="pathchain">${chips}</div></div>`;
+}
 
 /* ---------- bottom sheet ---------- */
 const sheet=document.getElementById('sheet'),backdrop=document.getElementById('backdrop');
@@ -745,9 +819,9 @@ function openSheet(ids){
     const u=D.unions.find(x=>(x.s1===p1.id&&x.s2===p2.id)||(x.s1===p2.id&&x.s2===p1.id));
     let h=`<div class="shead">
       <div class="sava">${img1||escH(initials(p1.name))}</div>
-      <div><div class="sname">${escH(p1.name)} <span class="mtag">${p1.metis?'MÉTIS':''}</span></div>
+      <div><div class="sname">${escH(p1.name)} <span class="mtag">${p1.metis?'MÉTIS':''}</span> ${vBadge(p1)}</div>
       <div class="smeta">${escH(fmtYears(p1))}</div>
-      <div class="sname" style="font-size:16px;margin-top:6px">${escH(p2.name)} <span class="mtag">${p2.metis?'MÉTIS':''}</span></div>
+      <div class="sname" style="font-size:16px;margin-top:6px">${escH(p2.name)} <span class="mtag">${p2.metis?'MÉTIS':''}</span> ${vBadge(p2)}</div>
       <div class="smeta">${escH(fmtYears(p2))}</div></div></div>`;
     const notes=[p1.note,p2.note].filter(Boolean).map(n=>`<div class="snote">${escH(n)}</div>`).join('');
     h+=notes;
@@ -765,9 +839,10 @@ function openSheet(ids){
     const p=ps[0];
     const img=D.images[p.id]?`<img src="${D.images[p.id]}" alt="">`:'';
     let h=`<div class="shead"><div class="sava">${img||escH(initials(p.name))}</div>
-      <div><div class="sname">${escH(p.name)} ${p.you?'<span class="mtag">★ you</span>':''}${p.metis?' <span class="mtag">MÉTIS</span>':''}</div>
+      <div><div class="sname">${escH(p.name)} ${p.you?'<span class="mtag">★ you</span>':''}${p.metis?' <span class="mtag">MÉTIS</span>':''} ${vBadge(p)}</div>
       <div class="smeta">${escH(fmtYears(p))}${p.living?' · living':''}</div></div></div>`;
     if(p.note)h+=`<div class="snote">${escH(p.note)}</div>`;
+    h+=pathBlock(p.id);
     const s=D.stories[p.id];
     if(s)h+=`<div class="sstory"><p>${escH(s.text)}</p>${s.source?`<a class="srclink" href="${escH(s.source)}" target="_blank" rel="noopener">source ↗</a>`:''}</div>`;
     h+=relativesBlock(null,p.id);
@@ -807,7 +882,7 @@ function chip(id){
   return `<button class="chip${cls}" data-id="${id}">${escH(p.name)}</button>`;
 }
 document.getElementById('sheetbody').addEventListener('click',e=>{
-  const c=e.target.closest('.chip');
+  const c=e.target.closest('.chip,.pthchip');
   if(c){const id=c.dataset.id;openSheet([id]);}
 });
 function closeSheet(){sheet.classList.remove('open');backdrop.classList.remove('show');}
