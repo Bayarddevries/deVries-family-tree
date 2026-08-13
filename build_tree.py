@@ -38,6 +38,36 @@ _extra_unions = [
 for _u in _extra_unions:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Round 2 additions (corroborated across 2+ free sources: FamilySearch, Find a Grave, cemetery register, redriverancestry) ----
+# deVries: Leewe de Vries + Trienje Pommer -> parents of Gerhard De Vries (East Frisia, Germany)
+# Hamilton: John James Hamilton + Jane Buchanan -> parents of Guy Wentworth Hamilton
+# King:    Thomas Allan King + Catherine Ann Clark -> parents of Ethel Rose King
+# Riggs:   Harmon Miles Riggs + Amelia Williams -> parents of Ernest Charles Riggs
+PEOPLE.setdefault("P97", {"id":"P97","name":"Leewe de Vries","birth":"1862","death":"1926","metis":False,"privacy":"deceased",
+  "note":"Gerhard de Vries's father (8 Dec 1862, Dyksterhusen, East Frisia, Germany; d. 4 May 1926, Germany). East Frisian, not Dutch proper."})
+PEOPLE.setdefault("P98", {"id":"P98","name":"Trienje Pommer","birth":"1863","death":"1937","metis":False,"privacy":"deceased",
+  "note":"Gerhard de Vries's mother (13 Sep 1863, Ditzumerhammrich; d. 17 May 1937, Ste. Rose du Lac, MB)."})
+PEOPLE.setdefault("P99", {"id":"P99","name":"John James Hamilton","birth":"1856","death":"1913","metis":False,"privacy":"deceased",
+  "note":"Guy Wentworth Hamilton's father (b. 1856, Mornington Twp, Ontario; d. 1913, Tisdale SK). Settler line."})
+PEOPLE.setdefault("P100", {"id":"P100","name":"Jane Buchanan","birth":"1859","death":"1931","metis":False,"privacy":"deceased",
+  "note":"Guy Wentworth Hamilton's mother (1859-1931)."})
+PEOPLE.setdefault("P101", {"id":"P101","name":"Thomas Allan King","birth":"1864","death":"1954","metis":False,"privacy":"deceased",
+  "note":"Ethel Rose King's father (1864-1954); Ontario (SD&G) settler line."})
+PEOPLE.setdefault("P102", {"id":"P102","name":"Catherine Ann Clark","birth":"1867","death":"1956","metis":False,"privacy":"deceased",
+  "note":"Ethel Rose King's mother (1867-1956), m. Thomas Allan King 17 Mar 1884."})
+PEOPLE.setdefault("P103", {"id":"P103","name":"Harmon Miles Riggs","birth":"1834","death":"1874","metis":False,"privacy":"deceased",
+  "note":"Ernest Charles Riggs's father (1834-1874), m. Amelia Williams 11 Nov 1858, Jackson, WI; family migrated US -> Red River."})
+PEOPLE.setdefault("P104", {"id":"P104","name":"Amelia Williams","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Ernest Charles Riggs's mother (Amelia Williams), m. Harmon Miles Riggs 1858."})
+_extra_unions2 = [
+  {"id":"U23","spouse1":"P97","spouse2":"P98","children":["P067"]},
+  {"id":"U24","spouse1":"P99","spouse2":"P100","children":["P061"]},
+  {"id":"U25","spouse1":"P101","spouse2":"P102","children":["P062"]},
+  {"id":"U26","spouse1":"P103","spouse2":"P104","children":["P041"]},
+]
+for _u in _extra_unions2:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -321,7 +351,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104"}
 INFERRED = {"P080","P94","P95"}  # Cree matriarch 'Nikawiy' (oral tradition); Oltrop grandparents (secondary source)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
