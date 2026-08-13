@@ -31,4 +31,10 @@ Source: **Métis National Historical Online Database** (metisnationdatabase.ca, 
 | `david-spence-bio-barkwell.txt` | David Spence (1824–1885) full biography. |
 | `william-peter-hallett-bio-barkwell.txt` | William Peter Hallett (1811–1873) — buffalo-hunt captain, Chief Scout "49th Rangers". |
 
+## Dictionary of Canadian Biography (biographi.ca)
+| File | Who | Key facts used |
+|---|---|---|
+| `isaac-batt-dcb-biography.html` | **Isaac Batt** (c.1725–1791) | Fur-trader; m. Sarah Fowler 18 Apr 1761 (England); "Indian wife Nestichio daughter of Isaac Batt" via James Spence Sr's will; confirms Spence Sr linkage. |
+| `john-norquay-dcb-biography.html` | **John Norquay** (1841–1889) | Raised by his paternal grandmother "Mrs James Spence" = Jane Morwick; confirms the Spence/Hamilton connection. |
+
 All documents retain their archival provenance. Registration/reference numbers are noted in `../metis-db-family-findings.md` and `../vital-stats-findings.md`.
