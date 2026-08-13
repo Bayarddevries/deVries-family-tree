@@ -13,6 +13,11 @@ Source: **Métis National Historical Online Database** (metisnationdatabase.ca, 
 | `andrew-setter-1875-scrip-affidavit.pdf` | Andrew Setter | St Andrews / Winnipeg branch. LAC RG15 v.1319. |
 | `roderick-setter-1875-scrip-affidavit.pdf` | Roderick Alexander Setter | St Andrews. (Note: the direct-line Roderick McK is b.1856 at Poplar Point; this is the St Andrews Roderick. Confirm before conflating.) LAC RG15 v.1324. |
 | `john-spence-1875-scrip-affidavit.pdf` | John "Jake" Spence | Son of David Spence & Catherine Hallett. |
+| `david-spence-1875-scrip-affidavit-poplar-point.pdf` | David Spence | Second David Spence affidavit (Poplar Point application). |
+| `george-setter-1875-scrip-affidavit-high-bluff.pdf` | George Setter | Second George Setter affidavit (High Bluff application). |
+| `george-setter-jr-1875-scrip-affidavit.pdf` | George Setter Jr | |
+| `collin-setter-1875-scrip-affidavit.pdf` | Colin C. Setter | Son of George Setter & Jessie Campbell. |
+| `ellen-spence-1875-scrip-affidavit.pdf` | Ellen Spence | Daughter of David Spence & Catherine Hallett. |
 
 ## Census household pages (1870 Red River census)
 | File | Household | Members (ages) |
