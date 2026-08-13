@@ -162,6 +162,18 @@ _extra_unions6 = [
 for _u in _extra_unions6:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Parenteau parentage corrected (VERIFIED 2026-08-13: Barkwell 'Metis Dictionary of Biography' + Red River Ancestry) ----
+# Catherine Parenteau's father was Jean Baptiste Parenteau (from Quebec), NOT Joseph V. Parenteau.
+# (Joseph V. Parenteau + Suzanne 'Cree' Richard are a DIFFERENT family - parents of Metis leader Pierre Parenteau.)
+_p=PEOPLE["P122"]; _p["note"]="Catherine Hallett's mother (c.1799-1857, Metis). Father = Jean Baptiste Parenteau (from Quebec), confirmed by Barkwell + Red River Ancestry - this corrects the earlier 'Joseph V. Parenteau + Suzanne Cree' lead, which belongs to a different Parenteau family. Mother still unknown."
+PEOPLE.setdefault("P123", {"id":"P123","name":"Jean Baptiste Parenteau","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Catherine Parenteau's father, from Quebec. Confirmed by Barkwell's Metis Dictionary of Biography + Red River Ancestry. The earlier 'Joseph V. Parenteau + Suzanne Cree' lead belongs to a different family (parents of Metis leader Pierre Parenteau)."})
+PEOPLE.setdefault("P124", {"id":"P124","name":"Unknown (Parenteau)","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Catherine Parenteau's mother - not yet identified."})
+_extra_unions7 = [{"id":"U36","spouse1":"P123","spouse2":"P124","children":["P122"]}]
+for _u in _extra_unions7:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -460,7 +472,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123"}
 INFERRED = {"P080","P94","P95","P120"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird (all secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
