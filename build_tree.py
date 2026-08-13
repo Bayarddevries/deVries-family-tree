@@ -194,6 +194,16 @@ STORIES.update({
    "source": "hockeydb / Wikipedia / Edmonton Oilers records"},
 })
 
+# ---- Hourie line stories (2026-08-13) ----
+STORIES.update({
+ "P060": {"title": "Two Hourie sisters, two Setter brothers",
+   "text": "Sarah Ann Hourie (b. 8 Dec 1860, High Bluff; d. 19 May 1944) married Roderick McKenzie Setter on 3 Jan 1879. Her sister Jemima Hourie had married Roderick's brother Colin Setter a few years earlier (1875), so two Hourie sisters married two Setter brothers and knit the two Red River Metis families together.",
+   "source": "Red River Ancestry · FamilySearch M81J-6D8 · Find a Grave #154376026"},
+ "P119": {"title": "From Orkney and the Shoshoni to Red River",
+   "text": "The Hourie line begins with John Hourie (1779-1857), an HBC man from South Ronaldsay in Orkney, Scotland, and Margaret Bird (1787-1847), a Shoshoni 'Snake' woman adopted by Chief Factor James Curtis Bird. Their union is the same Orkney-and-Indigenous meeting that shaped the Spence and Setter lines, the root of the family's Metis heritage.",
+   "source": "Red River Ancestry · FamilySearch (Margaret Bird needs primary confirmation)"},
+})
+
 # ---- Feature 4: new research-backed stories + enhancements (2026-08-12) ----
 STORIES.update({
  "P030": {"title": "David Spence — the farmer who helped found Manitoba",
