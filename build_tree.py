@@ -212,6 +212,51 @@ _extra_unions9 = [
 for _u in _extra_unions9:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Collateral children + Hallett siblings (VERIFIED 2026-08-13) ----
+# BROWN children (Ellen Anderson Spence + George Brown, U43) - 12, FamilySearch VERIFIED
+_brown_kids = [
+  ("P133","Archibald George Brown","1877","1937"),("P134","Alexander Brown","1878","1923"),
+  ("P135","Daniel David Brown","1880","1956"),("P136","Jane Brown","1882",""),
+  ("P137","Richard A. Brown","1884",""),("P138","Ida Brown","1886",""),
+  ("P139","Clara M. E. Brown","1889",""),("P140","Margaret Brown","1891",""),
+  ("P141","Flora C. Brown","1893","1899"),("P142","Mariam Brown","1895",""),
+  ("P143","Lawrence Brown","1898",""),("P144","William Archibald Brown","1899",""),
+]
+for _pid,_n,_b,_d in _brown_kids:
+  PEOPLE.setdefault(_pid, {"id":_pid,"name":_n,"birth":_b,"death":_d,"metis":False,"privacy":"deceased",
+    "note":"Child of Ellen Anderson Spence + George Brown."})
+for _u in UNIONS:
+  if _u["id"]=="U43": _u["children"]=["P133","P134","P135","P136","P137","P138","P139","P140","P141","P142","P143","P144"]
+
+# WISHART children (Harriet Spence + Peter Henry Wishart, U44) - 7, redriverancestry VERIFIED
+_wishart_kids = [
+  ("P145","Florence Mildred Wishart","1887","","m. George Augustus Langford 1913"),
+  ("P146","Henry Allen Wishart","1889","","'Harry' · m. Kathleen Maggie Payne 1920 · WWI 1918"),
+  ("P147","Edgar Wolseley Franklin Wishart","1891","","'Ted' · m. Mary Ethel Neilson 1925 · WWI 1918"),
+  ("P148","Edna Wishart","1896","","m. Harold 'Bertie' Cleave 1926"),
+  ("P149","Ruby Emma Elizabeth Wishart","1897","",""),
+  ("P150","Edith Jane Wishart","1900","","m. Thomas Hoy"),
+  ("P151","Herbert Charles Wishart","1901","","farmer, Makinak"),
+]
+for _pid,_n,_b,_d,_nt in _wishart_kids:
+  PEOPLE.setdefault(_pid, {"id":_pid,"name":_n,"birth":_b,"death":_d,"metis":False,"privacy":"deceased","note":_nt})
+for _u in UNIONS:
+  if _u["id"]=="U44": _u["children"]=["P145","P146","P147","P148","P149","P150","P151"]
+
+# HALLETT siblings (children of Henry Hallett Jr + Catherine Parenteau, U35) - corroborated set.
+# RECONCILED the two 'Jane' entries (Jane Spence 1839 + Jane Baubee 1841) as one Jane with a note
+# (possible source duplicate); held Alfred/John/Cornelius as less-documented (not added as facts).
+_hallett_sibs = [
+  ("P152","Antoine (Edwin) Hallett","1823","1853",""),("P153","Esther Justine Hallett","1824","1869","m. Klyne"),
+  ("P154","Henry Hallett III","1827","1869","'Andrew'"),("P155","Charlotte Hallett","1834","","m. McNabb"),
+  ("P156","Jane Hallett","1839","1874","also recorded as 'Jane Baubee' (1841-79) - possible source duplicate"),
+  ("P157","Anne Hallett","1846","","m. Bird"),
+]
+for _pid,_n,_b,_d,_nt in _hallett_sibs:
+  PEOPLE.setdefault(_pid, {"id":_pid,"name":_n,"birth":_b,"death":_d,"metis":True,"privacy":"deceased","note":_nt})
+for _u in UNIONS:
+  if _u["id"]=="U35": _u["children"]=["P033","P152","P153","P154","P155","P156","P157"]
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -477,6 +522,11 @@ f05["children"] += [(ellen_b, f43["s1x"]), (jane_b, f45["s1x"]), (harriet_b, f44
 f42, colin_b, jemima_b = add_couple("U42", -COL*0.9, 6)  # Colin Campbell Setter + Jemima Hourie
 f19["children"] += [(colin_b, f42["s1x"])]
 
+# children rows for the new collateral couples (leaves)
+f43["children"] = leaf_boxes(by_union["U43"], 9, COL*0.9)    # Brown children (Ellen+George)
+f44["children"] = leaf_boxes(by_union["U44"], 11, COL*0.9)   # Wishart children (Harriet+Peter)
+f35["children"] = leaf_boxes(by_union["U35"], 4, COL*1.7)    # Hallett siblings (Henry Jr + Catherine Parenteau)
+
 # --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
 rows = {}
 for n in PERS:
@@ -570,7 +620,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123","P125","P127","P128","P129","P130","P131","P132"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123","P125","P127","P128","P129","P130","P131","P132","P133","P134","P135","P136","P137","P138","P139","P140","P141","P142","P143","P144","P145","P146","P147","P148","P149","P150","P151","P152","P153","P154","P155","P156","P157"}
 INFERRED = {"P080","P94","P95","P120","P126"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird + Catherine Crise (secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
@@ -901,17 +951,20 @@ function drawTree(){
   const RAIL='#A99BD9', MAR='#E8B45A';
   const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
   T.fams.forEach(f=>{
+    const n1=nodeById(f.s1), n2=nodeById(f.s2);
+    if(!n1||!n2)return;
+    const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                        // ACTUAL spouse centers (post-overlap-resolution)
     const my=f.y+PH/2;
-    seg(f.s1x+PW/2, my, f.s2x-PW/2, my, MAR, 4.5);                 // marriage bar
-    const y0=f.y+PH, ry=y0+26;
-    seg(f.x, y0, f.x, ry, RAIL, 4);                                // drop from marriage
+    seg(c1x, my, c2x, my, MAR, 4.5);                               // marriage bar
+    const barx=(c1x+c2x)/2, y0=f.y+PH, ry=y0+26;
+    seg(barx, y0, barx, ry, RAIL, 4);                              // drop from marriage
     if(f.children.length){
-      const cxs=f.children.map(c=>c[1]);
-      // rail must always span from the marriage drop to every child (even a single child)
-      const mn=Math.min(f.x, ...cxs), mx=Math.max(f.x, ...cxs);
+      const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
+      const cxs=kids.map(k=>k.x+k.w/2);                            // ACTUAL child centers
+      const mn=Math.min(barx, ...cxs), mx=Math.max(barx, ...cxs);
       if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
       const ctop=f.y+RH;
-      f.children.forEach(([pid,cx])=>{ seg(cx, ry, cx, ctop, RAIL, 4); });
+      kids.forEach(k=>{ const cx=k.x+k.w/2; seg(cx, ry, cx, ctop, RAIL, 4); });
     }
   });
   // special edges: dashed convergence + in-law stubs (up)
@@ -924,7 +977,9 @@ function drawTree(){
     }else if(e.up){
       const f1=famById[e.from], f2=famById[e.to];
       if(f1&&f2){
-        const x1=f1.x, y1=f1.y, x2=f2.x, y2=f2.y+PH;
+        const cxF=(f)=>{const a=nodeById(f.s1),b=nodeById(f.s2);return a&&b?(a.x+a.w/2+b.x+b.w/2)/2:f.x;};
+        const x1=cxF(f1), x2=cxF(f2);
+        const y1=f1.y+PH, y2=f2.y+PH;
         const mid=(y1+y2)/2;
         seg(x1,y1,x1,mid,RAIL,3.5);seg(x1,mid,x2,mid,RAIL,3.5);seg(x2,mid,x2,y2,RAIL,3.5);
       }
