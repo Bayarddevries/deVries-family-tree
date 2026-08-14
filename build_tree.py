@@ -400,8 +400,25 @@ def leaf_boxes(u, row, cx):
         out.append((nid, bx + P_W/2))
     return out
 
+def leaf_grid(u, row, cx, per=6):
+    """leaf children of union u wrapped into compact rows of `per`, starting at `row`.
+    Keeps wide families narrow so their connector rails don't overlap neighbouring families."""
+    leaves = [c for c in u["children"]
+              if not any(c in (fu["spouse1"], fu["spouse2"]) for fu in UNIONS if fu["id"] != u["id"])]
+    if not leaves: return []
+    out = []
+    for r_i in range(0, len(leaves), per):
+        band = leaves[r_i:r_i+per]
+        y = (row + r_i//per)*ROW_H
+        total = len(band)*(P_W + LEAF_GAP) - LEAF_GAP
+        x0 = cx - total/2
+        for i, pid in enumerate(band):
+            bx = x0 + i*(P_W + LEAF_GAP)
+            out.append((add_person(pid, bx, y), bx + P_W/2))
+    return out
+
 # ---- explicit columnar layout (x = canvas center; COL = column pitch) ----
-COL = 470
+COL = 700   # column pitch between the two trunks and side branches (was 470 - too tight, trunks overlapped)
 # rows 0-2: the Batt root spine (top center)
 f16, isaac_b, _ = add_couple("U16", 0, 0)
 f15, marg_b, _  = add_couple("U15", 0, 1)
@@ -422,7 +439,7 @@ f01["children"] = [(peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
 f03, george_b1, isab_b = add_couple("U03", -COL-230, 4)
 f19, george_b2, jess_b = add_couple("U19", -COL+230, 4)
 f05, david_b, cath_b   = add_couple("U05",  COL, 4)
-f02["children"] = [(george_b1, f03["s1x"]), (george_b2, f19["s1x"])] + leaf_boxes(by_union["U02"], 4, -COL)
+f02["children"] = [(george_b1, f03["s1x"]), (george_b2, f19["s1x"])] + leaf_grid(by_union["U02"], 4, -COL, 6)
 f04["children"] = [(david_b, f05["s1x"])] + leaf_boxes(by_union["U04"], 4, COL)
 
 # row 5: line A = Roderick; line B = Ernest; Elizabeth⚭Norquay side branch
@@ -431,7 +448,7 @@ f06, ern_b, mary_b   = add_couple("U06",  COL, 5)
 f11, eliz_b, norq_b  = add_couple("U11", -COL*1.9, 5)
 f03["children"] = [(eliz_b, f11["s1x"])] + leaf_boxes(by_union["U03"], 5, -COL-230)
 f19["children"] = [(rod_b, f12["s1x"])] + leaf_boxes(by_union["U19"], 5, -COL)
-f05["children"] = [(mary_b, f06["s2x"])] + leaf_boxes(by_union["U05"], 5, COL)
+f05["children"] = [(mary_b, f06["s2x"])] + leaf_grid(by_union["U05"], 5, COL, 6)
 
 # row 6: the two lines CONVERGE at Alan⚭Ella; Hamilton in-law column
 f07, alan_b, ella_b  = add_couple("U07", 0, 6)
@@ -454,7 +471,7 @@ TEDGES.append({"from": "fam_U10", "to": "fam_U14", "up": True})   # Bryon's pare
 # row 9: Tracy⚭Bryon; deVries leaves in their column
 f10, tracy_b, bry_b  = add_couple("U10", 0, 9)
 f09["children"] = [(tracy_b, f10["s1x"])] + leaf_boxes(by_union["U09"], 9, -220)
-f14["children"] += leaf_boxes(by_union["U14"], 9, COL*2.1)
+f14["children"] += leaf_grid(by_union["U14"], 9, COL*2.1, 6)
 
 # row 10: Bayard⚭Paula and Ashley⚭Noel
 f17, bay_b, paula_b  = add_couple("U17", -300, 10, you=True)
@@ -523,9 +540,9 @@ f42, colin_b, jemima_b = add_couple("U42", -COL*0.9, 6)  # Colin Campbell Setter
 f19["children"] += [(colin_b, f42["s1x"])]
 
 # children rows for the new collateral couples (leaves)
-f43["children"] = leaf_boxes(by_union["U43"], 9, COL*0.9)    # Brown children (Ellen+George)
-f44["children"] = leaf_boxes(by_union["U44"], 11, COL*0.9)   # Wishart children (Harriet+Peter)
-f35["children"] = leaf_boxes(by_union["U35"], 4, COL*1.7)    # Hallett siblings (Henry Jr + Catherine Parenteau)
+f43["children"] = leaf_grid(by_union["U43"], 9, COL*0.9, 6)    # Brown children (Ellen+George)
+f44["children"] = leaf_grid(by_union["U44"], 11, COL*0.9, 6)   # Wishart children (Harriet+Peter)
+f35["children"] = leaf_grid(by_union["U35"], 4, COL*1.7, 6)    # Hallett siblings (Henry Jr + Catherine Parenteau)
 
 # --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
 rows = {}
@@ -963,8 +980,7 @@ function drawTree(){
       const cxs=kids.map(k=>k.x+k.w/2);                            // ACTUAL child centers
       const mn=Math.min(barx, ...cxs), mx=Math.max(barx, ...cxs);
       if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
-      const ctop=f.y+RH;
-      kids.forEach(k=>{ const cx=k.x+k.w/2; seg(cx, ry, cx, ctop, RAIL, 4); });
+      kids.forEach(k=>{ const cx=k.x+k.w/2; seg(cx, ry, cx, k.y+k.h/2, RAIL, 4); });  // drop to EACH child's own row (handles wrapped children)
     }
   });
   // special edges: dashed convergence + in-law stubs (up)
