@@ -243,6 +243,15 @@ for _pid,_n,_b,_d,_nt in _wishart_kids:
 for _u in UNIONS:
   if _u["id"]=="U44": _u["children"]=["P145","P146","P147","P148","P149","P150","P151"]
 
+# Collateral children (12 Brown, 7 Wishart) are KEPT in PEOPLE (People tab / Stories / search)
+# but rendered in the TREE as one compact summary node per family. Laying out 12+7 individual
+# boxes put them on the same rows as the central trunk (Bayard's parents / Bayard himself),
+# where the overlap-resolver crammed them into the trunk's free space and made the tree ugly.
+PEOPLE.setdefault("P900", {"id":"P900","name":"George & Ellen Brown","birth":"","death":"","metis":False,"privacy":"deceased","group":True,"kids":12,
+  "note":"12 children (each has a full profile in the People tab): Archibald George (1877-1937), Alexander (1878-1923), Daniel David (1880-1956), Jane (1882-), Richard A. (1884-), Ida (1886-), Clara M.E. (1889-), Margaret (1891-), Flora C. (1893-1899), Mariam (1895-), Lawrence (1898-), William Archibald (1899-)."})
+PEOPLE.setdefault("P901", {"id":"P901","name":"Peter & Harriet Wishart","birth":"","death":"","metis":False,"privacy":"deceased","group":True,"kids":7,
+  "note":"7 children (each has a full profile in the People tab): Florence Mildred (1887-, m. George Augustus Langford 1913), Henry Allen 'Harry' (1889-, m. Kathleen Payne 1920), Edgar Wolseley 'Ted' (1891-, m. Mary Ethel Neilson 1925), Edna (1896-, m. Bertie Cleave 1926), Ruby Emma Elizabeth (1897-), Edith Jane (1900-, m. Thomas Hoy), Herbert Charles (1901-, farmer Makinak)."})
+
 # HALLETT siblings (children of Henry Hallett Jr + Catherine Parenteau, U35) - corroborated set.
 # RECONCILED the two 'Jane' entries (Jane Spence 1839 + Jane Baubee 1841) as one Jane with a note
 # (possible source duplicate); held Alfred/John/Cornelius as less-documented (not added as facts).
@@ -417,132 +426,17 @@ def leaf_grid(u, row, cx, per=6):
             out.append((add_person(pid, bx, y), bx + P_W/2))
     return out
 
-# ---- explicit columnar layout (x = canvas center; COL = column pitch) ----
-COL = 700   # column pitch between the two trunks and side branches (was 470 - too tight, trunks overlapped)
-# rows 0-2: the Batt root spine (top center)
-f16, isaac_b, _ = add_couple("U16", 0, 0)
-f15, marg_b, _  = add_couple("U15", 0, 1)
-f01, james_b, nest_b = add_couple("U01", 0, 2)
-f16["children"] = [(isaac_b, f15["s1x"])]                # Isaac hangs under Dantzick
-f15["children"] = [(marg_b, f01["s2x"])]                 # Margaret hangs under Isaac
+def summary_box(pid, row, cx, w=210):
+    """one wide leaf box for a collapsed collateral family (children listed in its popup)."""
+    nid = add_person(pid, cx - w/2, row*ROW_H)
+    PERS[-1]["w"] = w
+    return nid, cx
 
-# row 3: the two Spence lines split into two columns
-f02, andrew_b, peggy_b = add_couple("U02", -COL, 3)
-f04, jamesj_b, jane_b  = add_couple("U04",  COL, 3)
-# U01's rail drops to its real children: Peggy (U02 spouse2), JamesJr (U04) + George Sr leaf.
-# NOTE: Andrew SETTER is Peggy's HUSBAND, not a child of James Sr - he stays in couple U02
-# and the Setter kids descend from U02, so JamesJr/Andrew/Setters are SEPARATE lines.
-george_sr = leaf_boxes(by_union["U01"], 3, 0)          # George Spence Sr leaf at center
-f01["children"] = [(peggy_b, f02["s2x"]), (jamesj_b, f04["s1x"])] + george_sr
-
-# row 4: line A = George's two marriages; line B = David
-f03, george_b1, isab_b = add_couple("U03", -COL-230, 4)
-f19, george_b2, jess_b = add_couple("U19", -COL+230, 4)
-f05, david_b, cath_b   = add_couple("U05",  COL, 4)
-f02["children"] = [(george_b1, f03["s1x"]), (george_b2, f19["s1x"])] + leaf_grid(by_union["U02"], 4, -COL, 6)
-f04["children"] = [(david_b, f05["s1x"])] + leaf_boxes(by_union["U04"], 4, COL)
-
-# row 5: line A = Roderick; line B = Ernest; Elizabeth⚭Norquay side branch
-f12, rod_b, sarah_b  = add_couple("U12", -COL, 5)
-f06, ern_b, mary_b   = add_couple("U06",  COL, 5)
-f11, eliz_b, norq_b  = add_couple("U11", -COL*1.9, 5)
-f03["children"] = [(eliz_b, f11["s1x"])] + leaf_boxes(by_union["U03"], 5, -COL-230)
-f19["children"] = [(rod_b, f12["s1x"])] + leaf_boxes(by_union["U19"], 5, -COL)
-f05["children"] = [(mary_b, f06["s2x"])] + leaf_grid(by_union["U05"], 5, COL, 6)
-
-# row 6: the two lines CONVERGE at Alan⚭Ella; Hamilton in-law column
-f07, alan_b, ella_b  = add_couple("U07", 0, 6)
-f13, guy_b, ethel_b  = add_couple("U13", COL*2.1, 6)
-f12["children"] = [(alan_b, f07["s1x"])]               # line A drops into Alan
-f06["children"] = [(ella_b, f07["s2x"])]               # line B drops into Ella
-TEDGES.append({"from": "fam_U08", "to": "fam_U13", "up": True})   # Lawrence's parents
-
-# row 7: the trunk: Doris⚭Lawrence; Hamilton leaves beside their column
-f08, doris_b, law_b  = add_couple("U08", 0, 7)
-f07["children"] = [(doris_b, f08["s1x"])] + leaf_boxes(by_union["U07"], 7, 0)
-f13["children"] += leaf_boxes(by_union["U13"], 7, COL*2.1)
-
-# row 8: Mavis⚭Robert; deVries in-law column
-f09, mavis_b, rob_b  = add_couple("U09", -220, 8)
-f14, ger_b, gees_b   = add_couple("U14", COL*2.1, 8)
-f08["children"] = [(mavis_b, f09["s1x"])] + leaf_boxes(by_union["U08"], 8, -220)
-TEDGES.append({"from": "fam_U10", "to": "fam_U14", "up": True})   # Bryon's parents
-
-# row 9: Tracy⚭Bryon; deVries leaves in their column
-f10, tracy_b, bry_b  = add_couple("U10", 0, 9)
-f09["children"] = [(tracy_b, f10["s1x"])] + leaf_boxes(by_union["U09"], 9, -220)
-f14["children"] += leaf_grid(by_union["U14"], 9, COL*2.1, 6)
-
-# row 10: Bayard⚭Paula and Ashley⚭Noel
-f17, bay_b, paula_b  = add_couple("U17", -300, 10, you=True)
-f18, ash_b, noel_b   = add_couple("U18",  300, 10)
-f10["children"] = [(bay_b, f17["s1x"]), (ash_b, f18["s1x"])]
-
-# row 11: the kids
-f17["children"] = leaf_boxes(by_union["U17"], 11, -300)
-f18["children"] = leaf_boxes(by_union["U18"], 11,  300)
-
-# ---- in-law family side branches (so Hallett/Hourie/Riggs/Parenteau/deVries/Hamilton build out
-#      as their own nodes, connected by 'up' edges where they marry in - same as Hamilton/deVries) ----
-# HOURIE family (line A: Sarah Ann Hourie's parents) - left
-f34, jh_b, mb_b = add_couple("U34", -COL*1.7, 1)     # John Hourie + Margaret Bird
-f33, ph_b, eh_b = add_couple("U33", -COL*1.7, 2)     # Philip Hourie + Euphemia Cook Halcro
-TEDGES.append({"from": "fam_U12", "to": "fam_U33", "up": True})   # Sarah Ann's parents
-TEDGES.append({"from": "fam_U33", "to": "fam_U34", "up": True})   # Philip's parents
-
-# RIGGS family (line B: Ernest Riggs's parents) - right
-f28, drj_b, ch_b = add_couple("U28", COL*1.3, 1)     # David J. Riggs Jr + Catherine Hendricks
-f26, hm_b, aw_b  = add_couple("U26", COL*1.3, 2)     # Harmon Miles Riggs + Amelia Williams
-TEDGES.append({"from": "fam_U06", "to": "fam_U26", "up": True})   # Ernest's parents
-TEDGES.append({"from": "fam_U26", "to": "fam_U28", "up": True})   # Harmon's parents
-
-# HALLETT / PARENTEAU family (line B: Catherine Hallett's parents) - right
-f36, jbp_b, unk_b = add_couple("U36", COL*1.7, 1)    # Jean Baptiste Parenteau + Unknown
-f35, hh_b, cp_b   = add_couple("U35", COL*1.7, 2)    # Henry Hallett Jr + Catherine Parenteau
-TEDGES.append({"from": "fam_U05", "to": "fam_U35", "up": True})   # Catherine Hallett's parents
-TEDGES.append({"from": "fam_U35", "to": "fam_U36", "up": True})   # Catherine Parenteau's father
-# HALLETT patriarch + William Peter (line B: Henry Jr's parents; William Peter's parents) - right
-f37, hs_b, cc_b  = add_couple("U37", COL*1.9, 0)     # Henry Hallett Sr + Catherine Crise
-f38, wp_b, mp_b  = add_couple("U38", COL*2.3, 0)     # William Peter Hallett + Maria Pruden
-TEDGES.append({"from": "fam_U35", "to": "fam_U37", "up": True})   # Henry Jr's parents
-TEDGES.append({"from": "fam_U38", "to": "fam_U37", "up": True})   # William Peter's parents
-
-# deVRIES deeper (Gerhard's parents) - far right
-f27, edv_b, mm_b = add_couple("U27", COL*3.2, 5)     # Engbertus de Vries + Maria Meinders
-f23, ldv_b, tp_b = add_couple("U23", COL*3.2, 6)     # Leewe de Vries + Trienje Pommer
-TEDGES.append({"from": "fam_U14", "to": "fam_U23", "up": True})   # Gerhard's parents
-TEDGES.append({"from": "fam_U23", "to": "fam_U27", "up": True})   # Leewe's parents
-
-# HAMILTON deeper (Guy's parents / John James's line) - far right
-f30, johnh_b, el_b = add_couple("U30", COL*2.9, 3)   # John Hamilton + Eleanor Preston
-f31, jos_b, mbu_b  = add_couple("U31", COL*2.9, 4)   # Joseph Hamilton + Mary Busby
-f24, jjh_b, jb_b   = add_couple("U24", COL*2.9, 5)   # John James Hamilton + Jane Buchanan
-TEDGES.append({"from": "fam_U13", "to": "fam_U24", "up": True})   # Guy's parents
-TEDGES.append({"from": "fam_U24", "to": "fam_U31", "up": True})   # John James's parents
-TEDGES.append({"from": "fam_U31", "to": "fam_U30", "up": True})   # Joseph's parents
-
-# KING / BUCHANAN (Ethel King's parents + Jane Buchanan's parents) - far right
-f32, johnbu_b, iw_b = add_couple("U32", COL*3.8, 3)  # John Buchanan + Isabella Watson (Jane's parents)
-f29, wk_b, sb_b     = add_couple("U29", COL*3.8, 4)  # William King + Sarah Burke
-f25, tak_b, cc_b    = add_couple("U25", COL*3.8, 5)  # Thomas Allan King + Catherine Clark
-TEDGES.append({"from": "fam_U13", "to": "fam_U25", "up": True})   # Ethel's parents
-TEDGES.append({"from": "fam_U25", "to": "fam_U29", "up": True})   # Thomas Allan's parents
-TEDGES.append({"from": "fam_U24", "to": "fam_U32", "up": True})   # Jane Buchanan's parents
-
-# SPENCE sibling marriages (line B: Ellen / Jane / Harriet Spence) - right of line B
-f43, ellen_b, george_b = add_couple("U43", COL*0.9, 6)   # Ellen Anderson Spence + George Brown
-f45, jane_b, folster_b = add_couple("U45", COL*0.9, 7)   # Jane Spence + William Folster
-f44, harriet_b, wish_b = add_couple("U44", COL*0.9, 8)   # Harriet Spence + Peter Henry Wishart
-f05["children"] += [(ellen_b, f43["s1x"]), (jane_b, f45["s1x"]), (harriet_b, f44["s1x"])]
-
-# SETTER sibling marriage (line A: Colin Setter + Jemima Hourie) - left of line A
-f42, colin_b, jemima_b = add_couple("U42", -COL*0.9, 6)  # Colin Campbell Setter + Jemima Hourie
-f19["children"] += [(colin_b, f42["s1x"])]
-
-# children rows for the new collateral couples (leaves)
-f43["children"] = leaf_grid(by_union["U43"], 9, COL*0.9, 6)    # Brown children (Ellen+George)
-f44["children"] = leaf_grid(by_union["U44"], 11, COL*0.9, 6)   # Wishart children (Harriet+Peter)
-f35["children"] = leaf_grid(by_union["U35"], 4, COL*1.7, 6)    # Hallett siblings (Henry Jr + Catherine Parenteau)
+# ---- AUTO-LAYOUT (generation-layered; derives every position + connector from the graph) ----
+from layout_auto import auto_layout
+PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE)
+# (overlap resolver, generation lanes, canvas bounds, and family-geometry recompute follow below)
+# ------------------------------------------------------------------------------------------------
 
 # --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
 rows = {}
@@ -597,6 +491,49 @@ for f in FAMS:
     f["x"] = (f["s1x"] + f["s2x"])/2
     f["y"] = n1["y"]
     f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid, _ in f["children"]]
+
+# ================= VALIDATION (auto-layout integrity) =================
+# Fails the build if a person is disconnected or a connector misses its target.
+import sys as _sys
+def _validate_layout():
+    errs, warns = [], []
+    spouse_nids = {f["s1"] for f in FAMS} | {f["s2"] for f in FAMS}
+    child_nids = {cid for f in FAMS for cid, _ in f["children"]}
+    # 1. every union that HAS children in the data must have a populated children rail
+    for u in UNIONS:
+        if by_union[u["id"]].get("children") and \
+           not any(f["u"] == u["id"] and f["children"] for f in FAMS):
+            errs.append(f"union {u['id']} has children but no connected rail")
+    # 2. no node is orphaned (neither a spouse nor a connected child)
+    for n in PERS:
+        if n["id"] not in spouse_nids and n["id"] not in child_nids:
+            errs.append(f"person {n['pid']} ({n['id']}) is disconnected (neither spouse nor child rail)")
+    # 3. connector spans: a child box should sit one generation below its parent family
+    byf = {f["u"]: f for f in FAMS}
+    for f in FAMS:
+        for cid, _ in f["children"]:
+            k = bybox[cid]; gap = (k["y"] - f["y"]) / ROW_H
+            if gap < 0.5:
+                warns.append(f"connector {f['u']}->{k['pid']} spans {gap:.1f} rows (child at/above parent)")
+    # 4. no overlapping boxes
+    boxes = sorted(PERS, key=lambda n: n["x"])
+    for i in range(len(boxes)):
+        a = boxes[i]
+        for b in boxes[i+1:]:
+            if b["x"] >= a["x"] + a["w"] + 1:
+                break
+            if a["y"] == b["y"] and not (b["x"] >= a["x"] + a["w"] or a["x"] >= b["x"] + b["w"]):
+                warns.append(f"overlap {a['pid']} & {b['pid']} at row {a['y']}")
+    return errs, warns
+ERR, WARN = _validate_layout()
+for _w in WARN: print("  WARN:", _w)
+if ERR:
+    for _e in ERR: print("  ERROR:", _e)
+    print(f"  [{len(ERR)} layout ERRORS - see above; aborting write]")
+    _sys.exit(1)
+print(f"  [layout-ok: {len(PERS)} nodes, {len(FAMS)} unions, {len(WARN)} warnings]")
+# ======================================================================
+
 TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
         "pw": P_W, "ph": P_H, "rowh": ROW_H,
         "w": int(maxx - minx + 190), "h": int(maxy + 60)}
@@ -641,36 +578,104 @@ VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033
 INFERRED = {"P080","P94","P95","P120","P126"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird + Catherine Crise (secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
+# `core:false` marks far-flung origins (Europe / US) that are reachable by zooming out but
+# excluded from the default view so the map centres on the Red River / MB-SK homeland.
 MAP_PLACES = [
- {"id":"orkney","name":"Orkney, Scotland","lat":59.048,"lng":-2.969,"people":["P001","P007"],
-  "note":"Home island of the HBC founders: James Spence Sr and Andrew Setter were both born in Orkney before coming to Rupert's Land."},
- {"id":"york","name":"York Factory","lat":57.003,"lng":-92.302,"people":["P001","P007","P079"],
+ {"id":"orkney","name":"Orkney, Scotland","lat":59.048,"lng":-2.969,"core":False,"people":["P001","P007","P119"],
+  "note":"Home of the HBC founders: James Spence Sr and Andrew Setter (both Orkney), and John Hourie (South Ronaldsay)."},
+ {"id":"york","name":"York Factory","lat":57.003,"lng":-92.302,"core":False,"people":["P001","P007","P079"],
   "note":"HBC post on Hudson Bay where the fur-trade founders worked: James Spence Sr, Andrew Setter (voyageur) and Isaac Batt."},
- {"id":"flinflon","name":"Flin Flon","lat":54.768,"lng":-101.864,"people":["P045","P046"],
+ {"id":"battersea","name":"Battersea, England","lat":51.461,"lng":-0.160,"core":False,"people":["P125"],
+  "note":"Where Henry Hallett Sr was baptised (1773) before coming to Rupert's Land."},
+ {"id":"quebec","name":"Montreal, Quebec","lat":45.501,"lng":-73.567,"core":False,"people":["P123"],
+  "note":"Origin of Jean Baptiste Parenteau, who came to Red River (father of Catherine Parenteau)."},
+ {"id":"mayo","name":"Co. Mayo, Ireland","lat":53.980,"lng":-9.430,"core":False,"people":["P113","P114"],
+  "note":"Irish home of John Hamilton + Eleanor Preston, the founders of the Hamilton line (settlers, not Scottish)."},
+ {"id":"friesland","name":"Ee, Friesland, Netherlands","lat":53.329,"lng":5.992,"core":False,"people":["P105","P97","P069","P067"],
+  "note":"deVries homeland in the Frisian lands (Ee, Netherlands / East Frisia, Germany); the deVries surname comes from here."},
+ {"id":"winchester","name":"Winchester Twp, Ontario","lat":44.990,"lng":-75.340,"core":False,"people":["P109","P110","P101"],
+  "note":"Stormont, Dundas & Glengarry. Home of William King + Sarah Burke; their son Thomas Allan King was born here (1864)."},
+ {"id":"mornington","name":"Mornington, Ontario","lat":43.490,"lng":-80.860,"core":False,"people":["P111","P112","P99"],
+  "note":"Perth County. Joseph Hamilton married Mary Busby here (1848); son John James Hamilton born 1856."},
+ {"id":"muscatine","name":"Muscatine, Iowa","lat":41.420,"lng":-91.040,"core":False,"people":["P107"],
+  "note":"Where David J. Riggs Jr lived (1804-1850); the Riggs line came north from the United States to Red River."},
+ {"id":"flinflon","name":"Flin Flon","lat":54.768,"lng":-101.864,"core":True,"people":["P045","P046"],
   "note":"The Hamiltons moved here in 1939, when Mavis was six. This is how the maternal line came to Flin Flon."},
- {"id":"tisdale","name":"Tisdale, SK","lat":52.853,"lng":-104.051,"people":["P044","P045","P046"],
+ {"id":"tisdale","name":"Tisdale, SK","lat":52.853,"lng":-104.051,"core":True,"people":["P044","P045","P046"],
   "note":"Doris Setter married Lawrence Hamilton here (1932); their daughter Mavis was born here in 1933."},
- {"id":"thepas","name":"The Pas","lat":53.826,"lng":-101.254,"people":["P079"],
+ {"id":"neche","name":"Neche, ND","lat":48.980,"lng":-97.550,"core":True,"people":["P062"],
+  "note":"Where Ethel Rose King was born (1892); the King family crossed from Ontario through here to Saskatchewan."},
+ {"id":"thepas","name":"The Pas","lat":53.826,"lng":-101.254,"core":True,"people":["P079"],
   "note":"Isaac Batt traded and travelled inland near here in the 1760s-70s."},
- {"id":"standrews","name":"St. Andrews","lat":50.270,"lng":-96.979,"people":["P010","P025"],
+ {"id":"standrews","name":"St. Andrews","lat":50.270,"lng":-96.979,"core":True,"people":["P010","P025"],
   "note":"Red River parish where the Setter line is recorded in the 1870 census."},
- {"id":"stjohns","name":"St. John's, Red River","lat":49.895,"lng":-97.138,"people":["P030","P033"],
-  "note":"Red River. David Spence was born here in 1824 and married Catherine Hallett here in 1844."},
- {"id":"sfx","name":"St. François Xavier","lat":49.905,"lng":-97.526,"people":["P051"],
-  "note":"White Horse Plain - the buffalo-hunt community where the family's Norquay kin lived."},
- {"id":"poplar","name":"Poplar Point","lat":50.040,"lng":-98.002,"people":["P030","P010","P025"],
+ {"id":"stjohns","name":"St. John's, Red River","lat":49.895,"lng":-97.138,"core":True,"people":["P030","P033","P121","P122"],
+  "note":"Red River. David Spence was born here in 1824 and married Catherine Hallett here in 1844; Henry Hallett Jr married Catherine Parenteau here in 1824."},
+ {"id":"sfx","name":"St. François Xavier","lat":49.905,"lng":-97.526,"core":True,"people":["P051"],
+  "note":"White Horse Plain, the buffalo-hunt community where the family's Norquay kin lived."},
+ {"id":"poplar","name":"Poplar Point","lat":50.040,"lng":-98.002,"core":True,"people":["P030","P010","P025"],
   "note":"David Spence's home and his MLA constituency; the Setter family farmed here. Both families in the 1870 census."},
- {"id":"highbluff","name":"High Bluff","lat":49.978,"lng":-98.251,"people":["P030","P010"],
-  "note":"David Spence applied for Métis scrip here in 1875; George Setter farmed in this area."},
- {"id":"portage","name":"Portage la Prairie","lat":49.973,"lng":-98.290,"people":["P041","P038","P043","P042","P044"],
+ {"id":"highbluff","name":"High Bluff","lat":49.978,"lng":-98.251,"core":True,"people":["P030","P010","P060"],
+  "note":"David Spence applied for Metis scrip here in 1875; George Setter farmed here; Sarah Ann Hourie was born and died here."},
+ {"id":"beautifulplains","name":"Beautiful Plains, MB","lat":50.440,"lng":-99.280,"core":True,"people":["P061"],
+  "note":"Where Guy Wentworth Hamilton was born (1882), after the Hamilton family moved west from Ontario."},
+ {"id":"ochreriver","name":"Ochre River, MB","lat":51.160,"lng":-99.450,"core":True,"people":["P067","P068","P071"],
+  "note":"The deVries homestead near Lake Dauphin / Turtle River; Gerhard and Geeske farmed here after coming from Friesland."},
+ {"id":"portage","name":"Portage la Prairie","lat":49.973,"lng":-98.290,"core":True,"people":["P041","P038","P043","P042","P044"],
   "note":"Ernest Riggs's farm. Allan Setter married Ella Riggs here (1909); their daughter Doris was born here in 1912."},
 ]
-# migration / connection lines through place ids
+# migration / connection lines, one colour per family line (legend rendered on the map)
 MAP_LINKS = [
- {"id":"fur","label":"fur trade","p":["orkney","york","stjohns"],"dash":True},
- {"id":"settle","label":"settlement west","p":["stjohns","sfx","poplar","highbluff","portage"],"dash":False},
- {"id":"north","label":"move north 1939","p":["portage","tisdale","flinflon"],"dash":False},
+ {"id":"spence_setter","label":"Spence & Setter (line A)","color":"#E8B45A",
+  "p":["orkney","york","stjohns","standrews","poplar","highbluff","portage"],"dash":False,
+  "desc":"Your direct line. James Spence Sr (Orkney) and Margaret 'Nestichio' Batt, the Metis matriarch; through Peggy Spence and Andrew Setter, then the Setters of Red River, ending at Alan Setter."},
+ {"id":"spence_riggs","label":"Spence & Riggs (line B)","color":"#C39BD3",
+  "p":["orkney","york","stjohns","portage"],"dash":False,
+  "desc":"Your direct line. From James Spence Sr through David Spence (the MLA), his daughter Mary Ann Spence who married Ernest Riggs, to Ella Alberta Riggs. Lines A and B meet at the Alan Setter + Ella Riggs marriage."},
+ {"id":"batt","label":"Batt (fur trade)","color":"#7A6D96",
+  "p":["orkney","york","thepas"],"dash":True,
+  "desc":"Isaac Batt, the English HBC fur trader who worked and travelled inland (The Pas) and was the father of Margaret 'Nestichio' Batt."},
+ {"id":"hourie","label":"Hourie","color":"#E57373",
+  "p":["orkney","stjohns","highbluff"],"dash":True,
+  "desc":"John Hourie of Orkney (and a Shoshoni wife); his granddaughter Sarah Ann Hourie married Roderick McKenzie Setter, joining the Hourie and Setter families."},
+ {"id":"hallett","label":"Hallett","color":"#F06292",
+  "p":["battersea","stjohns"],"dash":True,
+  "desc":"Henry Hallett Sr, baptised in Battersea, England, founder of the Red River Hallett family; Catherine Hallett married David Spence."},
+ {"id":"parenteau","label":"Parenteau","color":"#BA68C8",
+  "p":["quebec","stjohns"],"dash":True,
+  "desc":"Jean Baptiste Parenteau, who came from Quebec to Red River; his daughter Catherine Parenteau married Henry Hallett Jr."},
+ {"id":"deVries","label":"deVries (Dutch)","color":"#5B8DEF",
+  "p":["friesland","ochreriver"],"dash":False,
+  "desc":"Your paternal line. The deVries family came from the Frisian lands (Ee, Netherlands / East Frisia) and homesteaded at Ochre River near Lake Dauphin."},
+ {"id":"hamilton","label":"Hamilton (Irish)","color":"#6FBF73",
+  "p":["mayo","mornington","beautifulplains","tisdale","flinflon"],"dash":False,
+  "desc":"Your maternal in-law line. The Hamiltons came from Co. Mayo, Ireland, through Ontario (Mornington) and Beautiful Plains, then west to Tisdale and north to Flin Flon."},
+ {"id":"king","label":"King","color":"#4DB6AC",
+  "p":["winchester","neche","tisdale"],"dash":True,
+  "desc":"Ethel Rose King's family, settlers who came west from Winchester Twp, Ontario, through Neche, North Dakota, into Saskatchewan."},
+ {"id":"riggs","label":"Riggs (US)","color":"#FF8A65",
+  "p":["muscatine","portage"],"dash":True,
+  "desc":"The Riggs line came north from Iowa (David J. Riggs Jr lived in Muscatine) to Red River, where Ernest Riggs farmed at Portage."},
+ {"id":"north","label":"Your line (to Flin Flon)","color":"#9CE0F5",
+  "p":["portage","tisdale","flinflon"],"dash":False,
+  "desc":"The modern move: Doris Setter married Lawrence Hamilton at Tisdale, and the family moved to Flin Flon in 1939, bringing the line from Red River to the north."},
 ]
+
+# detailed legend + 'how to read' blocks rendered from the links above (injected into the map tab)
+def _map_route(ids):
+    names = {p["id"]: p["name"] for p in MAP_PLACES}
+    return " → ".join(names.get(i, i) for i in ids)
+MAP_LEGEND_HTML = '<div class="mlegendfull"><h3>Family lines</h3>' + "".join(
+    f'<div class="mlgrow"><i class="sw" style="background:{lk["color"]}{(";height:3px" if lk["dash"] else "")}"></i>'
+    f'<div class="mlgtxt"><b>{lk["label"]}</b><span class="mlgroute">{_map_route(lk["p"])}</span>'
+    f'<span class="mlgdesc">{lk.get("desc","")}</span></div></div>' for lk in MAP_LINKS) + '</div>'
+MAP_ABOUT_HTML = ('<div class="mabout"><h3>How to read this map</h3>'
+  '<p>Each red marker is a place where family lived or passed through. Tap one to see who was there. '
+  'The coloured lines trace the journey of each <b>family line</b>.</p>'
+  '<p>The <b>gold</b> and <b>purple</b> lines are your two direct ancestors (the Spence-Setter and Spence-Riggs lines). '
+  'They begin in Orkney and converge at the Alan Setter + Ella Riggs marriage, which is how two separate Spence lines both lead to you.</p>'
+  '<p>Solid lines show settlement and the dashed lines show fur-trade or earlier migration. '
+  'Distant origins in Europe and the United States sit off the default view, so zoom out to see them.</p></div>')
 
 # =========================================================
 # EMBEDDED DATA (for the JS app)
@@ -680,6 +685,7 @@ JS_DATA = {
     "people": [{"id": p["id"], "name": p["name"], "birth": p.get("birth"), "death": p.get("death"),
                 "metis": bool(p.get("metis")), "living": p.get("privacy") == "living",
                 "note": p.get("note", ""), "you": bool(p.get("you")),
+                "group": bool(p.get("group")), "kids": p.get("kids", 0),
                 "inlaw": p["id"] in INLAW,
                 "vflag": ("verified" if p["id"] in VERIFIED else ("inferred" if p["id"] in INFERRED else ""))} for p in PEOPLE.values()],
     "unions": [{"id": u["id"], "s1": u["spouse1"], "s2": u["spouse2"],
@@ -736,8 +742,10 @@ APP = r"""
 
   <section id="view-map" class="view">
     <h2 class="vhead">Where they lived</h2>
-    <div class="mapintro">Tap a place to see the family who lived there. Lines trace the family's journey from the fur trade to the north.</div>
+    <div class="mapintro">Tap a marker to see the family who lived there. Each coloured line traces one family line's journey, from the fur-trade homeland to the modern north. Key below the map.</div>
     <div id="mapwrap" class="mapwrap"></div>
+    [[MAP_ABOUT]]
+    [[MAP_LEGEND]]
   </section>
 </main>
 
@@ -803,6 +811,8 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
 .cnode.you{border-color:var(--crimson);box-shadow:0 0 0 2px rgba(224,82,92,.25),0 6px 18px rgba(0,0,0,.4)}
 .cnode.inlaw{border-style:dashed;border-color:var(--muted);opacity:.95}
 .cnode.inlaw .n1{color:var(--muted);font-style:italic}
+.cnode.grp{border-style:dashed;border-color:var(--gold);background:rgba(214,168,83,.08);cursor:zoom-in}
+.cnode.grp .n1{color:var(--gold)}
 .cnode .sp{display:inline-block;margin-top:2px;background:rgba(214,168,83,.14);color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.3px;padding:1px 5px;border-radius:6px}
 .cnode .n1,.cnode .n3{font-family:'Cinzel',serif;font-size:12px;color:var(--cream);line-height:1.2;font-weight:600}
 .cnode .n2{font-size:13px;color:var(--gold);line-height:1.15}
@@ -861,7 +871,7 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 
 /* map (Leaflet) */
 .mapintro{font-size:13.5px;color:var(--muted);line-height:1.5;margin:0 4px 12px}
-.mapwrap{position:relative;z-index:0;height:460px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#16203a}
+.mapwrap{position:relative;z-index:0;height:min(72vh,820px);min-height:440px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#16203a}
 .mapwrap .leaflet-container{background:#16203a;font-family:'EB Garamond',serif}
 .mapwrap .leaflet-popup-content-wrapper{background:var(--surface2);color:var(--cream);border:1px solid var(--gold);border-radius:12px}
 .mapwrap .leaflet-popup-content{margin:12px 14px}
@@ -872,6 +882,21 @@ canvas#conn{position:absolute;top:0;left:0;pointer-events:none}
 .mpop .chips{display:flex;flex-wrap:wrap;gap:5px}
 .mpop .chip{font-size:11.5px;padding:3px 9px}
 .mapidle{color:var(--muted);font-size:14px;padding:14px}
+.mlegend{position:absolute;bottom:24px;right:10px;z-index:500;background:rgba(20,26,43,.92);border:1px solid var(--line);border-radius:10px;padding:8px 10px;max-width:210px}
+.mlegend .mlrow{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--cream);line-height:1.5}
+.mlegend .mlrow i{display:inline-block;width:18px;height:4px;border-radius:2px;flex:none}
+.mabout{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:14px 0}
+.mabout h3,.mlegendfull h3{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px;color:var(--gold);margin:0 0 8px;text-transform:uppercase}
+.mabout p{font-size:13.5px;color:var(--txt);line-height:1.55;margin:0 0 8px}
+.mabout p:last-child{margin-bottom:0}
+.mlegendfull{background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mlgrow{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.mlgrow:last-child{border-bottom:none}
+.mlgrow .sw{display:inline-block;width:22px;height:5px;border-radius:3px;flex:none;margin-top:6px}
+.mlgrow .mlgtxt{flex:1;min-width:0}
+.mlgrow .mlgtxt b{display:block;font-family:'Cinzel',serif;font-size:13px;color:var(--cream)}
+.mlgrow .mlgroute{display:block;font-size:11.5px;color:var(--gold);margin:1px 0 3px;font-style:italic}
+.mlgrow .mlgdesc{display:block;font-size:12.5px;color:var(--txt);line-height:1.45}
 
 /* comments / suggest an edit */
 .comment-fab{position:fixed;right:16px;bottom:78px;width:54px;height:54px;border-radius:50%;border:none;background:var(--gold);color:#241a0c;font-size:24px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:900}
@@ -1009,7 +1034,12 @@ function drawTree(){
     div.className='cnode'+(n.you?' you':'')+(p.inlaw?' inlaw':'');
     div.style.left=n.x+'px';div.style.top=n.y+'px';div.style.width=n.w+'px';div.style.height=n.h+'px';
     let h='';
-    h+=`<div class="n1">${escH(p.name)}</div><div class="years">${escH(yrs(p))}</div>`;
+    if(p.group){
+      div.classList.add('grp');
+      h+=`<div class="n1">${escH(p.name)}</div><div class="years">${p.kids} children · tap for list</div>`;
+    }else{
+      h+=`<div class="n1">${escH(p.name)}</div><div class="years">${escH(yrs(p))}</div>`;
+    }
     if(p.metis)h+='<span class="m">MÉTIS</span>';
     if(p.inlaw)h+='<span class="sp">⚭ married in</span>';
     div.innerHTML=h;
@@ -1195,19 +1225,25 @@ function renderMap(){
   el.innerHTML='';
   LEAFLET_MAP=L.map(el,{scrollWheelZoom:false}).setView([52.0,-99.5],6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(LEAFLET_MAP);
-  const core=[];
+  const core=[]; const mlegend=[];
   D.mapplaces.forEach(p=>{
     const chips=p.people.map(id=>`<button class="chip" data-id="${id}">${escH(people[id].name)}</button>`).join('');
     const html=`<div class="mpop"><h4>${escH(p.name)}</h4><p>${escH(p.note||'')}</p><div class="chips">${chips}</div></div>`;
     L.circleMarker([p.lat,p.lng],{radius:11,color:'#D4A853',weight:2,fillColor:'#E0525C',fillOpacity:1})
       .addTo(LEAFLET_MAP).bindPopup(html);
-    if(p.id!=='orkney') core.push([p.lat,p.lng]);
+    if(p.core!==false) core.push([p.lat,p.lng]);
   });
   D.maplinks.forEach(lk=>{
     L.polyline(lk.p.map(id=>[MPLACES[id].lat,MPLACES[id].lng]),
-      {color:'#D4A853',weight:3,opacity:.85,dashArray:lk.dash?'7,6':null}).addTo(LEAFLET_MAP);
+      {color:lk.color||'#D4A853',weight:3,opacity:.85,dashArray:lk.dash?'7,6':null}).addTo(LEAFLET_MAP);
+    mlegend.push(`<div class="mlrow"><i style="background:${lk.color||'#D4A853'}${lk.dash?';height:2px':''}"></i><span>${escH(lk.label)}</span></div>`);
   });
-  // fit to the core MB/SK places (Orkney sits far across the Atlantic)
+  // legend for the family lines
+  if(mlegend.length){
+    const lg=document.createElement('div');lg.className='mlegend';lg.innerHTML=mlegend.join('');
+    const c=document.querySelector('.leaflet-bottom.leaflet-left'); (c||LEAFLET_MAP.getContainer()).appendChild(lg);
+  }
+  // fit to the core Red River / MB-SK places (Europe & US origins are reachable by zooming out)
   LEAFLET_MAP.fitBounds(core,{padding:[22,22]});
 }
 function startMap(){
@@ -1379,7 +1415,8 @@ HTML = f"""<!DOCTYPE html>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>{CSS}</style>
 </head><body>
-{APP.replace('[[TITLE]]', esc(PROJ['title'])).replace('[[SUBTITLE]]', esc(PROJ['focus']))}
+{APP.replace('[[TITLE]]', esc(PROJ['title'])).replace('[[SUBTITLE]]', esc(PROJ['focus']))
+     .replace('[[MAP_ABOUT]]', MAP_ABOUT_HTML).replace('[[MAP_LEGEND]]', MAP_LEGEND_HTML)}
 <script>
 const __DATA__ = {json_blob};
 {JS.replace('__DATA__', '__DATA__')}
