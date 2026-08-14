@@ -434,7 +434,10 @@ def summary_box(pid, row, cx, w=210):
 
 # ---- AUTO-LAYOUT (generation-layered; derives every position + connector from the graph) ----
 from layout_auto import auto_layout
-PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE)
+# Collateral families with many children render as ONE summary box (P900/P901 group nodes)
+# so their child-rails stay short and never merge with neighbouring families' rails.
+COLLAPSE = {"U43": "P900", "U44": "P901"}   # union -> summary person (defined above as group)
+PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE, collapse=COLLAPSE)
 # (overlap resolver, generation lanes, canvas bounds, and family-geometry recompute follow below)
 # ------------------------------------------------------------------------------------------------
 
@@ -988,24 +991,31 @@ function drawTree(){
     if(dash)l.setAttribute('stroke-dasharray','5,5');
     svg.appendChild(l);
   };
-  // classic structure: marriage bars + child rails (THICK, high-visibility lines)
+  // classic structure: marriage bars + INDIVIDUAL parent->child elbows.
+  // Each child gets its OWN connector (down from the bar, over, down into the box)
+  // so no two families ever share a rail that reads as one shared parent.
   const PW=T.pw, PH=T.ph, RH=T.rowh;
   const RAIL='#A99BD9', MAR='#E8B45A';
   const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
   T.fams.forEach(f=>{
     const n1=nodeById(f.s1), n2=nodeById(f.s2);
     if(!n1||!n2)return;
-    const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                        // ACTUAL spouse centers (post-overlap-resolution)
+    const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                 // ACTUAL spouse centers
     const my=f.y+PH/2;
-    seg(c1x, my, c2x, my, MAR, 4.5);                               // marriage bar
-    const barx=(c1x+c2x)/2, y0=f.y+PH, ry=y0+26;
-    seg(barx, y0, barx, ry, RAIL, 4);                              // drop from marriage
+    seg(c1x, my, c2x, my, MAR, 4.5);                        // marriage bar
+    const barx=(c1x+c2x)/2, y0=f.y+PH;
     if(f.children.length){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
-      const cxs=kids.map(k=>k.x+k.w/2);                            // ACTUAL child centers
-      const mn=Math.min(barx, ...cxs), mx=Math.max(barx, ...cxs);
-      if(mx-mn>3) seg(mn, ry, mx, ry, RAIL, 4);                    // children rail
-      kids.forEach(k=>{ const cx=k.x+k.w/2; seg(cx, ry, cx, k.y+k.h/2, RAIL, 4); });  // drop to EACH child's own row (handles wrapped children)
+      // stagger the drop from the bar so same-row children don't stack into a rail
+      const dropYs=[];
+      kids.forEach(k=>{ dropYs.push((y0 + k.y + k.h/2)/2); });
+      kids.forEach((k,i)=>{
+        const cx=k.x+k.w/2, ky=k.y+k.h/2;
+        const midY=dropYs[i];
+        seg(barx, y0, barx, midY, RAIL, 3.5);               // down from bar
+        seg(barx, midY, cx, midY, RAIL, 3.5);               // over to child x
+        seg(cx, midY, cx, ky, RAIL, 3.5);                   // down into child box
+      });
     }
   });
   // special edges: dashed convergence + in-law stubs (up)

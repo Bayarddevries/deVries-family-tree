@@ -26,15 +26,19 @@ BAYARD = "P050"
 
 
 def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
-                gap2=GAP2, gap_box=GAP_BOX):
+                gap2=GAP2, gap_box=GAP_BOX, collapse=None):
     by_union = {u["id"]: u for u in UNIONS}
+    collapse = collapse or {}
     if box_w is None:
         box_w = lambda pid: 210 if PEOPLE.get(pid, {}).get("group") else p_w
+    eff_children = {u["id"]: ([collapse[u["id"]]] if u["id"] in collapse
+                               else list(u.get("children", [])))
+                    for u in UNIONS}
 
     # ---- parent-of / spouse-of maps ----
     parent_union_of = {}              # pid -> the union where pid is a child
     for u in UNIONS:
-        for c in u.get("children", []):
+        for c in eff_children[u["id"]]:
             parent_union_of[c] = u["id"]
     spouse_of = defaultdict(list)     # pid -> unions where pid is a spouse
     for u in UNIONS:
@@ -58,18 +62,18 @@ def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
             for sp in (by_union[u]["spouse1"], by_union[u]["spouse2"]):
                 pgen[sp] = max(pgen.get(sp, NEG), g)
                 if sp not in seen: seen.add(sp); dq.append(sp)
-            for c in by_union[u].get("children", []):
+            for c in eff_children[u]:
                 pgen[c] = max(pgen.get(c, NEG), g - 1)
                 if c not in seen: seen.add(c); dq.append(c)
     for u in UNIONS:                                  # stragglers (safety)
         ugen.setdefault(u["id"], 0)
         for sp in (u["spouse1"], u["spouse2"]): pgen.setdefault(sp, 0)
-        for c in u.get("children", []): pgen.setdefault(c, ugen[u["id"]] - 1)
+        for c in eff_children[u["id"]]: pgen.setdefault(c, ugen[u["id"]] - 1)
     max_gen = max(ugen.values())
     y_of = lambda g: (max_gen - g) * row_h
 
     def leaf_children(u):
-        return [c for c in by_union[u].get("children", [])
+        return [c for c in eff_children[u]
                 if not any(c in (v["spouse1"], v["spouse2"])
                            for v in UNIONS if v["id"] != u)]
 
@@ -92,7 +96,7 @@ def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
         for sp in (uu["spouse1"], uu["spouse2"]):
             if sp in parent_union_of and parent_union_of[sp] != uid:
                 _link(unit, unit_of_couple[parent_union_of[sp]])
-        for c in uu.get("children", []):
+        for c in eff_children[uid]:
             target = next((v for v in spouse_of[c] if v != uid), None)
             if target and target in unit_of_couple:
                 _link(unit, unit_of_couple[target])
@@ -156,7 +160,7 @@ def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
     fam_by_u = {f["u"]: f for f in FAMS}
     for u in UNIONS:
         fam = fam_by_u[u["id"]]; kids = []
-        for c in by_union[u["id"]].get("children", []):
+        for c in eff_children[u["id"]]:
             target = next((v for v in spouse_of[c] if v != u["id"]), None)
             nid = None
             if target and (target, c) in boxid_for:
