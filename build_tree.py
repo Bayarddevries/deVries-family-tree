@@ -192,6 +192,26 @@ _extra_unions8 = [
 for _u in _extra_unions8:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
 
+# ---- Collateral: David Spence's children's spouses + Jemima Hourie (VERIFIED 2026-08-13) ----
+# Ellen (P035) m. George Brown; Jane (P037) m. William Folster; Harriet (P039) m. Peter Henry Wishart.
+# Colin Campbell Setter (P024) m. Jemima Hourie (Sarah Ann's sister).
+PEOPLE.setdefault("P129", {"id":"P129","name":"George Brown","birth":"1853","death":"1936","metis":False,"privacy":"deceased",
+  "note":"Ellen Anderson Spence's husband (m. 1873). Son of Henry Brown & Isabella Slater."})
+PEOPLE.setdefault("P130", {"id":"P130","name":"Peter Henry Wishart","birth":"1862","death":"1936","metis":False,"privacy":"deceased",
+  "note":"Harriet Spence's husband (m. 1887)."})
+PEOPLE.setdefault("P131", {"id":"P131","name":"William Folster","birth":"","death":"","metis":False,"privacy":"deceased",
+  "note":"Jane Spence's husband (m. 1879). Children not yet confirmed (possible conflation with a St Clements Folster family)."})
+PEOPLE.setdefault("P132", {"id":"P132","name":"Jemima Hourie","birth":"","death":"","metis":True,"privacy":"deceased",
+  "note":"Wife of Colin Campbell Setter (P024). Sarah Ann Hourie's sister - two Hourie sisters married two Setter brothers."})
+_extra_unions9 = [
+  {"id":"U43","spouse1":"P035","spouse2":"P129","children":[]},
+  {"id":"U45","spouse1":"P037","spouse2":"P131","children":[]},
+  {"id":"U44","spouse1":"P039","spouse2":"P130","children":[]},
+  {"id":"U42","spouse1":"P024","spouse2":"P132","children":[]},
+]
+for _u in _extra_unions9:
+    if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
+
 STORIES = DATA.get("stories", {})
 # Expanded stories (kept here so data/family-tree.json stays untouched).
 STORIES.update({
@@ -447,6 +467,16 @@ TEDGES.append({"from": "fam_U13", "to": "fam_U25", "up": True})   # Ethel's pare
 TEDGES.append({"from": "fam_U25", "to": "fam_U29", "up": True})   # Thomas Allan's parents
 TEDGES.append({"from": "fam_U24", "to": "fam_U32", "up": True})   # Jane Buchanan's parents
 
+# SPENCE sibling marriages (line B: Ellen / Jane / Harriet Spence) - right of line B
+f43, ellen_b, george_b = add_couple("U43", COL*0.9, 6)   # Ellen Anderson Spence + George Brown
+f45, jane_b, folster_b = add_couple("U45", COL*0.9, 7)   # Jane Spence + William Folster
+f44, harriet_b, wish_b = add_couple("U44", COL*0.9, 8)   # Harriet Spence + Peter Henry Wishart
+f05["children"] += [(ellen_b, f43["s1x"]), (jane_b, f45["s1x"]), (harriet_b, f44["s1x"])]
+
+# SETTER sibling marriage (line A: Colin Setter + Jemima Hourie) - left of line A
+f42, colin_b, jemima_b = add_couple("U42", -COL*0.9, 6)  # Colin Campbell Setter + Jemima Hourie
+f19["children"] += [(colin_b, f42["s1x"])]
+
 # --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
 rows = {}
 for n in PERS:
@@ -540,7 +570,7 @@ TIMELINE = [
 # 'verified' = confirmed by a primary record (census, scrip affidavit, vital-stat registration,
 #              HBC/DCB record, will, marriage/birth registration) located in this research.
 # 'inferred' = oral tradition / uncorroborated / needs verification.
-VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123","P125","P127","P128"}
+VERIFIED = {"P001","P002","P003","P006","P007","P010","P025","P029","P030","P033","P034","P035","P036","P037","P038","P039","P040","P041","P042","P043","P044","P051","P060","P079","P92","P93","P96","P97","P98","P99","P100","P101","P102","P103","P104","P105","P106","P107","P108","P109","P110","P111","P112","P113","P114","P115","P116","P117","P118","P119","P121","P122","P123","P125","P127","P128","P129","P130","P131","P132"}
 INFERRED = {"P080","P94","P95","P120","P126"}  # Cree matriarch 'Nikawiy' + Oltrop grandparents + Margaret Bird + Catherine Crise (secondary/oral, need primary)
 
 # ---- Map: family places & the lines connecting them (Leaflet, real coordinates) ----
