@@ -1,0 +1,8 @@
+// deVries-family-tree .stignore — Syncthing carries file CONTENT only.
+// git history stays with the GitHub remote (single source of truth) to avoid a fork.
+.git/
+*.tmp
+Thumbs.db
+.DS_Store
+__pycache__/
+*.pyc

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>deVries · Spence Family Tree — Family Wheel</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#07070f;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100dvh;touch-action:none}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:
+    radial-gradient(circle at 50% 40%, #1a1a30 0%, #0b0b18 58%, #040409 100%)}
+  svg{width:100%;height:100%}
+  .ring{fill:none;opacity:.0;animation:ringIn 1.2s ease forwards}
+  .node{cursor:pointer;opacity:0;transition:opacity .3s ease, filter .15s}
+  .node:hover circle{filter:brightness(1.6) drop-shadow(0 0 6px currentColor)}
+  .nodet{font-size:8px;fill:#e8e8f4;font-weight:600;pointer-events:none;text-anchor:middle;
+    paint-order:stroke;stroke:#07070f;stroke-width:2.5px;stroke-linejoin:round}
+  .spoke{stroke-linecap:round;opacity:.13;transition:opacity .35s ease}
+  .spoke.focus{opacity:.55}
+  #hub{opacity:0;animation:hubIn .9s ease forwards}
+  #hub text{fill:#ffd166;text-anchor:middle}
+  #hub circle.me{fill:#ffd166;stroke:#fff;stroke-width:2}
+  @keyframes ringIn{to{opacity:.12}}
+  @keyframes hubIn{to{opacity:1}}
+  #hud{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
+  #title{font-size:13px;font-weight:700;letter-spacing:.5px;text-shadow:0 1px 4px #000;opacity:0;animation:fadeUp .8s .2s ease forwards}
+  #title small{display:block;font-size:9px;font-weight:400;opacity:.55;margin-top:2px}
+  #hint{font-size:9px;opacity:.5;text-align:right;max-width:150px;line-height:1.4}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  #legend{position:fixed;bottom:12px;left:12px;z-index:5;background:#ffffff0d;backdrop-filter:blur(8px);
+    border:1px solid #ffffff1a;border-radius:12px;padding:8px 10px;font-size:9px;max-width:190px;opacity:0;animation:fadeUp .8s .4s ease forwards}
+  #legend b{display:block;font-size:10px;margin-bottom:4px;letter-spacing:.3px}
+  #legend span{display:flex;align-items:center;gap:5px;margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    cursor:pointer;padding:2px 4px;border-radius:4px;transition:background .15s, transform .1s}
+  #legend span:hover{background:#ffffff1c;transform:translateX(2px)}
+  #legend span.active{background:#ffffff1c;outline:1px solid currentColor}
+  #legend i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none;transition:transform .2s}
+  #legend span.active i{transform:scale(1.5)}
+  #sheet{position:fixed;left:0;right:0;bottom:0;background:#17172b;border-top:1px solid #ffffff22;
+    border-radius:18px 18px 0 0;padding:16px 18px 28px;transform:translateY(110%);transition:transform .3s cubic-bezier(.2,.9,.3,1.1);z-index:10;box-shadow:0 -8px 40px #000a}
+  #sheet.open{transform:translateY(0)}
+  #sheet .n{font-size:18px;font-weight:700}
+  #sheet .d{font-size:12px;opacity:.65;margin-top:2px}
+  #sheet .l{font-size:10px;display:inline-block;margin-top:8px;padding:3px 10px;border-radius:20px;color:#0a0a12;font-weight:700}
+  #sheet .close{position:absolute;top:12px;right:16px;font-size:20px;opacity:.5;background:none;border:none;color:#fff;cursor:pointer}
+  .grab{cursor:grab}
+  .btnrow{position:fixed;bottom:12px;right:12px;z-index:6;display:flex;gap:6px}
+  .btnrow button{background:#ffffff14;border:1px solid #ffffff2a;color:#e8e8f0;border-radius:9px;
+    width:34px;height:34px;font-size:14px;cursor:pointer;transition:background .15s, transform .1s;backdrop-filter:blur(4px)}
+  .btnrow button:hover{background:#ffffff2a;transform:scale(1.08)}
+  .btnrow button:active{transform:scale(.94)}
+</style>
+</head>
+<body>
+<div id="wrap"><svg id="svg" viewBox="-600 -600 1200 1200"></svg></div>
+<div id="hud">
+  <div id="title">deVries · Spence Family Tree<small>drag to rotate · front line fans out · tap a legend color to spin it to front</small></div>
+  <div id="hint">⟳ drag to rotate · pinch to zoom<br>double-tap to zoom · tap a person</div>
+</div>
+<div class="btnrow"><button onclick="rotBy(-30)" title="rotate left">⟲</button><button onclick="rotBy(30)" title="rotate right">⟳</button></div>
+<div id="legend"><b>Family lines</b><div id="leglist"></div></div>
+<div id="sheet">
+  <button class="close" onclick="closeSheet()">✕</button>
+  <div class="n" id="s_name"></div>
+  <div class="d" id="s_dates"></div>
+  <div class="l" id="s_line"></div>
+</div>
+<script>
+const NODES=[{"id": "P002", "name": "Margaret 'Nestichio' Batt", "r": 423.6, "a": 0.0, "lc": 0.0, "g": 8, "c": "#ff6b6b", "you": false, "d": "1757-1829"}, {"id": "P080", "name": "Cree matriarch (Nikawiy)", "r": 461.8, "a": -4.5, "lc": 0.0, "g": 9, "c": "#ff6b6b", "you": false, "d": ""}, {"id": "P079", "name": "Isaac Batt", "r": 461.8, "a": 4.5, "lc": 0.0, "g": 9, "c": "#ff6b6b", "you": false, "d": "c1725-1791"}, {"id": "P081", "name": "Dantzick Batt", "r": 500.0, "a": -4.5, "lc": 0.0, "g": 10, "c": "#ff6b6b", "you": false, "d": ""}, {"id": "P082", "name": "Sarah Lindsel", "r": 500.0, "a": 4.5, "lc": 0.0, "g": 10, "c": "#ff6b6b", "you": false, "d": ""}, {"id": "P085", "name": "Hudson Brown", "r": 80.0, "a": 27.33, "lc": 33.33, "g": -1, "c": "#ffd166", "you": false, "d": ""}, {"id": "P086", "name": "Oliver Brown", "r": 80.0, "a": 33.33, "lc": 33.33, "g": -1, "c": "#ffd166", "you": false, "d": ""}, {"id": "P087", "name": "Ellis Brown", "r": 80.0, "a": 39.33, "lc": 33.33, "g": -1, "c": "#ffd166", "you": false, "d": ""}, {"id": "P084", "name": "Noel Brown", "r": 118.2, "a": 33.33, "lc": 33.33, "g": 0, "c": "#ffd166", "you": false, "d": ""}, {"id": "P046", "name": "Mavis Irene Hamilton", "r": 194.5, "a": 50.6, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": "1933-2020"}, {"id": "P055", "name": "Alan Guy Hamilton", "r": 194.5, "a": 57.02, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P056", "name": "Daniel Hamilton", "r": 194.5, "a": 63.45, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P057", "name": "Patrick Hamilton", "r": 194.5, "a": 69.88, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P058", "name": "Wesley C. Hamilton", "r": 194.5, "a": 76.31, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P059", "name": "Harley Hamilton", "r": 194.5, "a": 82.74, "lc": 66.67, "g": 2, "c": "#06d6a0", "you": false, "d": "1934-2001"}, {"id": "P045", "name": "Lawrence Donald Hamilton", "r": 232.7, "a": 51.24, "lc": 66.67, "g": 3, "c": "#06d6a0", "you": false, "d": "1912-1984"}, {"id": "P063", "name": "Jean Margaret Hamilton", "r": 232.7, "a": 58.95, "lc": 66.67, "g": 3, "c": "#06d6a0", "you": false, "d": "1915-2000"}, {"id": "P064", "name": "Madeleine Phyllis Hamilton", "r": 232.7, "a": 66.67, "lc": 66.67, "g": 3, "c": "#06d6a0", "you": false, "d": "1918-2004"}, {"id": "P065", "name": "William Morrison Hamilton", "r": 232.7, "a": 74.38, "lc": 66.67, "g": 3, "c": "#06d6a0", "you": false, "d": "1926-1991"}, {"id": "P066", "name": "Vivian Ethel Hamilton", "r": 232.7, "a": 82.1, "lc": 66.67, "g": 3, "c": "#06d6a0", "you": false, "d": "1930"}, {"id": "P061", "name": "Guy Wentworth Hamilton", "r": 270.9, "a": 57.02, "lc": 66.67, "g": 4, "c": "#06d6a0", "you": false, "d": "1882-1946"}, {"id": "P062", "name": "Ethel Rose King", "r": 270.9, "a": 76.31, "lc": 66.67, "g": 4, "c": "#06d6a0", "you": false, "d": "1892-1982"}, {"id": "P048", "name": "Tracy Diane Lau", "r": 156.4, "a": 95.5, "lc": 100.0, "g": 1, "c": "#118ab2", "you": false, "d": ""}, {"id": "P091", "name": "Gordon Lau", "r": 156.4, "a": 104.5, "lc": 100.0, "g": 1, "c": "#118ab2", "you": false, "d": ""}, {"id": "P047", "name": "Robert Lau", "r": 194.5, "a": 100.0, "lc": 100.0, "g": 2, "c": "#118ab2", "you": false, "d": ""}, {"id": "P090", "name": "Wendy Provins", "r": 156.4, "a": 133.33, "lc": 133.33, "g": 1, "c": "#ef476f", "you": false, "d": ""}, {"id": "P042", "name": "Ella Alberta Riggs", "r": 270.9, "a": 166.67, "lc": 166.67, "g": 4, "c": "#f78c6b", "you": false, "d": "c1880s"}, {"id": "P041", "name": "Ernest Charles Riggs", "r": 309.1, "a": 166.67, "lc": 166.67, "g": 5, "c": "#f78c6b", "you": false, "d": "1859"}, {"id": "P051", "name": "Premier John Norquay", "r": 118.2, "a": 200.0, "lc": 200.0, "g": 0, "c": "#7b2cbf", "you": false, "d": "1841-1889"}, {"id": "P044", "name": "Doris A. Setter", "r": 232.7, "a": 167.73, "lc": 200.0, "g": 3, "c": "#7b2cbf", "you": false, "d": "1912-2006"}, {"id": "P052", "name": "Elwyn Setter", "r": 232.7, "a": 189.24, "lc": 200.0, "g": 3, "c": "#7b2cbf", "you": false, "d": ""}, {"id": "P053", "name": "Erma Ann Setter", "r": 232.7, "a": 210.76, "lc": 200.0, "g": 3, "c": "#7b2cbf", "you": false, "d": "1910"}, {"id": "P054", "name": "Clayton N. Setter", "r": 232.7, "a": 232.27, "lc": 200.0, "g": 3, "c": "#7b2cbf", "you": false, "d": "1917-1975"}, {"id": "P043", "name": "Alan Setter", "r": 270.9, "a": 200.0, "lc": 200.0, "g": 4, "c": "#7b2cbf", "you": false, "d": "1884-1964"}, {"id": "P020", "name": "John James Setter", "r": 309.1, "a": 161.28, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1837"}, {"id": "P021", "name": "Caroline Setter", "r": 309.1, "a": 169.88, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1840"}, {"id": "P022", "name": "Elizabeth Setter", "r": 309.1, "a": 178.49, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1842"}, {"id": "P023", "name": "Duncan Richard Setter", "r": 309.1, "a": 187.09, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1852"}, {"id": "P024", "name": "Colin Campbell Setter", "r": 309.1, "a": 195.7, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1854"}, {"id": "P025", "name": "Roderick McKenzie Setter", "r": 309.1, "a": 204.3, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1856"}, {"id": "P060", "name": "Sarah Ann Howrie", "r": 309.1, "a": 212.91, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "c1859"}, {"id": "P026", "name": "Alexander Hunter Murray Setter", "r": 309.1, "a": 221.51, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1858"}, {"id": "P027", "name": "George William Setter", "r": 309.1, "a": 230.12, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1861-1874"}, {"id": "P028", "name": "Ellen Madeleine 'Nellie' Setter", "r": 309.1, "a": 238.72, "lc": 200.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1861-1874"}, {"id": "P008", "name": "James Setter", "r": 347.3, "a": 160.56, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1810"}, {"id": "P009", "name": "Margaret Setter", "r": 347.3, "a": 167.73, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1813"}, {"id": "P010", "name": "George Setter", "r": 347.3, "a": 174.9, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1815-1899"}, {"id": "P011", "name": "Isabella 'Bella' Setter", "r": 347.3, "a": 182.07, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1816"}, {"id": "P012", "name": "Elizabeth Setter", "r": 347.3, "a": 189.24, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1822"}, {"id": "P013", "name": "Ann Setter", "r": 347.3, "a": 196.41, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1825"}, {"id": "P014", "name": "Mary Setter", "r": 347.3, "a": 203.59, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1830"}, {"id": "P015", "name": "Thomas Alexander Setter", "r": 347.3, "a": 210.76, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1831"}, {"id": "P016", "name": "John Setter", "r": 347.3, "a": 217.93, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1832"}, {"id": "P017", "name": "Catherine Setter", "r": 347.3, "a": 225.1, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1837"}, {"id": "P018", "name": "Isabella Kennedy", "r": 347.3, "a": 232.27, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1820-1846"}, {"id": "P019", "name": "Jessie Ellen Campbell", "r": 347.3, "a": 239.44, "lc": 200.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1824-1912"}, {"id": "P007", "name": "Andrew Setter", "r": 385.5, "a": 200.0, "lc": 200.0, "g": 7, "c": "#7b2cbf", "you": false, "d": "1777-1870"}, {"id": "P034", "name": "John 'Jake' Spence", "r": 309.1, "a": 211.72, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1848"}, {"id": "P035", "name": "Ellen Anderson Spence", "r": 309.1, "a": 218.92, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1853"}, {"id": "P036", "name": "Charles David Spence", "r": 309.1, "a": 226.13, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1857"}, {"id": "P037", "name": "Jane Spence", "r": 309.1, "a": 233.33, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1859"}, {"id": "P038", "name": "Mary Ann Spence", "r": 309.1, "a": 240.54, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1861-1930"}, {"id": "P039", "name": "Harriet Spence", "r": 309.1, "a": 247.74, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1863"}, {"id": "P040", "name": "William 'Bill' Spence", "r": 309.1, "a": 254.95, "lc": 233.33, "g": 5, "c": "#4cc9f0", "you": false, "d": "1866"}, {"id": "P030", "name": "David Spence", "r": 347.3, "a": 214.42, "lc": 233.33, "g": 6, "c": "#4cc9f0", "you": false, "d": "1824-1885"}, {"id": "P031", "name": "Joseph Spence", "r": 347.3, "a": 227.03, "lc": 233.33, "g": 6, "c": "#4cc9f0", "you": false, "d": "1826"}, {"id": "P032", "name": "Catherine Spence", "r": 347.3, "a": 239.64, "lc": 233.33, "g": 6, "c": "#4cc9f0", "you": false, "d": "1829"}, {"id": "P033", "name": "Catherine Hallett", "r": 347.3, "a": 252.25, "lc": 233.33, "g": 6, "c": "#4cc9f0", "you": false, "d": "1824-1880"}, {"id": "P003", "name": "James Spence Jr", "r": 385.5, "a": 213.16, "lc": 233.33, "g": 7, "c": "#4cc9f0", "you": false, "d": "c1782-1857"}, {"id": "P004", "name": "Andrew Spence", "r": 385.5, "a": 223.25, "lc": 233.33, "g": 7, "c": "#4cc9f0", "you": false, "d": "1786"}, {"id": "P005", "name": "George Spence Sr", "r": 385.5, "a": 233.33, "lc": 233.33, "g": 7, "c": "#4cc9f0", "you": false, "d": "1792"}, {"id": "P006", "name": "Margaret 'Peggy' Spence", "r": 385.5, "a": 243.42, "lc": 233.33, "g": 7, "c": "#4cc9f0", "you": false, "d": "1795-1868"}, {"id": "P029", "name": "Jane Morwick", "r": 385.5, "a": 253.51, "lc": 233.33, "g": 7, "c": "#4cc9f0", "you": false, "d": "1794-1874"}, {"id": "P001", "name": "James Spence Sr", "r": 423.6, "a": 233.33, "lc": 233.33, "g": 8, "c": "#4cc9f0", "you": false, "d": "c1753-1795"}, {"id": "P089", "name": "Grover deVries", "r": 80.0, "a": 266.67, "lc": 266.67, "g": -1, "c": "#f72585", "you": false, "d": ""}, {"id": "P050", "name": "Bayard deVries", "r": 118.2, "a": 249.85, "lc": 266.67, "g": 0, "c": "#f72585", "you": true, "d": ""}, {"id": "P083", "name": "Ashley deVries", "r": 118.2, "a": 266.67, "lc": 266.67, "g": 0, "c": "#f72585", "you": false, "d": ""}, {"id": "P088", "name": "Paula deVries", "r": 118.2, "a": 283.48, "lc": 266.67, "g": 0, "c": "#f72585", "you": false, "d": ""}, {"id": "P049", "name": "Bryon Edward deVries", "r": 156.4, "a": 243.74, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": "1954-2019"}, {"id": "P069", "name": "John 'Johann' de Vries", "r": 156.4, "a": 248.33, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": "1936"}, {"id": "P070", "name": "Tina de Vries", "r": 156.4, "a": 252.91, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P071", "name": "Leonard De Vries", "r": 156.4, "a": 257.5, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": "1932-2016"}, {"id": "P072", "name": "Etta de Vries", "r": 156.4, "a": 262.08, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P073", "name": "Annie 'Antje' de Vries", "r": 156.4, "a": 266.67, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P074", "name": "Margaret de Vries", "r": 156.4, "a": 271.25, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P075", "name": "Mary de Vries", "r": 156.4, "a": 275.84, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P076", "name": "Helen de Vries", "r": 156.4, "a": 280.42, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P077", "name": "Herman de Vries", "r": 156.4, "a": 285.01, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P078", "name": "Gerald de Vries", "r": 156.4, "a": 289.59, "lc": 266.67, "g": 1, "c": "#f72585", "you": false, "d": ""}, {"id": "P067", "name": "Gerhard De Vries", "r": 194.5, "a": 254.06, "lc": 266.67, "g": 2, "c": "#f72585", "you": false, "d": ""}, {"id": "P068", "name": "Geeske Oltrop", "r": 194.5, "a": 279.28, "lc": 266.67, "g": 2, "c": "#f72585", "you": false, "d": ""}];
+const LINES=[{"n": "Batt", "c": "#ff6b6b", "lc": 0.0}, {"n": "Brown", "c": "#ffd166", "lc": 33.33}, {"n": "Hamilton", "c": "#06d6a0", "lc": 66.67}, {"n": "Lau", "c": "#118ab2", "lc": 100.0}, {"n": "Provins", "c": "#ef476f", "lc": 133.33}, {"n": "Riggs", "c": "#f78c6b", "lc": 166.67}, {"n": "Setter", "c": "#7b2cbf", "lc": 200.0}, {"n": "Spence", "c": "#4cc9f0", "lc": 233.33}, {"n": "deVries", "c": "#f72585", "lc": 266.67}];
+const SVG=document.getElementById('svg'), NS='http://www.w3.org/2000/svg';
+const g=document.createElementNS(NS,'g');SVG.appendChild(g);
+let rotation=0,dragging=false,lastX=0,focus=null,FRONT=270,EXPAND=1.9;
+
+// generation rings (animated in via CSS)
+[[80,8],[150,6],[240,5],[330,4],[430,3]].forEach(([r,w])=>{
+  const c=document.createElementNS(NS,'circle');c.setAttribute('cx',0);c.setAttribute('cy',0);
+  c.setAttribute('r',r);c.setAttribute('fill','none');c.setAttribute('stroke','#ffffff');
+  c.setAttribute('stroke-width',w/8);c.setAttribute('class','ring');g.appendChild(c);
+});
+// hub
+const hub=document.createElementNS(NS,'g');hub.setAttribute('id','hub');g.appendChild(hub);
+const me=document.createElementNS(NS,'circle');me.setAttribute('r',11);me.setAttribute('class','me');hub.appendChild(me);
+const ct=document.createElementNS(NS,'text');ct.setAttribute('y',-18);ct.setAttribute('font-size','11px');
+ct.setAttribute('font-weight','700');ct.textContent="Bayard";hub.appendChild(ct);
+
+// spokes (one per line; for a single-line tree, draw one spoke to every member)
+const singleLine = LINES.length === 1;
+const spokeEls={};
+NODES.forEach(n=>{
+  if(singleLine){
+    const l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',0);l.setAttribute('y1',0);
+    l.setAttribute('x2',(n.r+8)*Math.cos(n.a*Math.PI/180));
+    l.setAttribute('y2',(n.r+8)*Math.sin(n.a*Math.PI/180));
+    l.setAttribute('stroke',n.c);l.setAttribute('class','spoke');l.setAttribute('data-color',n.c);
+    g.appendChild(l);spokeEls[n.c+n.id]=l;
+  } else if(!spokeEls[n.c]){
+    const l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',0);l.setAttribute('y1',0);l.setAttribute('x2',560*Math.cos(n.a*Math.PI/180));
+    l.setAttribute('y2',560*Math.sin(n.a*Math.PI/180));l.setAttribute('stroke',n.c);
+    l.setAttribute('class','spoke');l.setAttribute('data-color',n.c);g.appendChild(l);spokeEls[n.c]=l;
+  }
+});
+// nodes
+const nodeEls=[];
+NODES.forEach((n,i)=>{
+  const node=document.createElementNS(NS,'g');node.setAttribute('class','node');
+  const c=document.createElementNS(NS,'circle');c.setAttribute('r',n.g>=0?4.5:3.5);c.setAttribute('fill',n.c);
+  c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','1');node.appendChild(c);
+  const tx=document.createElementNS(NS,'text');tx.setAttribute('class','nodet');tx.textContent=n.name;node.appendChild(tx);
+  node.addEventListener('click',()=>openSheet(n));
+  g.appendChild(node);nodeEls.push({el:node,tx,c:n.c,baseA:n.a,r:n.r,lc:n.lc});
+  // staggered entrance animation
+  setTimeout(()=>node.style.opacity=1, 150+i*6);
+});
+function layout(){
+  let best=null,bestd=1e9;
+  LINES.forEach(l=>{let d=((l.lc+rotation-FRONT)%360+360)%360;if(d>180)d=360-d;if(d<bestd){bestd=d;best=l;}});
+  focus=best;
+  document.querySelectorAll('#leglist span').forEach(sp=>sp.classList.toggle('active',focus&&focus.c===sp.dataset.c));
+  Object.keys(spokeEls).forEach(key=>{
+    const el=spokeEls[key]; el.classList.toggle('focus',focus&&focus.c===el.getAttribute('data-color'));
+  });
+  nodeEls.forEach(nd=>{
+    const isFocus=focus&&nd.c===focus.c;
+    const dev=nd.baseA-nd.lc;
+    let a=nd.lc+(isFocus?dev*EXPAND:dev)+rotation;
+    nd.el.setAttribute('transform',`rotate(${a}) translate(${nd.r} 0)`);
+    nd.tx.setAttribute('transform',`rotate(${-a})`);
+  });
+}
+function applyRot(){layout();applyScale();}
+function applyScale(){g.setAttribute('transform',`scale(${scale})`);}
+let scale=1, MIN_SCALE=0.35, MAX_SCALE=5;
+const wrap=document.getElementById('wrap');
+// pinch + rotate via pointer map
+const ptrs={};
+let pinchDist=0, pinchScale=1, lastRot=0;
+wrap.addEventListener('pointerdown',e=>{
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY}; wrap.setPointerCapture?.(e.pointerId);
+  const keys=Object.keys(ptrs);
+  if(keys.length===2){
+    dragging=false;
+    const [a,b]=keys.map(k=>ptrs[k]);
+    pinchDist=Math.hypot(a.x-b.x,a.y-b.y); pinchScale=scale; lastRot=rotation;
+    wrap.classList.remove('grab');
+  } else { dragging=true; lastX=e.clientX; wrap.classList.add('grab'); }
+});
+window.addEventListener('pointermove',e=>{
+  if(!(e.pointerId in ptrs))return;
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  const keys=Object.keys(ptrs);
+  if(keys.length===2){
+    const [a,b]=keys.map(k=>ptrs[k]);
+    const d=Math.hypot(a.x-b.x,a.y-b.y);
+    scale=Math.min(MAX_SCALE,Math.max(MIN_SCALE,pinchScale*d/pinchDist));
+    applyScale();
+  } else if(dragging){
+    const dx=e.clientX-lastX; rotation+=dx*0.4; lastX=e.clientX; applyRot();
+  }
+});
+const endPtr=e=>{delete ptrs[e.pointerId]; if(Object.keys(ptrs).length<2){dragging=false;wrap.classList.remove('grab');} };
+window.addEventListener('pointerup',endPtr);
+window.addEventListener('pointercancel',endPtr);
+// double-tap to zoom in (or back to fit)
+let lastTap=0;
+wrap.addEventListener('pointerdown',e=>{
+  const now=Date.now();
+  if(now-lastTap<280){ // double tap
+    scale = scale>1.4 ? 1 : Math.min(MAX_SCALE, scale*2.2); applyScale(); lastTap=0;
+  } else lastTap=now;
+});
+window.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+function rotBy(d){rotation+=d;applyRot();}
+document.getElementById('leglist').innerHTML=LINES.map(l=>`<span data-lc="${l.lc}" data-c="${l.c}" style="color:${l.c}"><i style="background:${l.c}"></i>${l.n}</span>`).join('');
+document.querySelectorAll('#leglist span').forEach(sp=>{sp.addEventListener('click',()=>{rotation=FRONT-parseFloat(sp.dataset.lc);applyRot();});});
+function openSheet(n){
+  document.getElementById('s_name').textContent=n.name;
+  const rel = n.you ? ' · focal' : (n.g>=0 ? ' · ancestor' : ' · descendant');
+  document.getElementById('s_dates').textContent=(n.d||'dates unknown')+rel;
+  const l=document.getElementById('s_line');l.textContent=n.you?'focal person':(n.g>=0?'ancestor line':'descendant line');l.style.background=n.c;
+  document.getElementById('sheet').classList.add('open');
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('open');}
+applyRot();
+</script>
+</body>
+</html>
