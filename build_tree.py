@@ -478,6 +478,13 @@ def lane_label(d):
     return f"desc {abs(rel)} gen"
 TREE_LANES = [{"y": d*ROW_H, "label": lane_label(d)} for d in range(12)]
 
+# Separate dad's siblings (Gerhard+Geeske's 11 children incl. Bryon)
+# from mom's siblings (Robert+Mavis's 3 children incl. Tracy) so they don't
+# appear as one blended sibling group on the same row. Place dad's siblings
+# in an offset sub-row below the parents row.
+DAD_SIBLINGS_PIDS = {"P069","P070","P071","P072","P073","P074","P075","P076","P077","P078"}
+DAD_FAM_U = "U14"  # Gerhard De Vries + Geeske Oltrop
+
 # canvas bounds (no label gutter; the generation sidebar was removed - labels no longer made sense
 # once the tree grew to include in-law and converging branches at mixed depths)
 minx = min(n["x"] for n in PERS)
@@ -494,6 +501,29 @@ for f in FAMS:
     f["x"] = (f["s1x"] + f["s2x"])/2
     f["y"] = n1["y"]
     f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid, _ in f["children"]]
+
+# ---- separate dad's sibling cluster from mom's sibling cluster on the Parents row ----
+# Gerhard+Geeske's children (excluding Bryon, who is the direct ancestor in U10)
+# plus Robert+Mavis's children all pack onto y=1260. The U09 line from Robert+Mavis
+# visually flows across Bryon's siblings because they sit in the same continuous row.
+# Split dad's siblings into a sub-row.
+dad_nids = set()
+for n in PERS:
+    if n["pid"] in DAD_SIBLINGS_PIDS:
+        dad_nids.add(n["id"])
+dad_y = next(n["y"] for n in PERS if n["id"] in dad_nids)
+if dad_y is not None:
+    sub = ROW_H * 0.28   # ~39px below the parents row
+    for n in PERS:
+        if n["id"] in dad_nids:
+            n["y"] = int(dad_y + sub)
+    # recompute U14 children rails to match the new sibling positions
+    for f in FAMS:
+        if f["u"] == DAD_FAM_U:
+            f["children"] = [(cid, bybox[cid]["x"] + P_W/2) for cid, _ in f["children"]]
+    # the U10 marriage couple (Tracy+Bryon) also sits on y=1260; Bryon (b21) is NOT
+    # in DAD_SIBLINGS_PIDS so he stays at y=1260. But his rail into U10 must still work.
+    # (U10's own children rail is handled separately by the FAM recompute below.)
 
 # ================= VALIDATION (auto-layout integrity) =================
 # Fails the build if a person is disconnected or a connector misses its target.
