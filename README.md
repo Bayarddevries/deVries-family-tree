@@ -60,3 +60,4 @@ deVries-family-tree/
 - Hobbyist/family-tree data (redriverancestry, Ancestry, WikiTree) = "verify against primary records," never confirmed.
 - Never publish living people's details.
 - App/tree dates that conflict with archives are flagged, not silently preferred.
+
