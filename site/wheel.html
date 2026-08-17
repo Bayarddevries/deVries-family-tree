@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>deVries · Spence Family Tree</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#07070f;color:#e8e8f0;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;height:100dvh;touch-action:none}
+  #wrap{position:fixed;inset:0;background:radial-gradient(circle at 50% 45%, #10101f 0%, #07070f 55%, #030308 100%);overflow:hidden;cursor:grab}
+  #wrap.panning{cursor:grabbing}
+  #tree{position:absolute;left:50%;top:50%;width:0;height:0}
+  #tree svg{position:absolute;left:-600px;top:-600px;width:1200px;height:1200px;overflow:visible}
+  .node{cursor:pointer}
+  .node:hover circle{filter:brightness(1.7) drop-shadow(0 0 8px currentColor)}
+  .nodet{font-size:10px;fill:#eef;font-weight:600;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:#07070f;stroke-width:3px}
+  .conn{fill:none;stroke-linecap:round;pointer-events:none}
+  #hub text{fill:#ffd166;text-anchor:middle}
+  #hub circle.me{fill:#ffd166;stroke:#fff;stroke-width:2}
+  #hud{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;pointer-events:none}
+  #title{font-size:13px;font-weight:700;text-shadow:0 1px 4px #000}
+  #title small{display:block;font-size:9px;font-weight:400;opacity:.55;margin-top:2px}
+  #hint{font-size:9px;opacity:.5;text-align:right;max-width:170px;line-height:1.4}
+  #legend{position:fixed;bottom:12px;left:12px;z-index:5;background:#ffffff0d;border:1px solid #ffffff1a;border-radius:12px;padding:8px 10px;font-size:9px;max-width:190px}
+  #legend b{display:block;font-size:10px;margin-bottom:4px}
+  #legend span{display:flex;align-items:center;gap:5px;margin:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #legend i{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+  #sheet{position:fixed;left:0;right:0;bottom:0;background:#17172b;border-top:1px solid #ffffff22;border-radius:18px 18px 0 0;padding:16px 18px 28px;transform:translateY(110%);transition:transform .3s;z-index:10}
+  #sheet.open{transform:translateY(0)}
+  #sheet .n{font-size:18px;font-weight:700}
+  #sheet .d{font-size:12px;opacity:.65;margin-top:2px}
+  #sheet .close{position:absolute;top:12px;right:16px;font-size:20px;opacity:.5;background:none;border:none;color:#fff;cursor:pointer}
+  .btnrow{position:fixed;bottom:12px;right:12px;z-index:6;display:flex;gap:6px}
+  .btnrow button{background:#ffffff14;border:1px solid #ffffff2a;color:#e8e8f0;border-radius:9px;width:34px;height:34px;font-size:15px;cursor:pointer}
+  .btnrow button:hover{background:#ffffff2a}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="tree"><svg id="svg" viewBox="-600 -600 1200 1200"></svg></div></div>
+<div id="hud">
+  <div id="title">deVries · Spence Family Tree<small>drag to pan · pinch or double-tap to zoom · tap a person</small></div>
+  <div id="hint">drag to pan<br>pinch / double-tap to zoom<br>tap a person</div>
+</div>
+<div class="btnrow"><button onclick="zoomin()">+</button><button onclick="zoomout()">−</button><button onclick="fit()">⤢</button></div>
+<div id="legend"><b>Family lines</b><div id="leglist"></div></div>
+<div id="sheet"><button class="close" onclick="closeSheet()">✕</button><div class="n" id="s_name"></div><div class="d" id="s_dates"></div></div>
+<script>
+const NODES=[{"id": "P080", "name": "Cree matriarch (Nikawiy)", "a": 18.0, "r": 513.0, "g": 9, "c": "#4cc9f0", "you": false, "d": ""}, {"id": "P079", "name": "Isaac Batt", "a": 54.0, "r": 513.0, "g": 9, "c": "#4cc9f0", "you": false, "d": "c1725-1791"}, {"id": "P001", "name": "James Spence Sr", "a": 90.0, "r": 466.0, "g": 8, "c": "#f72585", "you": false, "d": "c1753-1795"}, {"id": "P002", "name": "Margaret 'Nestichio' Batt", "a": 36.0, "r": 466.0, "g": 8, "c": "#4cc9f0", "you": false, "d": "1757-1829"}, {"id": "P003", "name": "James Spence Jr", "a": 63.0, "r": 419.0, "g": 7, "c": "#f72585", "you": false, "d": "c1782-1857"}, {"id": "P006", "name": "Margaret 'Peggy' Spence", "a": 63.0, "r": 419.0, "g": 7, "c": "#f72585", "you": false, "d": "1795-1868"}, {"id": "P007", "name": "Andrew Setter", "a": 114.0, "r": 419.0, "g": 7, "c": "#7b2cbf", "you": false, "d": "1777-1870"}, {"id": "P010", "name": "George Setter", "a": 88.5, "r": 372.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1815-1899"}, {"id": "P019", "name": "Jessie Ellen Campbell", "a": 138.0, "r": 372.0, "g": 6, "c": "#7b2cbf", "you": false, "d": "1824-1912"}, {"id": "P025", "name": "Roderick McKenzie Setter", "a": 113.25, "r": 325.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "1856"}, {"id": "P060", "name": "Sarah Ann Howrie", "a": 258.0, "r": 325.0, "g": 5, "c": "#7b2cbf", "you": false, "d": "c1859"}, {"id": "P029", "name": "Jane Morwick", "a": 162.0, "r": 419.0, "g": 7, "c": "#f72585", "you": false, "d": "1794-1874"}, {"id": "P030", "name": "David Spence", "a": 112.5, "r": 372.0, "g": 6, "c": "#f72585", "you": false, "d": "1824-1885"}, {"id": "P033", "name": "Catherine Hallett", "a": 186.0, "r": 372.0, "g": 6, "c": "#f72585", "you": false, "d": "1824-1880"}, {"id": "P038", "name": "Mary Ann Spence", "a": 149.25, "r": 325.0, "g": 5, "c": "#f72585", "you": false, "d": "1861-1930"}, {"id": "P041", "name": "Ernest Charles Riggs", "a": 210.0, "r": 325.0, "g": 5, "c": "#f78c6b", "you": false, "d": "1859"}, {"id": "P042", "name": "Ella Alberta Riggs", "a": 179.62, "r": 278.0, "g": 4, "c": "#f78c6b", "you": false, "d": "c1880s"}, {"id": "P043", "name": "Alan Setter", "a": 185.62, "r": 278.0, "g": 4, "c": "#7b2cbf", "you": false, "d": "1884-1964"}, {"id": "P044", "name": "Doris A. Setter", "a": 182.62, "r": 231.0, "g": 3, "c": "#7b2cbf", "you": false, "d": "1912-2006"}, {"id": "P045", "name": "Lawrence Donald Hamilton", "a": 294.0, "r": 231.0, "g": 3, "c": "#ffd166", "you": false, "d": "1912-1984"}, {"id": "P046", "name": "Mavis Irene Hamilton", "a": 238.31, "r": 184.0, "g": 2, "c": "#ffd166", "you": false, "d": "1933-2020"}, {"id": "P047", "name": "Robert Lau", "a": 234.0, "r": 184.0, "g": 2, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P048", "name": "Tracy Diane Lau", "a": 236.16, "r": 137.0, "g": 1, "c": "#06d6a0", "you": false, "d": ""}, {"id": "P049", "name": "Bryon Edward deVries", "a": 342.0, "r": 137.0, "g": 1, "c": "#b5e48c", "you": false, "d": "1954-2019"}, {"id": "P061", "name": "Guy Wentworth Hamilton", "a": 282.0, "r": 278.0, "g": 4, "c": "#ffd166", "you": false, "d": "1882-1946"}, {"id": "P062", "name": "Ethel Rose King", "a": 306.0, "r": 278.0, "g": 4, "c": "#ffd166", "you": false, "d": "1892-1982"}, {"id": "P067", "name": "Gerhard De Vries", "a": 330.0, "r": 184.0, "g": 2, "c": "#b5e48c", "you": false, "d": ""}, {"id": "P068", "name": "Geeske Oltrop", "a": 354.0, "r": 184.0, "g": 2, "c": "#b5e48c", "you": false, "d": ""}, {"id": "P081", "name": "Dantzick Batt", "a": 42.0, "r": 560.0, "g": 10, "c": "#4cc9f0", "you": false, "d": ""}, {"id": "P082", "name": "Sarah Lindsel", "a": 66.0, "r": 560.0, "g": 10, "c": "#4cc9f0", "you": false, "d": ""}, {"id": "P050", "name": "Bayard deVries", "a": 0.0, "r": 0.0, "g": 0, "c": "#b5e48c", "you": true, "d": ""}];
+const CONN=[{"kind": "trunk", "child": "P002", "x1": 377.0, "y1": 273.9, "x2": 396.0, "y2": 287.7}, {"kind": "limb", "parent": "P079", "x1": 396.0, "y1": 287.7, "x2": 301.5, "y2": 415.0}, {"kind": "limb", "parent": "P080", "x1": 396.0, "y1": 287.7, "x2": 487.9, "y2": 158.5}, {"kind": "trunk", "child": "P003", "x1": 190.2, "y1": 373.3, "x2": 200.9, "y2": 394.3}, {"kind": "limb", "parent": "P001", "x1": 200.9, "y1": 394.3, "x2": 0.0, "y2": 466.0}, {"kind": "limb", "parent": "P002", "x1": 200.9, "y1": 394.3, "x2": 377.0, "y2": 273.9}, {"kind": "trunk", "child": "P006", "x1": 190.2, "y1": 373.3, "x2": 200.9, "y2": 394.3}, {"kind": "limb", "parent": "P001", "x1": 200.9, "y1": 394.3, "x2": 0.0, "y2": 466.0}, {"kind": "limb", "parent": "P002", "x1": 200.9, "y1": 394.3, "x2": 377.0, "y2": 273.9}, {"kind": "trunk", "child": "P010", "x1": 9.7, "y1": 371.9, "x2": 10.4, "y2": 395.4}, {"kind": "limb", "parent": "P007", "x1": 10.4, "y1": 395.4, "x2": -170.4, "y2": 382.8}, {"kind": "limb", "parent": "P006", "x1": 10.4, "y1": 395.4, "x2": 190.2, "y2": 373.3}, {"kind": "trunk", "child": "P030", "x1": -142.4, "y1": 343.7, "x2": -151.4, "y2": 365.4}, {"kind": "limb", "parent": "P003", "x1": -151.4, "y1": 365.4, "x2": 190.2, "y2": 373.3}, {"kind": "limb", "parent": "P029", "x1": -151.4, "y1": 365.4, "x2": -398.5, "y2": 129.5}, {"kind": "trunk", "child": "P038", "x1": -279.3, "y1": 166.2, "x2": -299.5, "y2": 178.2}, {"kind": "limb", "parent": "P030", "x1": -299.5, "y1": 178.2, "x2": -142.4, "y2": 343.7}, {"kind": "limb", "parent": "P033", "x1": -299.5, "y1": 178.2, "x2": -370.0, "y2": -38.9}, {"kind": "trunk", "child": "P042", "x1": -278.0, "y1": 1.8, "x2": -301.5, "y2": 2.0}, {"kind": "limb", "parent": "P041", "x1": -301.5, "y1": 2.0, "x2": -281.5, "y2": -162.5}, {"kind": "limb", "parent": "P038", "x1": -301.5, "y1": 2.0, "x2": -279.3, "y2": 166.2}, {"kind": "trunk", "child": "P044", "x1": -230.8, "y1": -10.6, "x2": -254.2, "y2": -11.7}, {"kind": "limb", "parent": "P043", "x1": -254.2, "y1": -11.7, "x2": -276.7, "y2": -27.2}, {"kind": "limb", "parent": "P042", "x1": -254.2, "y1": -11.7, "x2": -278.0, "y2": 1.8}, {"kind": "trunk", "child": "P046", "x1": -96.7, "y1": -156.6, "x2": -109.0, "y2": -176.6}, {"kind": "limb", "parent": "P044", "x1": -109.0, "y1": -176.6, "x2": -230.8, "y2": -10.6}, {"kind": "limb", "parent": "P045", "x1": -109.0, "y1": -176.6, "x2": 94.0, "y2": -211.0}, {"kind": "trunk", "child": "P048", "x1": -76.3, "y1": -113.8, "x2": -89.4, "y2": -133.3}, {"kind": "limb", "parent": "P047", "x1": -89.4, "y1": -133.3, "x2": -108.2, "y2": -148.9}, {"kind": "limb", "parent": "P046", "x1": -89.4, "y1": -133.3, "x2": -96.7, "y2": -156.6}, {"kind": "trunk", "child": "P050", "x1": 90.0, "y1": 0.0, "x2": 113.5, "y2": 0.0}, {"kind": "limb", "parent": "P048", "x1": 113.5, "y1": 0.0, "x2": -76.3, "y2": -113.8}, {"kind": "limb", "parent": "P049", "x1": 113.5, "y1": 0.0, "x2": 130.3, "y2": -42.3}, {"kind": "trunk", "child": "P043", "x1": -276.7, "y1": -27.2, "x2": -300.0, "y2": -29.6}, {"kind": "limb", "parent": "P025", "x1": -300.0, "y1": -29.6, "x2": -128.3, "y2": 298.6}, {"kind": "limb", "parent": "P060", "x1": -300.0, "y1": -29.6, "x2": -67.6, "y2": -317.9}, {"kind": "trunk", "child": "P045", "x1": 94.0, "y1": -211.0, "x2": 103.5, "y2": -232.5}, {"kind": "limb", "parent": "P061", "x1": 103.5, "y1": -232.5, "x2": 57.8, "y2": -271.9}, {"kind": "limb", "parent": "P062", "x1": 103.5, "y1": -232.5, "x2": 163.4, "y2": -224.9}, {"kind": "trunk", "child": "P049", "x1": 130.3, "y1": -42.3, "x2": 152.6, "y2": -49.6}, {"kind": "limb", "parent": "P067", "x1": 152.6, "y1": -49.6, "x2": 159.3, "y2": -92.0}, {"kind": "limb", "parent": "P068", "x1": 152.6, "y1": -49.6, "x2": 183.0, "y2": -19.2}, {"kind": "trunk", "child": "P079", "x1": 301.5, "y1": 415.0, "x2": 315.3, "y2": 434.0}, {"kind": "limb", "parent": "P081", "x1": 315.3, "y1": 434.0, "x2": 416.2, "y2": 374.7}, {"kind": "limb", "parent": "P082", "x1": 315.3, "y1": 434.0, "x2": 227.8, "y2": 511.6}, {"kind": "trunk", "child": "P025", "x1": -128.3, "y1": 298.6, "x2": -137.6, "y2": 320.2}, {"kind": "limb", "parent": "P010", "x1": -137.6, "y1": 320.2, "x2": 9.7, "y2": 371.9}, {"kind": "limb", "parent": "P019", "x1": -137.6, "y1": 320.2, "x2": -276.4, "y2": 248.9}, {"kind": "marriage", "p1": "P079", "p2": "P080", "x1": 301.5, "y1": 415.0, "x2": 487.9, "y2": 158.5}, {"kind": "marriage", "p1": "P001", "p2": "P002", "x1": 0.0, "y1": 466.0, "x2": 377.0, "y2": 273.9}, {"kind": "marriage", "p1": "P007", "p2": "P006", "x1": -170.4, "y1": 382.8, "x2": 190.2, "y2": 373.3}, {"kind": "marriage", "p1": "P003", "p2": "P029", "x1": 190.2, "y1": 373.3, "x2": -398.5, "y2": 129.5}, {"kind": "marriage", "p1": "P030", "p2": "P033", "x1": -142.4, "y1": 343.7, "x2": -370.0, "y2": -38.9}, {"kind": "marriage", "p1": "P041", "p2": "P038", "x1": -281.5, "y1": -162.5, "x2": -279.3, "y2": 166.2}, {"kind": "marriage", "p1": "P043", "p2": "P042", "x1": -276.7, "y1": -27.2, "x2": -278.0, "y2": 1.8}, {"kind": "marriage", "p1": "P044", "p2": "P045", "x1": -230.8, "y1": -10.6, "x2": 94.0, "y2": -211.0}, {"kind": "marriage", "p1": "P047", "p2": "P046", "x1": -108.2, "y1": -148.9, "x2": -96.7, "y2": -156.6}, {"kind": "marriage", "p1": "P048", "p2": "P049", "x1": -76.3, "y1": -113.8, "x2": 130.3, "y2": -42.3}, {"kind": "marriage", "p1": "P025", "p2": "P060", "x1": -128.3, "y1": 298.6, "x2": -67.6, "y2": -317.9}, {"kind": "marriage", "p1": "P061", "p2": "P062", "x1": 57.8, "y1": -271.9, "x2": 163.4, "y2": -224.9}, {"kind": "marriage", "p1": "P067", "p2": "P068", "x1": 159.3, "y1": -92.0, "x2": 183.0, "y2": -19.2}, {"kind": "marriage", "p1": "P081", "p2": "P082", "x1": 416.2, "y1": 374.7, "x2": 227.8, "y2": 511.6}, {"kind": "marriage", "p1": "P010", "p2": "P019", "x1": 9.7, "y1": 371.9, "x2": -276.4, "y2": 248.9}];
+const LINES=[{"n": "Batt", "c": "#4cc9f0", "lc": 18.0}, {"n": "Brown", "c": "#ff6b6b", "lc": 0}, {"n": "Hamilton", "c": "#ffd166", "lc": 294.0}, {"n": "Lau", "c": "#06d6a0", "lc": 234.0}, {"n": "Provins", "c": "#ef476f", "lc": 0}, {"n": "Riggs", "c": "#f78c6b", "lc": 210.0}, {"n": "Setter", "c": "#7b2cbf", "lc": 114.0}, {"n": "Spence", "c": "#f72585", "lc": 90.0}, {"n": "deVries", "c": "#b5e48c", "lc": 342.0}];
+const SVG=document.getElementById('svg'),NS='http://www.w3.org/2000/svg';
+const tree=document.getElementById('tree');
+const byId={};NODES.forEach(n=>{n.x=n.r*Math.cos(n.a*Math.PI/180);n.y=n.r*Math.sin(n.a*Math.PI/180);byId[n.id]=n;});
+CONN.forEach(c=>{
+  if(c.kind==='trunk'||c.kind==='limb'){
+    const l=document.createElementNS(NS,'line');l.setAttribute('class','conn');
+    l.setAttribute('x1',c.x1);l.setAttribute('y1',c.y1);l.setAttribute('x2',c.x2);l.setAttribute('y2',c.y2);
+    l.setAttribute('stroke','#A99BD9');l.setAttribute('stroke-width',2.2);l.setAttribute('vector-effect','non-scaling-stroke');
+    SVG.appendChild(l);
+  } else if(c.kind==='marriage'){
+    const l=document.createElementNS(NS,'line');l.setAttribute('class','conn');
+    l.setAttribute('x1',c.x1);l.setAttribute('y1',c.y1);l.setAttribute('x2',c.x2);l.setAttribute('y2',c.y2);
+    l.setAttribute('stroke','#E8B45A');l.setAttribute('stroke-width',3);l.setAttribute('vector-effect','non-scaling-stroke');
+    SVG.appendChild(l);
+  }
+});
+const hub=document.createElementNS(NS,'g');hub.setAttribute('id','hub');SVG.appendChild(hub);
+const me=document.createElementNS(NS,'circle');me.setAttribute('r',12);me.setAttribute('class','me');hub.appendChild(me);
+const ht=document.createElementNS(NS,'text');ht.setAttribute('y',-20);ht.setAttribute('font-size','12px');ht.setAttribute('font-weight','700');ht.textContent="Bayard";hub.appendChild(ht);
+NODES.forEach((n,i)=>{
+  const node=document.createElementNS(NS,'g');node.setAttribute('class','node');
+  const cc=document.createElementNS(NS,'circle');cc.setAttribute('r',5);cc.setAttribute('fill',n.c);
+  cc.setAttribute('stroke','#fff');cc.setAttribute('stroke-width','1');node.appendChild(cc);
+  const tx=document.createElementNS(NS,'text');tx.setAttribute('class','nodet');tx.setAttribute('y',-8);tx.textContent=n.name;node.appendChild(tx);
+  node.setAttribute('transform',`translate(${n.x} ${n.y})`);
+  node.addEventListener('click',e=>{e.stopPropagation();openSheet(n);});
+  SVG.appendChild(node);
+});
+let scale=1,tx=0,ty=0,drag=false,sx=0,sy=0,stx=0,sty=0,pinch=null;
+const MIN=0.15,MAX=8;
+function apply(){tree.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;}
+function fit(){
+  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
+  NODES.forEach(n=>{minX=Math.min(minX,n.x);maxX=Math.max(maxX,n.x);minY=Math.min(minY,n.y);maxY=Math.max(maxY,n.y);});
+  const w=maxX-minX,h=maxY-minY,pad=100;
+  scale=Math.min(window.innerWidth/(w+pad*2), window.innerHeight/(h+pad*2));
+  scale=Math.max(MIN,Math.min(scale,1.0)); tx=0; ty=0; apply();
+}
+function zoomin(){scale=Math.min(MAX,scale*1.5);apply();}
+function zoomout(){scale=Math.max(MIN,scale/1.5);apply();}
+const wrap=document.getElementById('wrap');const ptrs={};
+wrap.addEventListener('pointerdown',e=>{
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  const keys=Object.keys(ptrs);
+  if(keys.length===2){drag=false;const[a,b]=keys.map(k=>ptrs[k]);pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:scale};}
+  else{drag=true;sx=e.clientX;sy=e.clientY;stx=tx;sty=ty;wrap.classList.add('panning');}
+});
+window.addEventListener('pointermove',e=>{
+  if(!(e.pointerId in ptrs))return;
+  ptrs[e.pointerId]={x:e.clientX,y:e.clientY};
+  const keys=Object.keys(ptrs);
+  if(keys.length===2){const[a,b]=keys.map(k=>ptrs[k]);const d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch&&pinch.d>0)scale=Math.min(MAX,Math.max(MIN,pinch.s*d/pinch.d));apply();}
+  else if(drag){tx=stx+(e.clientX-sx);ty=sty+(e.clientY-sy);apply();}
+});
+const pend=e=>{delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2){drag=false;wrap.classList.remove('panning');}};
+window.addEventListener('pointerup',pend);window.addEventListener('pointercancel',pend);
+window.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
+let lastTap=0;
+wrap.addEventListener('pointerdown',e=>{const now=Date.now();
+  if(Object.keys(ptrs).length===1&&now-lastTap<280){scale=scale>1.4?1:Math.min(MAX,scale*2);apply();lastTap=0;}
+  else lastTap=now;});
+document.getElementById('leglist').innerHTML=LINES.map(l=>`<span><i style="background:${l.c}"></i>${l.n}</span>`).join('');
+function openSheet(n){document.getElementById('s_name').textContent=n.name;
+  document.getElementById('s_dates').textContent=n.d||'dates unknown';document.getElementById('sheet').classList.add('open');}
+function closeSheet(){document.getElementById('sheet').classList.remove('open');}
+fit();
+</script>
+</body>
+</html>

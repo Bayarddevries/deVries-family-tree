@@ -1,0 +1,17 @@
+# Syncthing
+.stfolder/
+.syncthing.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Temp / scratch
+*.tmp
+wheel-*.png
+radial-work/
+radial/
+
+# Build output (generated — but site/index.html is the deliverable, keep it)
+# site/
