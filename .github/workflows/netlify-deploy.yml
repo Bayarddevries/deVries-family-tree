@@ -1,0 +1,18 @@
+name: Deploy to Netlify
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify deploy
+        env:
+          NETLIFY_SITE_ID: cc78e7b9-7d7b-4ff8-922b-e60a3ba754e1
+        run: |
+          curl -s -X POST "https://api.netlify.com/api/v1/sites/${NETLIFY_SITE_ID}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.NETLIFY_AUTH_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"trigger_message": "GitHub push auto-deploy"}'
