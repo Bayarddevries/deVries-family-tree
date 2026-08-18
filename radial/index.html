@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Circular Family Tree</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#04060a; --grid:#c2681e; --line:#5af0ff; --line2:#0e7490;
+    --node:#eafdff; --root:#9dfbff; --gold:#f4c95d; --txt:#dbe9ee; --muted:#7c8a93;
+  }
+  html,body{height:100%}
+  body{background:radial-gradient(120% 120% at 50% 50%, #0a1018 0%, var(--bg) 70%);
+    color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden;touch-action:none}
+  #svg{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:grab}
+  #svg:active{cursor:grabbing}
+  /* edges: glow layer (wide soft cyan) + core layer (thin bright white) */
+  .edge{fill:none;stroke-linecap:round}
+  .edge.glow{stroke:var(--line);stroke-width:3.2;opacity:.85;filter:url(#glow)}
+  .edge.core{stroke:#ffffff;stroke-width:1.4;opacity:1}
+  .edge.glow.mar{stroke:var(--gold);stroke-width:2;opacity:.4;stroke-dasharray:4 4;filter:none}
+  .edge.core.mar{stroke:var(--gold);stroke-width:.7;opacity:.4;stroke-dasharray:4 4}
+  .edge.glow.direct{stroke:var(--gold);stroke-width:4;opacity:1}
+  .edge.core.direct{stroke:#fffbe6;stroke-width:2;opacity:1}
+  .edge.glow.dim{opacity:.12}
+  .edge.core.dim{opacity:.12}
+  .node{fill:none;stroke:var(--node);stroke-width:2.2}
+  .node.dim{opacity:.3}
+  .node.direct{stroke:var(--gold)}
+  .node.root{fill:var(--root);stroke:var(--root);filter:url(#glowW)}
+  .node-dot{fill:var(--node)}
+  .lbl{fill:var(--txt);font-size:9px;font-family:'Segoe UI',system-ui,sans-serif;
+    paint-order:stroke;stroke:#04060a;stroke-width:2.4px;stroke-linejoin:round;
+    pointer-events:none;user-select:none}
+  .lbl.direct{fill:var(--gold);font-weight:600}
+  .lbl.dim{opacity:.28}
+  #top{position:fixed;top:0;left:0;right:0;padding:12px 14px 6px;z-index:10;
+    pointer-events:none;display:flex;justify-content:space-between;align-items:flex-start}
+  #title{font-size:14px;letter-spacing:.4px;color:var(--txt);text-shadow:0 0 8px #000}
+  #title b{color:var(--gold);font-weight:700}
+  #hint{font-size:11px;color:var(--muted);margin-top:2px}
+  .ctrls{position:fixed;right:12px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:10}
+  .btn{width:42px;height:42px;border-radius:50%;border:1px solid #1c3340;background:rgba(8,18,24,.82);
+    color:var(--line);font-size:18px;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+  .btn:active{transform:scale(.92)}
+  .toggles{position:fixed;left:12px;bottom:18px;display:flex;flex-direction:column;gap:6px;z-index:10}
+  .tg{font-size:11px;color:var(--muted);border:1px solid #1c3340;background:rgba(8,18,24,.82);
+    padding:7px 11px;border-radius:20px;cursor:pointer;backdrop-filter:blur(6px);user-select:none}
+  .tg.on{color:var(--gold);border-color:#5a4a22}
+  #backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;
+    transition:opacity .25s;z-index:20}
+  #backdrop.show{opacity:1;pointer-events:auto}
+  #sheet{position:fixed;left:0;right:0;bottom:0;max-height:72vh;background:#0c151c;
+    border-radius:22px 22px 0 0;border-top:1px solid #1c3340;transform:translateY(105%);
+    transition:transform .3s cubic-bezier(.2,.9,.25,1);z-index:30;overflow-y:auto;padding:12px 20px 30px}
+  #sheet.open{transform:translateY(0)}
+  .handle{width:44px;height:4px;border-radius:2px;background:#1c3340;margin:0 auto 12px}
+  .sname{font-size:19px;font-weight:700;color:var(--txt)}
+  .smeta{font-size:12px;color:var(--muted);font-style:italic;margin-top:3px}
+  .snote{font-size:14px;line-height:1.5;color:var(--txt);margin-top:12px}
+  .stitle{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);
+    margin:14px 0 6px;font-weight:700}
+  .chip{display:inline-block;background:#13212b;border:1px solid #1c3340;border-radius:14px;
+    padding:4px 11px;font-size:12.5px;color:var(--txt);margin:0 5px 5px 0;cursor:pointer}
+  .chip.you{border-color:var(--gold);color:var(--gold)}
+  .close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);
+    font-size:20px;cursor:pointer}
+  .badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 7px;
+    border-radius:10px;margin-left:6px;vertical-align:middle}
+  .badge.m{background:#1d3323;color:#7bd89b;border:1px solid #2f5e3f}
+  .badge.you{background:#3a2e12;color:var(--gold);border:1px solid #5a4a22}
+</style>
+</head>
+<body>
+<svg id="svg"><defs>
+  <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="3.6" result="b1"/>
+    <feGaussianBlur stdDeviation="6.5" result="b2"/>
+    <feMerge>
+      <feMergeNode in="b2"/>
+      <feMergeNode in="b1"/>
+      <feMergeNode in="SourceGraphic"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+  <filter id="glowW" x="-100%" y="-100%" width="300%" height="300%">
+    <feGaussianBlur stdDeviation="5" result="b1"/>
+    <feGaussianBlur stdDeviation="9" result="b2"/>
+    <feMerge>
+      <feMergeNode in="b2"/>
+      <feMergeNode in="b1"/>
+      <feMergeNode in="SourceGraphic"/>
+      <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+  </filter>
+</defs></svg>
+
+<div id="top">
+  <div>
+    <div id="title"><b>Circular Family Tree</b> · deVries · Spence</div>
+    <div id="hint">drag to rotate · pinch or scroll to zoom · tap a person</div>
+  </div>
+</div>
+<div class="toggles">
+  <div class="tg on" id="tgLabels">names</div>
+  <div class="tg" id="tgDirect">direct line</div>
+</div>
+<div class="ctrls">
+  <div class="btn" id="zin">+</div>
+  <div class="btn" id="zout">&minus;</div>
+  <div class="btn" id="zreset">⟳</div>
+  <div class="btn" id="zfit">⤢</div>
+</div>
+<div id="backdrop"></div>
+<div id="sheet">
+  <div class="handle"></div>
+  <button class="close" id="sheetclose">✕</button>
+  <div id="sheetbody"></div>
+</div>
+
+<script>
+const DATA = {"people": [{"id": "P080", "name": "Cree matriarch (Nikawiy)", "metis": true, "privacy": "deceased", "note": "unnamed Cree mother of Margaret 'Nestichio' Batt · 'Nikawiy' = Cree for 'my mother' · the matrilineal Indigenous/Métis root"}, {"id": "P079", "name": "Isaac Batt", "birth": "c1725", "death": "1791", "metis": false, "privacy": "deceased", "note": "English HBC fur-trader · b. c1725 Hertfordshire, England · d. 1791 near Manchester House · father of Margaret 'Nestichio' Batt"}, {"id": "P001", "name": "James Spence Sr", "birth": "c1753", "death": "1795", "metis": false, "privacy": "deceased", "note": "Orkney-born HBC voyageur"}, {"id": "P002", "name": "Margaret 'Nestichio' Batt", "birth": "1757", "death": "1829", "metis": true, "privacy": "deceased", "note": "DIRECT · the Métis matriarch · dau. of Isaac Batt + a Cree woman · m. James Spence Sr · d.1829 Red River"}, {"id": "P003", "name": "James Spence Jr", "birth": "c1782", "death": "1857", "metis": true, "privacy": "deceased", "note": "HBC tailor, Red River 1818"}, {"id": "P004", "name": "Andrew Spence", "birth": "1786", "metis": true, "privacy": "deceased", "notes": "HBC archival biographical sheet: served York 1804-1811, Saskatchewan 1811-1816, Qu'Appelle 1816, Fort Hibernia 1817-1819, Brandon House / Upper Red River 1820-1821, then retired from the HBC and became a colonist. Evaluated 'sober, honest' early, later described as obstinate and insolent, with red hair and a light complexion. Parents: James Spence Sr and Nestichio Batt; siblings: James Spence 2nd, George Spence, Margaret (Peggy) Spence. Source: Archives of Manitoba, HBC Biographical Sheet for Andrew Spence."}, {"id": "P005", "name": "George Spence Sr", "birth": "1792", "metis": true, "privacy": "deceased", "note": "Ancestor of Grove family of Selkirk"}, {"id": "P006", "name": "Margaret 'Peggy' Spence", "birth": "1795", "death": "1868", "metis": true, "privacy": "deceased", "note": "DIRECT · Spence line A"}, {"id": "P007", "name": "Andrew Setter", "birth": "1777", "death": "1870", "metis": false, "privacy": "deceased", "note": "Orkney HBC voyageur"}, {"id": "P008", "name": "James Setter", "birth": "1810", "metis": true, "privacy": "deceased"}, {"id": "P009", "name": "Margaret Setter", "birth": "1813", "metis": true, "privacy": "deceased"}, {"id": "P010", "name": "George Setter", "birth": "1815", "death": "1899", "metis": true, "privacy": "deceased", "note": "son of Andrew Setter + Peggy Spence · m1 Isabella Kennedy, m2 Jessie Ellen Campbell"}, {"id": "P011", "name": "Isabella 'Bella' Setter", "birth": "1816", "metis": true, "privacy": "deceased"}, {"id": "P012", "name": "Elizabeth Setter", "birth": "1822", "metis": true, "privacy": "deceased"}, {"id": "P013", "name": "Ann Setter", "birth": "1825", "metis": true, "privacy": "deceased"}, {"id": "P014", "name": "Mary Setter", "birth": "1830", "metis": true, "privacy": "deceased"}, {"id": "P015", "name": "Thomas Alexander Setter", "birth": "1831", "metis": true, "privacy": "deceased"}, {"id": "P016", "name": "John Setter", "birth": "1832", "metis": true, "privacy": "deceased"}, {"id": "P017", "name": "Catherine Setter", "birth": "1837", "metis": true, "privacy": "deceased"}, {"id": "P018", "name": "Isabella Kennedy", "birth": "1820", "death": "1846", "metis": true, "privacy": "deceased"}, {"id": "P019", "name": "Jessie Ellen Campbell", "birth": "1824", "death": "1912", "metis": true, "privacy": "deceased", "note": "2nd wife of George Setter (m. after Isabella d.1846) · mother of Roderick McKenzie Setter"}, {"id": "P020", "name": "John James Setter", "birth": "1837", "metis": true, "privacy": "deceased"}, {"id": "P021", "name": "Caroline Setter", "birth": "1840", "metis": true, "privacy": "deceased"}, {"id": "P022", "name": "Elizabeth Setter", "birth": "1842", "metis": true, "privacy": "deceased", "note": "→ married Premier John Norquay"}, {"id": "P023", "name": "Duncan Richard Setter", "birth": "1852", "metis": true, "privacy": "deceased"}, {"id": "P024", "name": "Colin Campbell Setter", "birth": "1854", "metis": true, "privacy": "deceased"}, {"id": "P025", "name": "Roderick McKenzie Setter", "birth": "1856", "metis": true, "privacy": "deceased", "note": "son of George Setter + Jessie Ellen Campbell · m. Sarah Ann Howrie · DIRECT (line A)"}, {"id": "P060", "name": "Sarah Ann Howrie", "birth": "c1859", "metis": true, "privacy": "deceased", "note": "also 'Hourie' · wife of Roderick McKenzie Setter"}, {"id": "P026", "name": "Alexander Hunter Murray Setter", "birth": "1858", "metis": true, "privacy": "deceased"}, {"id": "P027", "name": "George William Setter", "birth": "1861", "death": "1874", "metis": true, "privacy": "deceased", "note": "twin, d. age 13"}, {"id": "P028", "name": "Ellen Madeleine 'Nellie' Setter", "birth": "1861", "death": "1874", "metis": true, "privacy": "deceased", "note": "twin, d. age 13"}, {"id": "P029", "name": "Jane Morwick", "birth": "1794", "death": "1874", "metis": true, "privacy": "deceased", "note": "née Morwick, wid. Norquay · grandmother of Premier John Norquay"}, {"id": "P030", "name": "David Spence", "birth": "1824", "death": "1885", "metis": true, "privacy": "deceased", "note": "FIRST MLA Poplar Point 1870-74 · Convention of Forty delegate (Ste. Anne's) · m. Catherine Hallett 1844 · d.1885 (accidental shooting)", "highlight": true}, {"id": "P031", "name": "Joseph Spence", "birth": "1826", "metis": true, "privacy": "deceased"}, {"id": "P032", "name": "Catherine Spence", "birth": "1829", "metis": true, "privacy": "deceased"}, {"id": "P033", "name": "Catherine Hallett", "birth": "1824", "death": "1880", "metis": true, "privacy": "deceased", "note": "dau. of Henry Hallett + Catherine Parenteau · m. David Spence 15 Feb 1844 · scrip 1876 · d.1880"}, {"id": "P034", "name": "John 'Jake' Spence", "birth": "1848", "metis": true, "privacy": "deceased", "note": "m. Ellen McNab"}, {"id": "P035", "name": "Ellen Anderson Spence", "birth": "1853", "metis": true, "privacy": "deceased", "note": "m. George Brown"}, {"id": "P036", "name": "Charles David Spence", "birth": "1857", "metis": true, "privacy": "deceased", "note": "m. 'Eliza' Foulds"}, {"id": "P037", "name": "Jane Spence", "birth": "1859", "metis": true, "privacy": "deceased", "note": "m. William Folster"}, {"id": "P038", "name": "Mary Ann Spence", "birth": "1861", "death": "1930", "metis": true, "privacy": "deceased", "note": "DIRECT · Spence line B"}, {"id": "P039", "name": "Harriet Spence", "birth": "1863", "metis": true, "privacy": "deceased", "note": "m. Peter Henry Wishart"}, {"id": "P040", "name": "William 'Bill' Spence", "birth": "1866", "metis": true, "privacy": "deceased", "note": "m. Martha McNab"}, {"id": "P041", "name": "Ernest Charles Riggs", "birth": "1859", "metis": true, "privacy": "deceased", "note": "son of Harmon M. Riggs + Amelia M. Williams"}, {"id": "P042", "name": "Ella Alberta Riggs", "birth": "c1880s", "metis": true, "privacy": "deceased", "note": "DIRECT · Spence line B"}, {"id": "P043", "name": "Alan Setter", "birth": "1884", "death": "1964", "metis": true, "privacy": "deceased", "note": "DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie"}, {"id": "P044", "name": "Doris A. Setter", "birth": "1912", "death": "2006", "metis": true, "privacy": "deceased", "note": "DIRECT · b. 24 Dec 1912 Portage la Prairie · m. Lawrence 29 Dec 1932 Tisdale SK · d. 23 Apr 2006"}, {"id": "P045", "name": "Lawrence Donald Hamilton", "birth": "1912", "death": "1984", "metis": false, "privacy": "deceased", "note": "b. 15 Jun 1912 Tisdale SK · d. 5 Feb 1984 Flin Flon · son of Guy Wentworth Hamilton + Ethel Rose King · also 'Laurence'"}, {"id": "P046", "name": "Mavis Irene Hamilton", "birth": "1933", "death": "2020", "metis": true, "privacy": "deceased", "note": "DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6"}, {"id": "P047", "name": "Robert Lau", "metis": false, "privacy": "deceased", "note": "maternal grandfather"}, {"id": "P048", "name": "Tracy Diane Lau", "metis": true, "privacy": "living", "note": "b. Flin Flon MB · DIRECT"}, {"id": "P049", "name": "Bryon Edward deVries", "birth": "1954", "death": "2019", "metis": false, "privacy": "deceased", "note": "father · b. 17 Jul 1954 · d. 13 Oct 2019 · HR Director Sunrise School Division · son of Gerhard de Vries + Geeske Oltrop"}, {"id": "P050", "name": "Bayard deVries", "metis": true, "privacy": "living", "note": "YOU · son of Tracy + Bryon · m. Paula · father of Grover · brother of Ashley", "you": true}, {"id": "P052", "name": "Elwyn Setter", "metis": true, "privacy": "deceased", "note": "child of Alan Setter + Ella Riggs"}, {"id": "P053", "name": "Erma Ann Setter", "birth": "1910", "metis": true, "privacy": "deceased", "note": "child of Alan Setter + Ella Riggs"}, {"id": "P054", "name": "Clayton N. Setter", "birth": "1917", "death": "1975", "metis": true, "privacy": "deceased", "note": "child of Alan Setter + Ella Riggs"}, {"id": "P055", "name": "Alan Guy Hamilton", "metis": false, "privacy": "living", "note": "son of Doris + Laurence"}, {"id": "P056", "name": "Daniel Hamilton", "metis": false, "privacy": "living", "note": "son of Doris + Laurence"}, {"id": "P057", "name": "Patrick Hamilton", "metis": false, "privacy": "living", "note": "son of Doris + Laurence"}, {"id": "P058", "name": "Wesley C. Hamilton", "metis": false, "privacy": "living", "note": "son of Doris + Laurence"}, {"id": "P059", "name": "Harley Hamilton", "birth": "1934", "death": "2001", "metis": false, "privacy": "deceased", "note": "son of Doris + Lawrence"}, {"id": "P061", "name": "Guy Wentworth Hamilton", "birth": "1882", "death": "1946", "metis": false, "privacy": "deceased", "note": "b. 26 Nov 1882 Beautiful Plains MB · d. 13 Jun 1946 Tisdale SK · Lawrence's father"}, {"id": "P062", "name": "Ethel Rose King", "birth": "1892", "death": "1982", "metis": false, "privacy": "deceased", "note": "b. 17 Apr 1892 Neche ND, USA · d. 16 Jun 1982 SK · Lawrence's mother"}, {"id": "P063", "name": "Jean Margaret Hamilton", "birth": "1915", "death": "2000", "metis": false, "privacy": "deceased", "note": "sister of Lawrence"}, {"id": "P064", "name": "Madeleine Phyllis Hamilton", "birth": "1918", "death": "2004", "metis": false, "privacy": "deceased", "note": "sister of Lawrence"}, {"id": "P065", "name": "William Morrison Hamilton", "birth": "1926", "death": "1991", "metis": false, "privacy": "deceased", "note": "brother of Lawrence"}, {"id": "P066", "name": "Vivian Ethel Hamilton", "birth": "1930", "metis": false, "privacy": "deceased", "note": "sister of Lawrence"}, {"id": "P067", "name": "Gerhard De Vries", "metis": false, "privacy": "deceased", "note": "paternal grandfather · Dutch (Friesland) · homesteaded Lake Dauphin/Turtle River, Ochre River MB"}, {"id": "P068", "name": "Geeske Oltrop", "metis": false, "privacy": "deceased", "note": "paternal grandmother · 'Geske' · m. Gerhard 4 Oct 1929 Ochre River MB"}, {"id": "P069", "name": "John 'Johann' de Vries", "birth": "1936", "metis": false, "privacy": "deceased", "note": "b. Ee, Friesland, Netherlands · note: birth year 1936 vs brother Leonard b.1932 (verify eldest)"}, {"id": "P070", "name": "Tina de Vries", "metis": false, "privacy": "deceased", "note": "m. Brenner"}, {"id": "P071", "name": "Leonard De Vries", "birth": "1932", "death": "2016", "metis": false, "privacy": "deceased", "note": "dairy farmer, Ochre River"}, {"id": "P072", "name": "Etta de Vries", "metis": false, "privacy": "deceased", "note": "m. Hodges"}, {"id": "P073", "name": "Annie 'Antje' de Vries", "metis": false, "privacy": "deceased", "note": "m. Boerchers"}, {"id": "P074", "name": "Margaret de Vries", "metis": false, "privacy": "deceased", "note": "m. Brink"}, {"id": "P075", "name": "Mary de Vries", "metis": false, "privacy": "deceased", "note": "m. McKean"}, {"id": "P076", "name": "Helen de Vries", "metis": false, "privacy": "deceased", "note": "m. Claeys"}, {"id": "P077", "name": "Herman de Vries", "metis": false, "privacy": "deceased", "note": "brother of Bryon"}, {"id": "P078", "name": "Gerald de Vries", "metis": false, "privacy": "deceased", "note": "brother of Bryon"}, {"id": "P051", "name": "Premier John Norquay", "birth": "1841", "death": "1889", "metis": true, "privacy": "deceased", "note": "Manitoba's first Métis premier (1878-87) · via Elizabeth Setter", "highlight": true, "notes": "Raised by his grandmother Jane Morwick and her second husband James Spence after his mother Isabella Truthwaite died when he was two (father d.1849) - he grew up inside the extended Spence household."}, {"id": "P081", "name": "Dantzick Batt", "metis": false, "privacy": "deceased", "note": "Isaac Batt's father (genealogy source, verify)"}, {"id": "P082", "name": "Sarah Lindsel", "metis": false, "privacy": "deceased", "note": "Isaac Batt's mother (genealogy source, verify)"}, {"id": "P083", "name": "Ashley deVries", "metis": true, "privacy": "living", "note": "Bayard's sister · m. Noel Brown"}, {"id": "P084", "name": "Noel Brown", "metis": false, "privacy": "living", "note": "Ashley's husband"}, {"id": "P085", "name": "Hudson Brown", "metis": false, "privacy": "living", "note": "son of Ashley + Noel"}, {"id": "P086", "name": "Oliver Brown", "metis": false, "privacy": "living", "note": "son of Ashley + Noel (twin)"}, {"id": "P087", "name": "Ellis Brown", "metis": false, "privacy": "living", "note": "son of Ashley + Noel (twin)"}, {"id": "P088", "name": "Paula deVries", "metis": false, "privacy": "living", "note": "Bayard's wife"}, {"id": "P089", "name": "Grover deVries", "metis": true, "privacy": "living", "note": "Bayard & Paula's son"}, {"id": "P090", "name": "Wendy Provins", "metis": true, "privacy": "living", "note": "Mavis's daughter · Diane's sister"}, {"id": "P091", "name": "Gordon Lau", "metis": true, "privacy": "living", "note": "Mavis's son · Diane's brother"}, {"id": "P92", "name": "James Morwick", "birth": "c1778", "death": "1865", "metis": false, "privacy": "deceased", "note": "Jane Morwick's father (c.1778-1865), Kirkwall, Orkney."}, {"id": "P93", "name": "Sarah Sabiston", "birth": "1800", "death": "1872", "metis": false, "privacy": "deceased", "note": "Jane Morwick's mother (1800-1872)."}, {"id": "P96", "name": "Sarah Fowler", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Isaac Batt's English wife. The Metis line descends from Batt's Cree family, not her."}, {"id": "P97", "name": "Leewe de Vries", "birth": "1862", "death": "1926", "metis": false, "privacy": "deceased", "note": "Gerhard de Vries's father."}, {"id": "P98", "name": "Trienje Pommer", "birth": "1863", "death": "1937", "metis": false, "privacy": "deceased", "note": "Gerhard de Vries's mother."}, {"id": "P99", "name": "John James Hamilton", "birth": "1856", "death": "1913", "metis": false, "privacy": "deceased", "note": "Guy Wentworth Hamilton's father."}, {"id": "P100", "name": "Jane Buchanan", "birth": "1859", "death": "1931", "metis": false, "privacy": "deceased", "note": "Guy Wentworth Hamilton's mother."}, {"id": "P101", "name": "Thomas Allan King", "birth": "1864", "death": "1954", "metis": false, "privacy": "deceased", "note": "Ethel Rose King's father; Ontario settler."}, {"id": "P102", "name": "Catherine Ann Clark", "birth": "1867", "death": "1956", "metis": false, "privacy": "deceased", "note": "Ethel Rose King's mother."}, {"id": "P103", "name": "Harmon Miles Riggs", "birth": "1834", "death": "1874", "metis": false, "privacy": "deceased", "note": "Ernest Charles Riggs's father."}, {"id": "P104", "name": "Amelia Williams", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Ernest Charles Riggs's mother."}, {"id": "P105", "name": "Engbertus de Vries", "birth": "1839", "death": "", "metis": false, "privacy": "deceased", "note": "Leewe de Vries's father."}, {"id": "P106", "name": "Maria Geerds Meinders", "birth": "1836", "death": "1872", "metis": false, "privacy": "deceased", "note": "Leewe de Vries's mother."}, {"id": "P107", "name": "David J. Riggs Jr", "birth": "1804", "death": "1850", "metis": false, "privacy": "deceased", "note": "Harmon Miles Riggs's father."}, {"id": "P108", "name": "Catherine M. Hendricks", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Harmon Miles Riggs's mother."}, {"id": "P109", "name": "William King", "birth": "1817", "death": "1898", "metis": false, "privacy": "deceased", "note": "Thomas Allan King's father."}, {"id": "P110", "name": "Sarah Burke", "birth": "1829", "death": "1909", "metis": false, "privacy": "deceased", "note": "Thomas Allan King's mother."}, {"id": "P111", "name": "Joseph Hamilton", "birth": "1821", "death": "1889", "metis": false, "privacy": "deceased", "note": "John James Hamilton's father."}, {"id": "P112", "name": "Mary Busby", "birth": "1831", "death": "1921", "metis": false, "privacy": "deceased", "note": "John James Hamilton's mother."}, {"id": "P113", "name": "John Hamilton", "birth": "1791", "death": "1857", "metis": false, "privacy": "deceased", "note": "Joseph Hamilton's father; Irish immigrant."}, {"id": "P114", "name": "Eleanor Jane Preston", "birth": "1798", "death": "1884", "metis": false, "privacy": "deceased", "note": "Joseph Hamilton's mother."}, {"id": "P115", "name": "John Buchanan", "birth": "1829", "death": "1909", "metis": false, "privacy": "deceased", "note": "Jane Buchanan's father."}, {"id": "P116", "name": "Isabella Watson", "birth": "1837", "death": "1917", "metis": false, "privacy": "deceased", "note": "Jane Buchanan's mother."}, {"id": "P117", "name": "Philip Hourie", "birth": "1833", "death": "1914", "metis": false, "privacy": "deceased", "note": "Sarah Ann Hourie's father."}, {"id": "P118", "name": "Euphemia Cook Halcro", "birth": "1839", "death": "1917", "metis": false, "privacy": "deceased", "note": "Sarah Ann Hourie's mother."}, {"id": "P119", "name": "John Hourie", "birth": "1779", "death": "1857", "metis": false, "privacy": "deceased", "note": "Philip Hourie's father; Orkney HBC man."}, {"id": "P120", "name": "Margaret Bird", "birth": "1787", "death": "1847", "metis": false, "privacy": "deceased", "note": "Shoshoni adopted by Chief Factor James Curtis Bird."}, {"id": "P121", "name": "Henry Hallett Jr", "birth": "1799", "death": "1871", "metis": false, "privacy": "deceased", "note": "Father of Catherine Hallett."}, {"id": "P122", "name": "Catherine Parenteau", "birth": "c1799", "death": "1857", "metis": true, "privacy": "deceased", "note": "Catherine Hallett's mother (c.1799-1857, Metis). Father = Jean Baptiste Parenteau (from Quebec)."}, {"id": "P123", "name": "Jean Baptiste Parenteau", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Catherine Parenteau's father, from Quebec."}, {"id": "P124", "name": "Unknown (Parenteau)", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Catherine Parenteau's mother."}, {"id": "P125", "name": "Henry Hallett Sr", "birth": "1773", "death": "1844", "metis": false, "privacy": "deceased", "note": "Hallett patriarch, father of Henry Jr."}, {"id": "P126", "name": "Catherine Crise (Cree)", "birth": "", "death": "", "metis": true, "privacy": "deceased", "note": "Henry Hallett Sr's wife."}, {"id": "P127", "name": "William Peter Hallett", "birth": "c1811", "death": "1873", "metis": true, "privacy": "deceased", "note": "Buffalo-hunt captain, Henry Jr's younger brother."}, {"id": "P128", "name": "Maria Pruden", "birth": "1813", "death": "1883", "metis": true, "privacy": "deceased", "note": "Wife of William Peter Hallett."}, {"id": "P129", "name": "George Brown", "birth": "1853", "death": "1936", "metis": false, "privacy": "deceased", "note": "Ellen Spence's husband."}, {"id": "P130", "name": "Peter Henry Wishart", "birth": "1862", "death": "1936", "metis": false, "privacy": "deceased", "note": "Harriet Spence's husband."}, {"id": "P131", "name": "William Folster", "birth": "", "death": "", "metis": false, "privacy": "deceased", "note": "Jane Spence's husband."}, {"id": "P132", "name": "Jemima Hourie", "birth": "", "death": "", "metis": true, "privacy": "deceased", "note": "Wife of Colin Campbell Setter. Sarah Ann's sister."}], "unions": [{"id": "U15", "spouse1": "P079", "spouse2": "P080", "children": ["P002"]}, {"id": "U01", "spouse1": "P001", "spouse2": "P002", "children": ["P003", "P004", "P005", "P006"]}, {"id": "U02", "spouse1": "P007", "spouse2": "P006", "children": ["P008", "P009", "P010", "P011", "P012", "P013", "P014", "P015", "P016", "P017"]}, {"id": "U03", "spouse1": "P010", "spouse2": "P018", "children": ["P020", "P021", "P022"]}, {"id": "U04", "spouse1": "P003", "spouse2": "P029", "children": ["P030", "P031", "P032"]}, {"id": "U05", "spouse1": "P030", "spouse2": "P033", "children": ["P034", "P035", "P036", "P037", "P038", "P039", "P040"]}, {"id": "U06", "spouse1": "P041", "spouse2": "P038", "children": ["P042"]}, {"id": "U07", "spouse1": "P043", "spouse2": "P042", "children": ["P052", "P053", "P044", "P054"]}, {"id": "U08", "spouse1": "P044", "spouse2": "P045", "children": ["P055", "P056", "P046", "P057", "P058", "P059"]}, {"id": "U09", "spouse1": "P047", "spouse2": "P046", "children": ["P048", "P090", "P091"]}, {"id": "U10", "spouse1": "P048", "spouse2": "P049", "children": ["P050", "P083"]}, {"id": "U11", "spouse1": "P022", "spouse2": "P051", "children": [], "note": "Norquay connection (Elizabeth Setter ⚭ Premier John Norquay)"}, {"id": "U12", "spouse1": "P025", "spouse2": "P060", "children": ["P043"]}, {"id": "U13", "spouse1": "P061", "spouse2": "P062", "children": ["P045", "P063", "P064", "P065", "P066"]}, {"id": "U14", "spouse1": "P067", "spouse2": "P068", "children": ["P069", "P070", "P071", "P072", "P073", "P074", "P075", "P076", "P077", "P078", "P049"]}, {"id": "U16", "spouse1": "P081", "spouse2": "P082", "children": ["P079"], "note": "verify vs DCB (Stanstead Abbots, c1725)"}, {"id": "U17", "spouse1": "P050", "spouse2": "P088", "children": ["P089"]}, {"id": "U18", "spouse1": "P083", "spouse2": "P084", "children": ["P085", "P086", "P087"]}, {"id": "U19", "spouse1": "P010", "spouse2": "P019", "children": ["P023", "P024", "P025", "P026", "P027", "P028"], "note": "2nd wife of George Setter; the 6 children born 1852-1861"}, {"id": "U20", "spouse1": "P92", "spouse2": "P93", "children": ["P029"]}, {"id": "U22", "spouse1": "P079", "spouse2": "P96", "children": []}, {"id": "U23", "spouse1": "P97", "spouse2": "P98", "children": ["P067"]}, {"id": "U24", "spouse1": "P99", "spouse2": "P100", "children": ["P061"]}, {"id": "U25", "spouse1": "P101", "spouse2": "P102", "children": ["P062"]}, {"id": "U26", "spouse1": "P103", "spouse2": "P104", "children": ["P041"]}, {"id": "U27", "spouse1": "P105", "spouse2": "P106", "children": ["P97"]}, {"id": "U28", "spouse1": "P107", "spouse2": "P108", "children": ["P103"]}, {"id": "U29", "spouse1": "P109", "spouse2": "P110", "children": ["P101"]}, {"id": "U30", "spouse1": "P113", "spouse2": "P114", "children": ["P111"]}, {"id": "U31", "spouse1": "P111", "spouse2": "P112", "children": ["P99"]}, {"id": "U32", "spouse1": "P115", "spouse2": "P116", "children": ["P100"]}, {"id": "U33", "spouse1": "P117", "spouse2": "P118", "children": ["P060"]}, {"id": "U34", "spouse1": "P119", "spouse2": "P120", "children": ["P117"]}, {"id": "U35", "spouse1": "P121", "spouse2": "P122", "children": ["P033"]}, {"id": "U36", "spouse1": "P123", "spouse2": "P124", "children": ["P122"]}, {"id": "U37", "spouse1": "P125", "spouse2": "P126", "children": ["P121", "P127"]}, {"id": "U38", "spouse1": "P127", "spouse2": "P128", "children": []}, {"id": "U42", "spouse1": "P024", "spouse2": "P132", "children": []}, {"id": "U43", "spouse1": "P035", "spouse2": "P129", "children": []}, {"id": "U44", "spouse1": "P039", "spouse2": "P130", "children": []}, {"id": "U45", "spouse1": "P037", "spouse2": "P131", "children": []}]};
+const ROOT = (DATA.people.find(p=>p.you)||DATA.people[0]).id;
+const byId = {}; DATA.people.forEach(p=>byId[p.id]=p);
+const RING = 60;
+const NODE_R = 5.0;
+const TWO_PI = Math.PI*2;
+
+// ---- parent map + union maps ----
+const parentsOf = {};                 // child -> [parent ids]
+const childUnionOf = {};              // person -> union where they are a child
+const spouseUnionOf = {};             // person -> list of unions where they are a spouse
+DATA.unions.forEach(u=>{
+  const pars=[u.spouse1,u.spouse2].filter(Boolean);
+  (u.children||[]).forEach(c=>{ parentsOf[c]=pars.slice(); });
+  (u.children||[]).forEach(c=>{ if(!childUnionOf[c]) childUnionOf[c]=u; });
+  pars.forEach(s=>{ (spouseUnionOf[s]=spouseUnionOf[s]||[]).push(u); });
+});
+
+// ---- ancestor set + generation depth (BFS from ROOT upward) ----
+const anc=new Set([ROOT]); const depth={[ROOT]:0}; const q=[ROOT];
+while(q.length){ const c=q.shift(); const d=depth[c];
+  (parentsOf[c]||[]).forEach(p=>{ if(byId[p]&&!(p in depth)){depth[p]=d+1;anc.add(p);q.push(p);} });
+}
+
+// ---- leaf weight under a person (unique deepest ancestors upward) ----
+const leafMemo={};
+function leavesUnder(pid){
+  if(pid in leafMemo) return leafMemo[pid];
+  const u=childUnionOf[pid];
+  if(!u){ leafMemo[pid]=1; return 1; }            // no known parents -> a leaf
+  let s=0;
+  [u.spouse1,u.spouse2].forEach(sp=>{ if(sp&&byId[sp]) s+=leavesUnder(sp); });
+  leafMemo[pid]=Math.max(1,s); return leafMemo[pid];
+}
+
+// ---- union-aware recursive layout ----
+const pos={}; pos[ROOT]={x:0,y:0,r:0,a:0,d:0};
+const placed=new Set([ROOT]);
+const seenU=new Set();
+function layoutUnion(u,a0,a1){
+  if(!u||seenU.has(u.id)) return; seenU.add(u.id);
+  const s1=u.spouse1, s2=u.spouse2;
+  const w1=(s1&&byId[s1])?leavesUnder(s1):0;
+  const w2=(s2&&byId[s2])?leavesUnder(s2):0;
+  const tot=w1+w2||1;
+  const aMid=a0+(a1-a0)*(w1/tot);
+  if(s1&&byId[s1]&&!placed.has(s1)){
+    const a=(a0+aMid)/2, d=depth[s1]|0;
+    pos[s1]={x:d*RING*Math.cos(a), y:d*RING*Math.sin(a), r:d*RING, a, d};
+    placed.add(s1);
+  }
+  if(s2&&byId[s2]&&!placed.has(s2)){
+    const a=(aMid+a1)/2, d=depth[s2]|0;
+    pos[s2]={x:d*RING*Math.cos(a), y:d*RING*Math.sin(a), r:d*RING, a, d};
+    placed.add(s2);
+  }
+  if(s1&&byId[s1]&&childUnionOf[s1]&&!seenU.has(childUnionOf[s1].id)) layoutUnion(childUnionOf[s1], a0, aMid);
+  if(s2&&byId[s2]&&childUnionOf[s2]&&!seenU.has(childUnionOf[s2].id)) layoutUnion(childUnionOf[s2], aMid, a1);
+}
+const rootUnion=childUnionOf[ROOT];
+layoutUnion(rootUnion, -Math.PI/2, -Math.PI/2+TWO_PI);
+
+// place any ancestors not reached (orphan branches) around the rim
+let orphanStart=-Math.PI/2;
+anc.forEach(id=>{ if(!placed.has(id)){ const d=depth[id]|0, a=orphanStart;
+  pos[id]={x:d*RING*Math.cos(a), y:d*RING*Math.sin(a), r:d*RING, a, d}; placed.add(id); orphanStart+=0.2; } });
+
+// direct spine: paths ROOT -> P001 (James Spence Sr) and ROOT -> P002 (Margaret Batt)
+const directIds=new Set([ROOT]);
+function downward(id, target){
+  if(id===target){directIds.add(id);return true;}
+  let found=false;
+  (spouseUnionOf[id]||[]).forEach(u=>{
+    (u.children||[]).forEach(c=>{ if(byId[c]&&downward(c,target)){directIds.add(id);found=true;} });
+  });
+  return found;
+}
+downward(ROOT,'P001'); downward(ROOT,'P002');
+
+// ---- edges: child -> each parent (lineage) + spouse arc (marriage) ----
+const edges=[];
+anc.forEach(c=>{
+  (parentsOf[c]||[]).forEach(p=>{ if(anc.has(p)) edges.push({c,p,type:'line'}); });
+});
+DATA.unions.forEach(u=>{
+  const s1=u.spouse1,s2=u.spouse2;
+  if(s1&&s2&&anc.has(s1)&&anc.has(s2)) edges.push({c:s1,p:s2,type:'mar'});
+});
+
+// ---- render ----
+const svg=document.getElementById('svg');
+const maxDepth=Math.max(...Object.values(depth));
+const VB=(maxDepth*RING+80);
+svg.setAttribute('viewBox', `${-VB} ${-VB} ${VB*2} ${VB*2}`);
+const gGrid=document.createElementNS('http://www.w3.org/2000/svg','g');
+const gEdges=document.createElementNS('http://www.w3.org/2000/svg','g');
+const gNodes=document.createElementNS('http://www.w3.org/2000/svg','g');
+const gLabels=document.createElementNS('http://www.w3.org/2000/svg','g');
+svg.appendChild(gGrid); svg.appendChild(gEdges); svg.appendChild(gNodes); svg.appendChild(gLabels);
+
+// faint orange concentric rings + spokes (non-rotating)
+for(let d=1;d<=maxDepth;d++){
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',0);c.setAttribute('cy',0);c.setAttribute('r',d*RING);
+  c.setAttribute('fill','none');c.setAttribute('stroke','var(--grid)');
+  c.setAttribute('stroke-opacity','0.10');c.setAttribute('stroke-width','1');
+  gGrid.appendChild(c);
+}
+for(let i=0;i<24;i++){ const a=i/24*TWO_PI;
+  const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+  l.setAttribute('x1',0);l.setAttribute('y1',0);
+  l.setAttribute('x2',(maxDepth*RING+40)*Math.cos(a));l.setAttribute('y2',(maxDepth*RING+40)*Math.sin(a));
+  l.setAttribute('stroke','var(--grid)');l.setAttribute('stroke-opacity','0.06');l.setAttribute('stroke-width','1');
+  gGrid.appendChild(l);
+}
+
+edges.forEach(e=>{
+  const C=pos[e.c], P=pos[e.p]; if(!C||!P) return;
+  const isD=(e.type!=='mar') && directIds.has(e.c)&&directIds.has(e.p);
+  const d = (e.type==='mar')
+    ? `M ${C.x} ${C.y} L ${P.x} ${P.y}`
+    : (()=>{ const rm=(C.r+P.r)/2, ctrlx=rm*Math.cos(C.a), ctrly=rm*Math.sin(C.a);
+             return `M ${C.x} ${C.y} Q ${ctrlx} ${ctrly} ${P.x} ${P.y}`; })();
+  // glow layer (wide, soft) + core layer (thin, bright white-ish)
+  const glow=document.createElementNS('http://www.w3.org/2000/svg','path');
+  glow.setAttribute('d',d);
+  glow.setAttribute('class','edge glow'+(e.type==='mar'?' mar':'')+(isD?' direct':''));
+  glow.setAttribute('filter','url(#glow)');
+  const core=document.createElementNS('http://www.w3.org/2000/svg','path');
+  core.setAttribute('d',d);
+  core.setAttribute('class','edge core'+(e.type==='mar'?' mar':'')+(isD?' direct':''));
+  gEdges.appendChild(glow); gEdges.appendChild(core);
+});
+
+anc.forEach(id=>{
+  const p=pos[id]; const person=byId[id];
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.dataset.id=id; g.style.cursor='pointer';
+  const isRoot=id===ROOT, isDirect=directIds.has(id);
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);
+  c.setAttribute('r',isRoot?9:NODE_R);
+  c.setAttribute('class','node'+(isRoot?' root':(isDirect?' direct':'')));
+  c.setAttribute('filter', isRoot?'url(#glowW)':'url(#glow)');
+  g.appendChild(c);
+  // bright solid core dot (white center of the glowing ring)
+  const core=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  core.setAttribute('cx',p.x);core.setAttribute('cy',p.y);
+  core.setAttribute('r',isRoot?4.5:2.4);
+  core.setAttribute('fill', isRoot?'#ffffff':'#eaffff');
+  core.setAttribute('stroke','none');
+  core.setAttribute('filter','url(#glow)');
+  g.appendChild(core);
+  // invisible hit area so the whole node (not just the thin stroke) is tappable
+  const hit=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  hit.setAttribute('cx',p.x);hit.setAttribute('cy',p.y);
+  hit.setAttribute('r',isRoot?14:11);
+  hit.setAttribute('fill','transparent');
+  hit.setAttribute('stroke','none');
+  hit.style.cursor='pointer';
+  g.appendChild(hit);
+  // robust tap detection: pointerdown on node -> pointerup near same spot = tap
+  let downX=null, downY=null;
+  g.addEventListener('pointerdown',e=>{ downX=e.clientX; downY=e.clientY; });
+  g.addEventListener('pointerup',e=>{
+    if(downX===null) return;
+    const moved=Math.hypot(e.clientX-downX, e.clientY-downY);
+    downX=downY=null;
+    if(moved<8){ e.stopPropagation(); openSheet(id); }
+  });
+  gNodes.appendChild(g);
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',p.x + (Math.cos(p.a)>=0?8:-8));
+  t.setAttribute('y',p.y+3);
+  t.setAttribute('text-anchor', Math.cos(p.a)>=0?'start':'end');
+  t.setAttribute('class','lbl'+(isDirect?' direct':''));
+  const nm=person.name.split(/[ ]+/);
+  t.textContent=(nm[0]||'')+(nm.length>1?(' '+nm[nm.length-1]):'');
+  gLabels.appendChild(t);
+});
+
+// ---- transform / interaction ----
+let rot=0, zoom=1;
+function apply(){
+  const t=`rotate(${rot}) scale(${zoom})`;
+  gEdges.setAttribute('transform',t); gNodes.setAttribute('transform',t); gLabels.setAttribute('transform',t);
+  gLabels.querySelectorAll('text').forEach(t0=>{
+    const x=+t0.getAttribute('x'), y=+t0.getAttribute('y');
+    t0.setAttribute('transform',`rotate(${-rot} ${x} ${y})`);
+  });
+}
+apply();
+function fit(){ const vw=window.innerWidth, vh=window.innerHeight;
+  zoom=Math.min(vw,vh)/((maxDepth*RING+90)*2)*0.94; zoom=Math.max(zoom,0.2); rot=0; apply(); }
+function zoomAt(f){ zoom=Math.min(6,Math.max(0.2,zoom*f)); apply(); }
+
+const ptrs=new Map(); let lastAng=null;
+function centerAng(ev){ const r=svg.getBoundingClientRect();
+  return Math.atan2(ev.clientY-(r.top+r.height/2), ev.clientX-(r.left+r.width/2)); }
+svg.addEventListener('pointerdown',e=>{ ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===1) lastAng=centerAng(e); });
+svg.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return; ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===1&&lastAng!==null){
+    const a=centerAng(e); let d=a-lastAng; if(d>Math.PI)d-=TWO_PI; if(d<-Math.PI)d+=TWO_PI;
+    rot+=d*180/Math.PI; lastAng=a; apply();
+  } else if(ptrs.size===2){
+    const v=[...ptrs.values()]; const dist=Math.hypot(v[0][0]-v[1][0],v[0][1]-v[1][1]);
+    if(zoom._pd) zoomAt(dist/zoom._pd); zoom._pd=dist;
+  }
+});
+function endP(e){ ptrs.delete(e.pointerId); if(ptrs.size<2)zoom._pd=null; if(ptrs.size===0)lastAng=null; }
+svg.addEventListener('pointerup',endP); svg.addEventListener('pointercancel',endP);
+svg.addEventListener('wheel',e=>{e.preventDefault();zoomAt(Math.exp(-e.deltaY*0.0015));},{passive:false});
+let lastTap=0;
+svg.addEventListener('touchend',e=>{ if(e.changedTouches.length!==1)return;
+  const n=Date.now(); if(n-lastTap<320){zoomAt(1.4);lastTap=0;} else lastTap=n; },{passive:true});
+svg.addEventListener('dblclick',()=>zoomAt(1.4));
+
+document.getElementById('zin').onclick=()=>zoomAt(1.35);
+document.getElementById('zout').onclick=()=>zoomAt(1/1.35);
+document.getElementById('zreset').onclick=()=>{rot=0;apply();};
+document.getElementById('zfit').onclick=fit;
+
+let labelsOn=true, directOn=false;
+const tgL=document.getElementById('tgLabels'), tgD=document.getElementById('tgDirect');
+tgL.onclick=()=>{ labelsOn=!labelsOn; tgL.classList.toggle('on',labelsOn);
+  gLabels.style.display=labelsOn?'':'none'; };
+tgD.onclick=()=>{ directOn=!directOn; tgD.classList.toggle('on',directOn);
+  gEdges.querySelectorAll('.edge').forEach(p=>{ if(!p.classList.contains('direct')) p.classList.toggle('dim',directOn); });
+  gNodes.querySelectorAll('.node:not(.root):not(.direct)').forEach(p=>p.classList.toggle('dim',directOn));
+  gLabels.querySelectorAll('.lbl:not(.direct)').forEach(p=>p.classList.toggle('dim',directOn)); };
+
+// ---- detail sheet ----
+const backdrop=document.getElementById('backdrop'), sheet=document.getElementById('sheet');
+function openSheet(id){
+  const p=byId[id]; if(!p)return;
+  let h=`<div class="sname">${esc(p.name)}`;
+  if(p.you)h+=`<span class="badge you">YOU</span>`;
+  if(p.metis)h+=`<span class="badge m">MÉTIS</span>`;
+  h+=`</div>`;
+  const yrs=[]; if(p.birth)yrs.push('b. '+p.birth); if(p.death)yrs.push('d. '+p.death);
+  if(yrs.length)h+=`<div class="smeta">${yrs.join(' · ')}</div>`;
+  if(p.note||p.notes)h+=`<div class="snote">${esc(p.note||p.notes)}</div>`;
+  const pars=(parentsOf[id]||[]).filter(x=>byId[x]);
+  const kids=DATA.unions.filter(u=>(u.spouse1===id||u.spouse2===id)).flatMap(u=>u.children||[]).filter(x=>byId[x]);
+  if(pars.length){ h+=`<div class="stitle">Parents</div>`; h+=pars.map(x=>`<span class="chip" data-id="${x}">${esc(byId[x].name)}</span>`).join(''); }
+  if(kids.length){ h+=`<div class="stitle">Children</div>`; h+=kids.map(x=>`<span class="chip" data-id="${x}">${esc(byId[x].name)}</span>`).join(''); }
+  document.getElementById('sheetbody').innerHTML=h;
+  document.getElementById('sheetbody').querySelectorAll('.chip').forEach(c=>c.onclick=()=>openSheet(c.dataset.id));
+  backdrop.classList.add('show'); sheet.classList.add('open');
+}
+function closeSheet(){ backdrop.classList.remove('show'); sheet.classList.remove('open'); }
+document.getElementById('sheetclose').onclick=closeSheet;
+backdrop.onclick=closeSheet;
+function esc(s){const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;}
+window.addEventListener('resize',()=>{ if(zoom<=0.01)fit(); });
+fit();
+</script>
+</body>
+</html>
