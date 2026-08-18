@@ -306,7 +306,7 @@ function drawTree(){
     const my = n1.y + PH/2;;
     const yKey = my;
     if (!window.marriageYCount[yKey]) window.marriageYCount[yKey] = 0;
-    const yOffset = window.marriageYCount[yKey] * 6;  // 6px per family at same level
+    const yOffset = window\.marriageYCount\[yKey\] \* 25;  // 6px per family at same level
     const adjustedMy = my + yOffset;
     window.marriageYCount[yKey] += 1;
     seg(c1x, adjustedMy, c2x, adjustedMy, MAR, 4.5);  // marriage bar with stagger
