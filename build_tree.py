@@ -10,6 +10,7 @@ Usage: python3 build_tree.py
 """
 import json, os, html as H
 import base64
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = json.load(open(os.path.join(HERE, "data", "family-tree.json")))
@@ -1615,3 +1616,8 @@ out = os.path.join(HERE, "site", "index.html")
 os.makedirs(os.path.dirname(out), exist_ok=True)
 open(out, "w").write(HTML)
 print(f"Wrote {out} ({len(HTML)} bytes)")
+# Post-process: add Circular view tab with radial dendrogram
+import subprocess
+add_circ = os.path.join(HERE, "add_circular_view.py")
+if os.path.exists(add_circ):
+    subprocess.run([sys.executable, add_circ], cwd=HERE, check=True)

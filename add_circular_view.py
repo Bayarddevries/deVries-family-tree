@@ -24,22 +24,22 @@ CIRCULAR_CSS = """
 #svg-circle{position:absolute;top:0;left:0;width:100%;height:100%;display:block;cursor:grab}
 #svg-circle:active{cursor:grabbing}
 #svg-circle .edge{fill:none;stroke-linecap:round}
-#svg-circle .edge.glow{stroke:#5af0ff;stroke-width:3.2;opacity:.85;filter:url(#glowC)}
-#svg-circle .edge.core{stroke:#ffffff;stroke-width:1.4;opacity:1}
-#svg-circle .edge.glow.mar{stroke:#f4c95d;stroke-width:2;opacity:.4;stroke-dasharray:4 4;filter:none}
-#svg-circle .edge.core.mar{stroke:#f4c95d;stroke-width:.7;opacity:.4;stroke-dasharray:4 4}
-#svg-circle .edge.glow.direct{stroke:#f4c95d;stroke-width:4;opacity:1}
-#svg-circle .edge.core.direct{stroke:#fffbe6;stroke-width:2;opacity:1}
+#svg-circle .edge.glow{stroke:#8B7355;stroke-width:3.2;opacity:.85;filter:url(#glowC)}
+#svg-circle .edge.core{stroke:#FFFFFF;stroke-width:1.4;opacity:.6}
+#svg-circle .edge.glow.mar{stroke:#D4A853;stroke-width:2;opacity:.4;stroke-dasharray:4 4;filter:none}
+#svg-circle .edge.core.mar{stroke:#D4A853;stroke-width:.7;opacity:.4;stroke-dasharray:4 4}
+#svg-circle .edge.glow.direct{stroke:#A66E4E;stroke-width:4;opacity:1}
+#svg-circle .edge.core.direct{stroke:#E6D3A7;stroke-width:2;opacity:1}
 #svg-circle .edge.glow.dim{opacity:.12}
 #svg-circle .edge.core.dim{opacity:.12}
-#svg-circle .node{fill:none;stroke:#eaffff;stroke-width:2.2}
+#svg-circle .node{fill:none;stroke:#D4B896;stroke-width:2.2}
 #svg-circle .node.dim{opacity:.3}
-#svg-circle .node.direct{stroke:#f4c95d}
-#svg-circle .node.root{fill:#9dfbff;stroke:#9dfbff;filter:url(#glowW)}
-#svg-circle .node-dot{fill:#eaffff}
+#svg-circle .node.direct{stroke:#A66E4E}
+#svg-circle .node.root{fill:#9DB4C0;stroke:#C9A66F;filter:url(#glowW)}
+#svg-circle .node-dot{fill:#D4B896}
 #svg-circle .lbl{fill:#dbe9ee;font-size:9px;font-family:'Segoe UI',system-ui,sans-serif;
   paint-order:stroke;stroke:#04060a;stroke-width:2.4px;stroke-linejoin:round;pointer-events:none;user-select:none}
-#svg-circle .lbl.direct{fill:#f4c95d;font-weight:600}
+#svg-circle .lbl.direct{fill:#C9A66F;font-weight:600}
 #svg-circle .lbl.dim{opacity:.28}
 """
 html = html.replace(
