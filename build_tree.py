@@ -557,8 +557,115 @@ if ERR:
 print(f"  [layout-ok: {len(PERS)} nodes, {len(FAMS)} unions, {len(WARN)} warnings]")
 # ======================================================================
 
+# ---- Family-line classification (for organic colour coding) ----
+# Trace from Bayard (P050) upward through two ancestral trunks:
+#   Line A (setter):    Andrew+Spence -> George -> Roderick -> Alan
+#   Line B (riggs/spence): David Spence -> Mary Ann -> Ernest Riggs -> Ella
+#   Hamilton:           Joseph -> John James -> Guy -> Lawrence
+#   deVries:            Gerhard -> Leewe
+#   Hallett:            Henry Sr -> Henry Jr -> Catherine -> David Spence
+#   Hourie:             John Hourie -> Philip -> Sarah Ann
+#   King:               William King -> Thomas Allan -> Ethel
+# Each person is assigned a CSS class used for the box border accent + a
+# soft background tint. Spouses married into a line get the same class as
+# their partner. Collateral/unassigned default to 'earth-stone'.
+def _build_family_lines():
+    """Map each pid to a family-line label by tracing unions from root up."""
+    # Define the trunk person for each line (the person where the line enters)
+    # Lines traced from Bayard upward; each person inherits the line of the
+    # child through whom they enter.
+    lines = {}  # pid -> line name
+    # Start from Bayard, trace upward through unions
+    # Bayard's parents: Lawrence Hamilton (P045) + Doris Setter (P044)
+    lines["P050"] = "bayard"   # center / convergence point
+    # Trace up through known trunk people
+    trunk = {
+        "P050": "bayard",   # center / convergence point
+        # Line A: Setter line through Peggy Spence -> Andrew -> George -> Roderick -> Alan
+        "P006": "setter",     # Peggy Spence (Spence line A matriarch)
+        "P007": "setter",     # Andrew Setter (Orkney voyageur)
+        "P010": "setter",     # George Setter (middle bridge)
+        "P019": "setter",     # Jessie Ellen Campbell (George's 2nd wife)
+        "P025": "setter",     # Roderick McKenzie Setter
+        "P043": "setter",     # Alan Setter (where the two lines meet)
+        # Line A root: James Spence Sr + Margaret Batt
+        "P001": "setter",     # James Spence Jr (Peggy's father)
+        "P002": "setter",     # Margaret Nestichio Batt (James's partner)
+        # Line B: Spence/Riggs line through David Spence -> Mary Ann -> Ernest -> Ella
+        "P042": "riggs",      # Ella Alberta Riggs (convergence: meets setter line at Alan)
+        "P030": "spence",     # David Spence (MLA)
+        "P033": "spence",     # Catherine Hallett (David's wife)
+        "P038": "riggs",      # Mary Ann Spence (David's daughter)
+        "P041": "riggs",      # Ernest Charles Riggs (Mary Ann's husband)
+        # Spence line B root: James Spence Sr + Margaret Batt (U01)
+        # (P001 and P002 above already tagged setter - they're the SHARED root of both lines)
+        # Hamilton line
+        "P045": "hamilton",   # Lawrence Donald Hamilton
+        "P044": "hamilton",   # Doris Alberta Setter (married into Hamilton line)
+        "P061": "hamilton",   # Guy Wentworth Hamilton
+        "P062": "king",       # Ethel Rose King (married into Hamilton)
+        "P099": "hamilton",   # John James Hamilton
+        "P100": "hamilton",   # Jane Buchanan
+        "P111": "hamilton",   # Joseph Hamilton
+        "P112": "hamilton",   # Mary Busby
+        "P113": "hamilton",   # John Hamilton (Irish immigrant)
+        "P114": "hamilton",   # Eleanor Preston
+        "P115": "hamilton",   # John Buchanan
+        "P116": "hamilton",   # Isabella Watson
+        # King line
+        "P062": "king",       # Ethel Rose King (also Hamilton)
+        "P101": "king",       # Thomas Allan King
+        "P102": "king",       # Catherine Ann Clark
+        "P103": "riggs",      # Harmon Miles Riggs (Ernest's father)
+        "P104": "riggs",      # Amelia Williams
+        "P107": "riggs",      # David J. Riggs Jr
+        "P108": "riggs",      # Catherine Hendricks
+        # deVries line
+        "P055": "devries",    # Gerhard de Vries
+        "P056": "devries",    # Trientje
+        "P067": "devries",    # Gerhard's child
+        "P097": "devries",    # Leewe de Vries
+        "P098": "devries",    # Trienje Pommer
+        "P105": "devries",    # Engbertus de Vries
+        "P106": "devries",    # Maria Meinders
+        # Hourie line
+        "P060": "hourie",     # Sarah Ann Hourie (married into setter line)
+        "P117": "hourie",     # Philip Hourie
+        "P118": "hourie",     # Euphemia Cook Halcro
+        "P119": "hourie",     # John Hourie (Orkney patriarch)
+        "P120": "hourie",     # Margaret Bird (Shoshoni)
+        # Hallett line
+        "P121": "hallett",    # Henry Hallett Jr (Catherine's father)
+        "P122": "hallett",    # Catherine Parenteau
+        "P125": "hallett",    # Henry Hallett Sr
+        "P126": "hallett",    # Catherine Crise (Cree)
+        "P127": "hallett",    # William Peter Hallett
+        "P128": "hallett",    # Maria Pruden
+        "P123": "hallett",    # Jean Baptiste Parenteau
+        "P124": "hallett",    # Unknown (Parenteau)
+        # Collateral / in-law / unassigned
+        "P023": "setter",     # Duncan Ritchie (George's child)
+        "P024": "setter",     # Colin Campbell (married Jemima Hourie)
+        "P027": "setter",     # Alexander Hunter Murray
+        "P052": "inlaw",      # Tracy Diane Lau
+        "P053": "inlaw",      # Robert Lau (married in)
+        "P058": "inlaw",      # Al Hamilton (Bayard's great-uncle)
+    }
+    return trunk
+FAMILY_LINES = _build_family_lines()
+# Map to CSS class names
+FAClass = {pid: f"fl-{line}" for pid, line in FAMILY_LINES.items()}
+# Add group node classes
+for gid in ("P900", "P901", "P902"):
+    FAClass[gid] = "fl-grp"
+# Build FAMILY_CLASS map for all placed nodes
+FAMILY_CLASS = {}
+for n in PERS:
+    FAMILY_CLASS[n["pid"]] = FAClass.get(n["pid"], "fl-stone")
+
 TREE = {"nodes": PERS, "fams": FAMS, "edges": TEDGES, "lanes": TREE_LANES,
         "pw": P_W, "ph": P_H, "rowh": ROW_H,
+        "faclass": FAMILY_CLASS,
         "w": int(maxx - minx + 190), "h": int(maxy + 60)}
 
 # =========================================================
@@ -807,7 +914,10 @@ CSS = r"""
   --bg:#14121A;--surface:#1E1A26;--surface2:#272131;--line:#3A3346;
   --txt:#F2E9DC;--muted:#9C8FA9;--crimson:#E0525C;--crimson-d:#8C1F28;
   --gold:#D4A853;--cream:#F5EDE2;
-}
+  /* organic earthy palette for family-line colour coding */
+  --earth-umber:#7B5A42;--earth-sienna:#A66E4E;--earth-ochre:#C9A66F;
+  --earth-forest:#4A6B3F;--earth-moss:#5D7B5D;--earth-terracotta:#B46B4A;
+  --earth-stone:#6B5E52;--earth-clay:#9C7A62;}
 html,body{height:100%}
 body{background:radial-gradient(1200px 800px at 70% -10%,#241D2E 0%,var(--bg) 55%);color:var(--txt);
   font-family:'EB Garamond',Georgia,serif;overflow:hidden}
@@ -836,6 +946,44 @@ main{position:fixed;inset:58px 0 62px;overflow:hidden}
 .cnode.inlaw .n1{color:var(--muted);font-style:italic}
 .cnode.grp{border-style:dashed;border-color:var(--gold);background:rgba(214,168,83,.08);cursor:zoom-in}
 .cnode.grp .n1{color:var(--gold)}
+/* organic earthy family-line colour accents + slow pulse */
+.cnode.fl-setter{border-left:3px solid var(--earth-umber);box-shadow:0 0 8px rgba(123,90,66,.15)}
+.cnode.fl-riggs{border-left:3px solid var(--earth-sienna);box-shadow:0 0 8px rgba(166,110,78,.15)}
+.cnode.fl-spence{border-left:3px solid var(--earth-forest);box-shadow:0 0 8px rgba(74,107,63,.15)}
+.cnode.fl-hamilton{border-left:3px solid var(--earth-forest);box-shadow:0 0 8px rgba(74,107,63,.15)}
+.cnode.fl-king{border-left:3px solid var(--earth-ochre);box-shadow:0 0 8px rgba(201,166,95,.15)}
+.cnode.fl-devries{border-left:3px solid var(--earth-stone);box-shadow:0 0 8px rgba(107,94,82,.15)}
+.cnode.fl-hallett{border-left:3px solid var(--earth-terracotta);box-shadow:0 0 8px rgba(180,107,74,.15)}
+.cnode.fl-hourie{border-left:3px solid var(--earth-moss);box-shadow:0 0 8px rgba(93,123,93,.15)}
+.cnode.fl-bayard{border-left:3px solid var(--crimson);box-shadow:0 0 10px rgba(224,82,92,.2)}
+.cnode.fl-grp{border-left:3px solid var(--gold);box-shadow:0 0 8px rgba(212,168,83,.15)}
+.cnode.fl-inlaw{border-left:3px solid var(--muted);box-shadow:0 0 8px rgba(156,143,169,.15)}
+.cnode.fl-stone{border-left:3px solid var(--muted);box-shadow:0 0 8px rgba(156,143,169,.1)}
+/* slow organic pulse — each family line pulses in its own colour */
+@keyframes pulseSetter{0%,100%{box-shadow:0 0 6px rgba(123,90,66,.1);box-border-color:rgba(123,90,66,.3)}50%{box-shadow:0 0 14px rgba(123,90,66,.25),0 0 24px rgba(123,90,66,.15)}}
+@keyframes pulseRiggs{0%,100%{box-shadow:0 0 6px rgba(166,110,78,.1)}50%{box-shadow:0 0 14px rgba(166,110,78,.25),0 0 24px rgba(166,110,78,.15)}}
+@keyframes pulseHamilton{0%,100%{box-shadow:0 0 6px rgba(74,107,63,.1)}50%{box-shadow:0 0 14px rgba(74,107,63,.25),0 0 24px rgba(74,107,63,.15)}}
+@keyframes pulseSpence{0%,100%{box-shadow:0 0 6px rgba(74,107,63,.1)}50%{box-shadow:0 0 14px rgba(74,107,63,.25),0 0 24px rgba(74,107,63,.15)}}
+@keyframes pulseKing{0%,100%{box-shadow:0 0 6px rgba(201,166,95,.1)}50%{box-shadow:0 0 14px rgba(201,166,95,.25),0 0 24px rgba(201,166,95,.15)}}
+@keyframes pulseDevries{0%,100%{box-shadow:0 0 6px rgba(107,94,82,.1)}50%{box-shadow:0 0 14px rgba(107,94,82,.25),0 0 24px rgba(107,94,82,.15)}}
+@keyframes pulseHallett{0%,100%{box-shadow:0 0 6px rgba(180,107,74,.1)}50%{box-shadow:0 0 14px rgba(180,107,74,.25),0 0 24px rgba(180,107,74,.15)}}
+@keyframes pulseHourie{0%,100%{box-shadow:0 0 6px rgba(93,123,93,.1)}50%{box-shadow:0 0 14px rgba(93,123,93,.25),0 0 24px rgba(93,123,93,.15)}}
+@keyframes pulseGrp{0%,100%{box-shadow:0 0 6px rgba(212,168,83,.14)}50%{box-shadow:0 0 14px rgba(212,168,83,.25),0 0 24px rgba(212,168,83,.15)}}
+@keyframes pulseInlaw{0%,100%{box-shadow:0 0 6px rgba(156,143,169,.1)}50%{box-shadow:0 0 14px rgba(156,143,169,.25),0 0 24px rgba(156,143,169,.15)}}
+@keyframes pulseStone{0%,100%{box-shadow:0 0 6px rgba(107,94,82,.1)}50%{box-shadow:0 0 14px rgba(107,94,82,.25),0 0 24px rgba(107,94,82,.15)}}
+@keyframes pulseBayard{0%,100%{box-shadow:0 0 8px rgba(224,82,92,.2)}50%{box-shadow:0 0 16px rgba(224,82,92,.35),0 0 28px rgba(224,82,92,.2)}}
+.cnode.fl-setter{animation:pulseSetter 8s ease-in-out infinite}
+.cnode.fl-riggs{animation:pulseRiggs 9s ease-in-out 0.5s infinite}
+.cnode.fl-spence{animation:pulseSpence 8.5s ease-in-out 1s infinite}
+.cnode.fl-hamilton{animation:pulseHamilton 8s ease-in-out 0.3s infinite}
+.cnode.fl-hallett{animation:pulseHallett 9s ease-in-out 0.8s infinite}
+.cnode.fl-hourie{animation:pulseHourie 8.5s ease-in-out 0.2s infinite}
+.cnode.fl-king{animation:pulseKing 9s ease-in-out 0.6s infinite}
+.cnode.fl-devries{animation:pulseDevries 8s ease-in-out 0.4s infinite}
+.cnode.fl-grp{animation:pulseGrp 7s ease-in-out 0.1s infinite}
+.cnode.fl-stone{animation:pulseStone 10s ease-in-out 0.7s infinite}
+.cnode.fl-inlaw{animation:pulseInlaw 9s ease-in-out 0.9s infinite}
+.cnode.fl-bayard{animation:pulseBayard 6s ease-in-out infinite}
 .cnode .sp{display:inline-block;margin-top:2px;background:rgba(214,168,83,.14);color:var(--gold);font-size:8px;font-weight:700;letter-spacing:.3px;padding:1px 5px;border-radius:6px}
 .cnode .n1,.cnode .n3{font-family:'Cinzel',serif;font-size:12px;color:var(--cream);line-height:1.2;font-weight:600}
 .cnode .n2{font-size:13px;color:var(--gold);line-height:1.15}
@@ -1015,7 +1163,16 @@ function drawTree(){
   // Each child gets its OWN connector (down from the bar, over, down into the box)
   // so no two families ever share a rail that reads as one shared parent.
   const PW=T.pw, PH=T.ph, RH=T.rowh;
-  const RAIL='#A99BD9', MAR='#E8B45A';
+  // organic earthy colours: marriage bars warm gold, child connectors per family-line
+  const RAIL='#A99BD9', MAR='#C9A66F';
+  // family-line colour lookup (must match CSS fl-* classes)
+  const lineColor = {
+    'fl-setter':'#7B5A42','fl-riggs':'#A66E4E','fl-spence':'#4A6B3F',
+    'fl-hamilton':'#4A6B3F','fl-king':'#C9A66F','fl-devries':'#6B5E52',
+    'fl-hallett':'#B46B4A','fl-hourie':'#5D7B5D','fl-bayard':'#E0525C',
+    'fl-grp':'#D4A853','fl-inlaw':'#9C8FA9','fl-stone':'#6B5E52'
+  };
+  function lineC(pid){var c=T.faclass&&T.faclass[pid];return c?lineColor[c]||'#6B5E52':'#6B5E52';}
   const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
   T.fams.forEach(f=>{
     const n1=nodeById(f.s1), n2=nodeById(f.s2);
@@ -1032,9 +1189,10 @@ function drawTree(){
       kids.forEach((k,i)=>{
         const cx=k.x+k.w/2, ky=k.y+k.h/2;
         const midY=dropYs[i];
-        seg(barx, y0, barx, midY, RAIL, 3.5);               // down from bar
-        seg(barx, midY, cx, midY, RAIL, 3.5);               // over to child x
-        seg(cx, midY, cx, ky, RAIL, 3.5);                   // down into child box
+        var kidColor=lineC(k.pid);
+        seg(barx, y0, barx, midY, kidColor, 3.5);             // down from bar (family-line colour)
+        seg(barx, midY, cx, midY, kidColor, 3.5);             // over to child x
+        seg(cx, midY, cx, ky, kidColor, 3.5);                 // down into child box
       });
     }
   });
@@ -1052,7 +1210,7 @@ function drawTree(){
         const x1=cxF(f1), x2=cxF(f2);
         const y1=f1.y+PH, y2=f2.y+PH;
         const mid=(y1+y2)/2;
-        seg(x1,y1,x1,mid,RAIL,3.5);seg(x1,mid,x2,mid,RAIL,3.5);seg(x2,mid,x2,y2,RAIL,3.5);
+        seg(x1,y1,x1,mid,MAR,3);seg(x1,mid,x2,mid,MAR,3);seg(x2,mid,x2,y2,MAR,3);
       }
     }
   });
@@ -1061,7 +1219,7 @@ function drawTree(){
     const p=people[n.pid];
     if(!p)return;
     const div=document.createElement('div');
-    div.className='cnode'+(n.you?' you':'')+(p.inlaw?' inlaw':'');
+    div.className='cnode'+(n.you?' you':'')+(p.inlaw?' inlaw':'')+(T.faclass&&T.faclass[n.pid]?' '+T.faclass[n.pid]:'');
     div.style.left=n.x+'px';div.style.top=n.y+'px';div.style.width=n.w+'px';div.style.height=n.h+'px';
     let h='';
     if(p.group){

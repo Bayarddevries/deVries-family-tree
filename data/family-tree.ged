@@ -1,0 +1,1190 @@
+0 HEAD
+1 SOUR deVries-Lau Family Tree
+1 GEDC
+2 VERS 5.5.1
+2 FORM Lineage-Linked
+1 CHAR UTF-8
+0 @IP001@ INDI
+1 NAME James Spence Sr
+1 SEX M
+1 BIRT
+2 DATE ABT c1753
+1 DEAT
+2 DATE ABT 1795
+1 NOTE Orkney-born HBC voyageur
+0 @IP002@ INDI
+1 NAME Margaret 'Nestichio' Batt
+1 SEX F
+1 BIRT
+2 DATE ABT 1757
+1 DEAT
+2 DATE ABT 1829
+1 NOTE DIRECT · the Métis matriarch · dau. of Isaac Batt + a Cree woman · m. James Spence Sr · d.1829 Red River
+0 @IP003@ INDI
+1 NAME James Spence Jr
+1 SEX M
+1 BIRT
+2 DATE ABT c1782
+1 DEAT
+2 DATE ABT 1857
+1 NOTE HBC tailor, Red River 1818
+0 @IP004@ INDI
+1 NAME Andrew Spence
+1 SEX M
+1 BIRT
+2 DATE ABT 1786
+0 @IP005@ INDI
+1 NAME George Spence Sr
+1 SEX M
+1 BIRT
+2 DATE ABT 1792
+1 NOTE Ancestor of Grove family of Selkirk
+0 @IP006@ INDI
+1 NAME Margaret 'Peggy' Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1795
+1 DEAT
+2 DATE ABT 1868
+1 NOTE DIRECT · Spence line A
+0 @IP007@ INDI
+1 NAME Andrew Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1777
+1 DEAT
+2 DATE ABT 1870
+1 NOTE Orkney HBC voyageur
+0 @IP008@ INDI
+1 NAME James Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1810
+0 @IP009@ INDI
+1 NAME Margaret Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1813
+0 @IP010@ INDI
+1 NAME George Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1815
+1 DEAT
+2 DATE ABT 1899
+1 NOTE son of Andrew Setter + Peggy Spence · m1 Isabella Kennedy, m2 Jessie Ellen Campbell
+0 @IP011@ INDI
+1 NAME Isabella 'Bella' Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1816
+0 @IP012@ INDI
+1 NAME Elizabeth Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1822
+0 @IP013@ INDI
+1 NAME Ann Setter
+1 BIRT
+2 DATE ABT 1825
+0 @IP014@ INDI
+1 NAME Mary Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1830
+0 @IP015@ INDI
+1 NAME Thomas Alexander Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1831
+0 @IP016@ INDI
+1 NAME John Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1832
+0 @IP017@ INDI
+1 NAME Catherine Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1837
+0 @IP018@ INDI
+1 NAME Isabella Kennedy
+1 SEX F
+1 BIRT
+2 DATE ABT 1820
+1 DEAT
+2 DATE ABT 1846
+0 @IP019@ INDI
+1 NAME Jessie Ellen Campbell
+1 SEX F
+1 BIRT
+2 DATE ABT 1824
+1 DEAT
+2 DATE ABT 1912
+1 NOTE 2nd wife of George Setter (m. after Isabella d.1846) · mother of Roderick McKenzie Setter
+0 @IP020@ INDI
+1 NAME John James Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1837
+0 @IP021@ INDI
+1 NAME Caroline Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1840
+0 @IP022@ INDI
+1 NAME Elizabeth Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1842
+1 NOTE → married Premier John Norquay
+0 @IP023@ INDI
+1 NAME Duncan Richard Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1852
+0 @IP024@ INDI
+1 NAME Colin Campbell Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1854
+0 @IP025@ INDI
+1 NAME Roderick McKenzie Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1856
+1 NOTE son of George Setter + Jessie Ellen Campbell · m. Sarah Ann Howrie · DIRECT (line A)
+0 @IP026@ INDI
+1 NAME Alexander Hunter Murray Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1858
+0 @IP027@ INDI
+1 NAME George William Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1861
+1 DEAT
+2 DATE ABT 1874
+1 NOTE twin, d. age 13
+0 @IP028@ INDI
+1 NAME Ellen Madeleine 'Nellie' Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1861
+1 DEAT
+2 DATE ABT 1874
+1 NOTE twin, d. age 13
+0 @IP029@ INDI
+1 NAME Jane Morwick
+1 SEX F
+1 BIRT
+2 DATE ABT 1794
+1 DEAT
+2 DATE ABT 1874
+1 NOTE née Morwick, wid. Norquay · grandmother of Premier John Norquay
+0 @IP030@ INDI
+1 NAME David Spence
+1 SEX M
+1 BIRT
+2 DATE ABT 1824
+1 DEAT
+2 DATE ABT 1885
+1 NOTE FIRST MLA Poplar Point 1870-74 · Convention of Forty delegate (Ste. Anne's) · m. Catherine Hallett 1844 · d.1885 (accidental shooting)
+0 @IP031@ INDI
+1 NAME Joseph Spence
+1 SEX M
+1 BIRT
+2 DATE ABT 1826
+0 @IP032@ INDI
+1 NAME Catherine Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1829
+0 @IP033@ INDI
+1 NAME Catherine Hallett
+1 SEX F
+1 BIRT
+2 DATE ABT 1824
+1 DEAT
+2 DATE ABT 1880
+1 NOTE dau. of Henry Hallett + Catherine Parenteau · m. David Spence 15 Feb 1844 · scrip 1876 · d.1880
+0 @IP034@ INDI
+1 NAME John 'Jake' Spence
+1 SEX M
+1 BIRT
+2 DATE ABT 1848
+1 NOTE m. Ellen McNab
+0 @IP035@ INDI
+1 NAME Ellen Anderson Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1853
+1 NOTE m. George Brown
+0 @IP036@ INDI
+1 NAME Charles David Spence
+1 BIRT
+2 DATE ABT 1857
+1 NOTE m. 'Eliza' Foulds
+0 @IP037@ INDI
+1 NAME Jane Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1859
+1 NOTE m. William Folster
+0 @IP038@ INDI
+1 NAME Mary Ann Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1861
+1 DEAT
+2 DATE ABT 1930
+1 NOTE DIRECT · Spence line B
+0 @IP039@ INDI
+1 NAME Harriet Spence
+1 SEX F
+1 BIRT
+2 DATE ABT 1863
+1 NOTE m. Peter Henry Wishart
+0 @IP040@ INDI
+1 NAME William 'Bill' Spence
+1 SEX M
+1 BIRT
+2 DATE ABT 1866
+1 NOTE m. Martha McNab
+0 @IP041@ INDI
+1 NAME Ernest Charles Riggs
+1 BIRT
+2 DATE ABT 1859
+1 NOTE son of Harmon M. Riggs + Amelia M. Williams
+0 @IP042@ INDI
+1 NAME Ella Alberta Riggs
+1 SEX F
+1 BIRT
+2 DATE ABT c1880s
+1 NOTE DIRECT · Spence line B
+0 @IP043@ INDI
+1 NAME Alan Setter
+1 SEX M
+1 BIRT
+2 DATE ABT 1884
+1 DEAT
+2 DATE ABT 1964
+1 NOTE DIRECT · Spence line A · also spelled 'Sutter' · son of Roderick McKenzie Setter + Sarah Ann Howrie
+0 @IP044@ INDI
+1 NAME Doris A. Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1912
+1 DEAT
+2 DATE ABT 2006
+1 NOTE DIRECT · b. 24 Dec 1912 Portage la Prairie · m. Lawrence 29 Dec 1932 Tisdale SK · d. 23 Apr 2006
+0 @IP045@ INDI
+1 NAME Lawrence Donald Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1912
+1 DEAT
+2 DATE ABT 1984
+1 NOTE b. 15 Jun 1912 Tisdale SK · d. 5 Feb 1984 Flin Flon · son of Guy Wentworth Hamilton + Ethel Rose King · also 'Laurence'
+0 @IP046@ INDI
+1 NAME Mavis Irene Hamilton
+1 SEX F
+1 BIRT
+2 DATE ABT 1933
+1 DEAT
+2 DATE ABT 2020
+1 NOTE DIRECT · b. 1 Sep 1933 Tisdale SK · d. 26 Aug 2020 · m. Robert 'Bob' Lau · only daughter of 6 · moved to Flin Flon age 6
+0 @IP047@ INDI
+1 NAME Robert Lau
+1 NOTE maternal grandfather
+0 @IP048@ INDI
+1 NAME Tracy Diane Lau
+1 SEX F
+1 NOTE b. Flin Flon MB · DIRECT
+0 @IP049@ INDI
+1 NAME Bryon Edward deVries
+1 BIRT
+2 DATE ABT 1954
+1 DEAT
+2 DATE ABT 2019
+1 NOTE father · b. 17 Jul 1954 · d. 13 Oct 2019 · HR Director Sunrise School Division · son of Gerhard de Vries + Geeske Oltrop
+0 @IP050@ INDI
+1 NAME Bayard deVries
+1 SEX F
+1 NOTE YOU · son of Tracy + Bryon · m. Paula · father of Grover · brother of Ashley
+0 @IP051@ INDI
+1 NAME Premier John Norquay
+1 BIRT
+2 DATE ABT 1841
+1 DEAT
+2 DATE ABT 1889
+1 NOTE Manitoba's first Métis premier (1878-87) · via Elizabeth Setter
+0 @IP052@ INDI
+1 NAME Elwyn Setter
+1 NOTE child of Alan Setter + Ella Riggs
+0 @IP053@ INDI
+1 NAME Erma Ann Setter
+1 SEX F
+1 BIRT
+2 DATE ABT 1910
+1 NOTE child of Alan Setter + Ella Riggs
+0 @IP054@ INDI
+1 NAME Clayton N. Setter
+1 BIRT
+2 DATE ABT 1917
+1 DEAT
+2 DATE ABT 1975
+1 NOTE child of Alan Setter + Ella Riggs
+0 @IP055@ INDI
+1 NAME Alan Guy Hamilton
+1 SEX M
+1 NOTE son of Doris + Laurence
+0 @IP056@ INDI
+1 NAME Daniel Hamilton
+1 NOTE son of Doris + Laurence
+0 @IP057@ INDI
+1 NAME Patrick Hamilton
+1 NOTE son of Doris + Laurence
+0 @IP058@ INDI
+1 NAME Wesley C. Hamilton
+1 NOTE son of Doris + Laurence
+0 @IP059@ INDI
+1 NAME Harley Hamilton
+1 BIRT
+2 DATE ABT 1934
+1 DEAT
+2 DATE ABT 2001
+1 NOTE son of Doris + Lawrence
+0 @IP060@ INDI
+1 NAME Sarah Ann Hourie
+1 SEX F
+1 BIRT
+2 DATE ABT 1860
+1 DEAT
+2 DATE ABT 1944
+1 NOTE also 'Howrie' · wife of Roderick McKenzie Setter (m. 3 Jan 1879, High Bluff) · b. 8 Dec 1860, d. 19 May 1944 · dau. of Philip Hourie + Euphemia Cook Halcro
+0 @IP061@ INDI
+1 NAME Guy Wentworth Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1882
+1 DEAT
+2 DATE ABT 1946
+1 NOTE b. 26 Nov 1882 Beautiful Plains MB · d. 13 Jun 1946 Tisdale SK · Lawrence's father
+0 @IP062@ INDI
+1 NAME Ethel Rose King
+1 SEX F
+1 BIRT
+2 DATE ABT 1892
+1 DEAT
+2 DATE ABT 1982
+1 NOTE b. 17 Apr 1892 Neche ND, USA · d. 16 Jun 1982 SK · Lawrence's mother
+0 @IP063@ INDI
+1 NAME Jean Margaret Hamilton
+1 BIRT
+2 DATE ABT 1915
+1 DEAT
+2 DATE ABT 2000
+1 NOTE sister of Lawrence
+0 @IP064@ INDI
+1 NAME Madeleine Phyllis Hamilton
+1 BIRT
+2 DATE ABT 1918
+1 DEAT
+2 DATE ABT 2004
+1 NOTE sister of Lawrence
+0 @IP065@ INDI
+1 NAME William Morrison Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1926
+1 DEAT
+2 DATE ABT 1991
+1 NOTE brother of Lawrence
+0 @IP066@ INDI
+1 NAME Vivian Ethel Hamilton
+1 BIRT
+2 DATE ABT 1930
+1 NOTE sister of Lawrence
+0 @IP067@ INDI
+1 NAME Gerhard De Vries
+1 NOTE paternal grandfather · Dutch (Friesland) · homesteaded Lake Dauphin/Turtle River, Ochre River MB
+0 @IP068@ INDI
+1 NAME Geeske Oltrop
+1 NOTE paternal grandmother · 'Geske' · m. Gerhard 4 Oct 1929 Ochre River MB
+0 @IP069@ INDI
+1 NAME John 'Johann' de Vries
+1 SEX M
+1 BIRT
+2 DATE ABT 1936
+1 NOTE b. Ee, Friesland, Netherlands · note: birth year 1936 vs brother Leonard b.1932 (verify eldest)
+0 @IP070@ INDI
+1 NAME Tina de Vries
+1 SEX F
+1 NOTE m. Brenner
+0 @IP071@ INDI
+1 NAME Leonard De Vries
+1 BIRT
+2 DATE ABT 1932
+1 DEAT
+2 DATE ABT 2016
+1 NOTE dairy farmer, Ochre River
+0 @IP072@ INDI
+1 NAME Etta de Vries
+1 SEX F
+1 NOTE m. Hodges
+0 @IP073@ INDI
+1 NAME Annie 'Antje' de Vries
+1 NOTE m. Boerchers
+0 @IP074@ INDI
+1 NAME Margaret de Vries
+1 SEX F
+1 NOTE m. Brink
+0 @IP075@ INDI
+1 NAME Mary de Vries
+1 SEX F
+1 NOTE m. McKean
+0 @IP076@ INDI
+1 NAME Helen de Vries
+1 NOTE m. Claeys
+0 @IP077@ INDI
+1 NAME Herman de Vries
+1 NOTE brother of Bryon
+0 @IP078@ INDI
+1 NAME Gerald de Vries
+1 NOTE brother of Bryon
+0 @IP079@ INDI
+1 NAME Isaac Batt
+1 BIRT
+2 DATE ABT c1725
+1 DEAT
+2 DATE ABT 1791
+1 NOTE English HBC fur-trader · b. c1725 Hertfordshire, England · d. 1791 near Manchester House · father of Margaret 'Nestichio' Batt
+0 @IP080@ INDI
+1 NAME Cree matriarch (Nikawiy)
+1 NOTE unnamed Cree mother of Margaret 'Nestichio' Batt · 'Nikawiy' = Cree for 'my mother' · the matrilineal Indigenous/Métis root
+0 @IP081@ INDI
+1 NAME Dantzick Batt
+1 NOTE Isaac Batt's father (genealogy source, verify)
+0 @IP082@ INDI
+1 NAME Sarah Lindsel
+1 SEX F
+1 NOTE Isaac Batt's mother (genealogy source, verify)
+0 @IP083@ INDI
+1 NAME Ashley deVries
+1 NOTE Bayard's sister · m. Noel Brown
+0 @IP084@ INDI
+1 NAME Noel Brown
+1 NOTE Ashley's husband
+0 @IP085@ INDI
+1 NAME Hudson Brown
+1 NOTE son of Ashley + Noel
+0 @IP086@ INDI
+1 NAME Oliver Brown
+1 NOTE son of Ashley + Noel (twin)
+0 @IP087@ INDI
+1 NAME Ellis Brown
+1 NOTE son of Ashley + Noel (twin)
+0 @IP088@ INDI
+1 NAME Paula Fleury
+1 SEX F
+1 NOTE Bayard's wife
+0 @IP089@ INDI
+1 NAME Grover deVries
+1 NOTE Bayard & Paula's son
+0 @IP090@ INDI
+1 NAME Wendy Provins
+1 NOTE Mavis's daughter · Diane's sister
+0 @IP091@ INDI
+1 NAME Gordon Lau
+1 NOTE Mavis's son · Diane's brother
+0 @IP100@ INDI
+1 NAME Jane Buchanan
+1 SEX F
+1 BIRT
+2 DATE ABT 1859
+1 DEAT
+2 DATE ABT 1931
+1 NOTE Guy Wentworth Hamilton's mother (1859-1931).
+0 @IP101@ INDI
+1 NAME Thomas Allan King
+1 SEX M
+1 BIRT
+2 DATE ABT 1864
+1 DEAT
+2 DATE ABT 1954
+1 NOTE Ethel Rose King's father (1864-1954); Ontario (SD&G) settler line.
+0 @IP102@ INDI
+1 NAME Catherine Ann Clark
+1 SEX F
+1 BIRT
+2 DATE ABT 1867
+1 DEAT
+2 DATE ABT 1956
+1 NOTE Ethel Rose King's mother (1867-1956), m. Thomas Allan King 17 Mar 1884.
+0 @IP103@ INDI
+1 NAME Harmon Miles Riggs
+1 BIRT
+2 DATE ABT 1834
+1 DEAT
+2 DATE ABT 1874
+1 NOTE Ernest Charles Riggs's father (1834-1874), m. Amelia Williams 11 Nov 1858, Jackson, WI; family migrated US -> Red River.
+0 @IP104@ INDI
+1 NAME Amelia Williams
+1 SEX F
+1 NOTE Ernest Charles Riggs's mother (Amelia Williams), m. Harmon Miles Riggs 1858.
+0 @IP105@ INDI
+1 NAME Engbertus de Vries
+1 BIRT
+2 DATE ABT 1839
+1 NOTE Leewe de Vries's father (b. 1839, East Frisia, Germany).
+0 @IP106@ INDI
+1 NAME Maria Geerds Meinders
+1 SEX F
+1 BIRT
+2 DATE ABT 1836
+1 DEAT
+2 DATE ABT 1872
+1 NOTE Leewe de Vries's mother (1836-1872).
+0 @IP107@ INDI
+1 NAME David J. Riggs Jr
+1 SEX M
+1 BIRT
+2 DATE ABT 1804
+1 DEAT
+2 DATE ABT 1850
+1 NOTE Harmon Miles Riggs's father (1804-1850); b. Ontario, NY.
+0 @IP108@ INDI
+1 NAME Catherine M. Hendricks
+1 SEX F
+1 NOTE Harmon Miles Riggs's mother (Catherine M. Hendricks).
+0 @IP109@ INDI
+1 NAME William King
+1 SEX M
+1 BIRT
+2 DATE ABT 1817
+1 DEAT
+2 DATE ABT 1898
+1 NOTE Thomas Allan King's father (1817-1898); Ontario (SD&G) settler line.
+0 @IP110@ INDI
+1 NAME Sarah Burke
+1 SEX F
+1 BIRT
+2 DATE ABT 1829
+1 DEAT
+2 DATE ABT 1909
+1 NOTE Thomas Allan King's mother (1829-1909).
+0 @IP111@ INDI
+1 NAME Joseph Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1821
+1 DEAT
+2 DATE ABT 1889
+1 NOTE John James Hamilton's father (1821-1889); married Mary Busby 24 Feb 1848, Mornington, Perth Co., Ontario.
+0 @IP112@ INDI
+1 NAME Mary Busby
+1 SEX F
+1 BIRT
+2 DATE ABT 1831
+1 DEAT
+2 DATE ABT 1921
+1 NOTE John James Hamilton's mother (1831-1921).
+0 @IP113@ INDI
+1 NAME John Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1791
+1 DEAT
+2 DATE ABT 1857
+1 NOTE Joseph Hamilton's father; the Irish immigrant generation from Glenedagh, Co. Mayo, Ireland (1791-1857).
+0 @IP114@ INDI
+1 NAME Eleanor Jane Preston
+1 BIRT
+2 DATE ABT 1798
+1 DEAT
+2 DATE ABT 1884
+1 NOTE Joseph Hamilton's mother (1798-1884).
+0 @IP115@ INDI
+1 NAME John Buchanan
+1 SEX M
+1 BIRT
+2 DATE ABT 1829
+1 DEAT
+2 DATE ABT 1909
+1 NOTE Jane Buchanan's father (1829/1831-1909), b. Omagh, Co. Tyrone, Ireland; d. Langford/Neepawa, MB.
+0 @IP116@ INDI
+1 NAME Isabella Watson
+1 SEX F
+1 BIRT
+2 DATE ABT 1837
+1 DEAT
+2 DATE ABT 1917
+1 NOTE Jane Buchanan's mother (1837-1917); Scottish parents (James Watson Sr & Elizabeth Linnen).
+0 @IP117@ INDI
+1 NAME Philip Hourie
+1 SEX M
+1 BIRT
+2 DATE ABT 1833
+1 DEAT
+2 DATE ABT 1914
+1 NOTE Sarah Ann Hourie's father (1833-1914).
+0 @IP118@ INDI
+1 NAME Euphemia Cook Halcro
+1 SEX F
+1 BIRT
+2 DATE ABT 1839
+1 DEAT
+2 DATE ABT 1917
+1 NOTE Sarah Ann Hourie's mother (1839-1917).
+0 @IP119@ INDI
+1 NAME John Hourie
+1 SEX M
+1 BIRT
+2 DATE ABT 1779
+1 DEAT
+2 DATE ABT 1857
+1 NOTE Philip Hourie's father; the Orkney patriarch from South Ronaldsay (1779-1857), an HBC man. Same Orkney x Indigenous ethnogenesis as the Spence/Setter lines.
+0 @IP120@ INDI
+1 NAME Margaret Bird
+1 SEX F
+1 BIRT
+2 DATE ABT 1787
+1 DEAT
+2 DATE ABT 1847
+1 NOTE Philip Hourie's mother (1787-1847); a Shoshoni / 'Snake' woman adopted by Chief Factor James Curtis Bird. Needs primary confirmation.
+0 @IP121@ INDI
+1 NAME Henry Hallett Jr
+1 SEX M
+1 BIRT
+2 DATE ABT 1799
+1 DEAT
+2 DATE ABT 1871
+1 NOTE Catherine Hallett's father (c.1799-1871); married Catherine Parenteau 18 Oct 1824, St. John's.
+0 @IP122@ INDI
+1 NAME Catherine Parenteau
+1 SEX F
+1 BIRT
+2 DATE ABT c1799
+1 DEAT
+2 DATE ABT 1857
+1 NOTE Catherine Hallett's mother (c.1799-1857, Metis). Father = Jean Baptiste Parenteau (from Quebec), confirmed by Barkwell + Red River Ancestry - this corrects the earlier 'Joseph V. Parenteau + Suzanne C
+0 @IP123@ INDI
+1 NAME Jean Baptiste Parenteau
+1 NOTE Catherine Parenteau's father, from Quebec. Confirmed by Barkwell's Metis Dictionary of Biography + Red River Ancestry. The earlier 'Joseph V. Parenteau + Suzanne Cree' lead belongs to a different fami
+0 @IP124@ INDI
+1 NAME Unknown (Parenteau)
+1 NOTE Catherine Parenteau's mother - not yet identified.
+0 @IP125@ INDI
+1 NAME Henry Hallett Sr
+1 SEX M
+1 BIRT
+2 DATE ABT 1773
+1 DEAT
+2 DATE ABT 1844
+1 NOTE Hallett patriarch (bapt. 15 Apr 1773, Battersea; d. 9 Mar 1844, St John's). Father of Henry Hallett Jr and William Peter Hallett.
+0 @IP126@ INDI
+1 NAME Catherine Crise (Cree)
+1 SEX F
+1 NOTE Henry Hallett Sr's wife, mother of Henry Jr. Spelling varies (Crise / Cree / Tenanse) - needs primary confirmation.
+0 @IP127@ INDI
+1 NAME William Peter Hallett
+1 SEX M
+1 BIRT
+2 DATE ABT c1811
+1 DEAT
+2 DATE ABT 1873
+1 NOTE Catherine Hallett's uncle (Henry Jr's younger brother). Buffalo-hunt captain, leader / Chief Scout of the 49th Rangers (Int'l Boundary Commission 1872-73), opponent of Riel in 1869-70. m. Maria Pruden
+0 @IP128@ INDI
+1 NAME Maria Pruden
+1 SEX F
+1 BIRT
+2 DATE ABT 1813
+1 DEAT
+2 DATE ABT 1883
+1 NOTE Wife of William Peter Hallett (m. 6 Sep 1841, Grand Rapids / St Andrews).
+0 @IP129@ INDI
+1 NAME George Brown
+1 SEX M
+1 BIRT
+2 DATE ABT 1853
+1 DEAT
+2 DATE ABT 1936
+1 NOTE Ellen Anderson Spence's husband (m. 1873). Son of Henry Brown & Isabella Slater.
+0 @IP130@ INDI
+1 NAME Peter Henry Wishart
+1 SEX M
+1 BIRT
+2 DATE ABT 1862
+1 DEAT
+2 DATE ABT 1936
+1 NOTE Harriet Spence's husband (m. 1887).
+0 @IP131@ INDI
+1 NAME William Folster
+1 SEX M
+1 NOTE Jane Spence's husband (m. 1879). Children not yet confirmed (possible conflation with a St Clements Folster family).
+0 @IP132@ INDI
+1 NAME Jemima Hourie
+1 SEX F
+1 NOTE Wife of Colin Campbell Setter (P024). Sarah Ann Hourie's sister - two Hourie sisters married two Setter brothers.
+0 @IP133@ INDI
+1 NAME Archibald George Brown
+1 BIRT
+2 DATE ABT 1877
+1 DEAT
+2 DATE ABT 1937
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP134@ INDI
+1 NAME Alexander Brown
+1 SEX M
+1 BIRT
+2 DATE ABT 1878
+1 DEAT
+2 DATE ABT 1923
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP135@ INDI
+1 NAME Daniel David Brown
+1 BIRT
+2 DATE ABT 1880
+1 DEAT
+2 DATE ABT 1956
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP136@ INDI
+1 NAME Jane Brown
+1 SEX F
+1 BIRT
+2 DATE ABT 1882
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP137@ INDI
+1 NAME Richard A. Brown
+1 BIRT
+2 DATE ABT 1884
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP138@ INDI
+1 NAME Ida Brown
+1 SEX F
+1 BIRT
+2 DATE ABT 1886
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP139@ INDI
+1 NAME Clara M. E. Brown
+1 SEX F
+1 BIRT
+2 DATE ABT 1889
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP140@ INDI
+1 NAME Margaret Brown
+1 SEX F
+1 BIRT
+2 DATE ABT 1891
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP141@ INDI
+1 NAME Flora C. Brown
+1 SEX F
+1 BIRT
+2 DATE ABT 1893
+1 DEAT
+2 DATE ABT 1899
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP142@ INDI
+1 NAME Mariam Brown
+1 BIRT
+2 DATE ABT 1895
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP143@ INDI
+1 NAME Lawrence Brown
+1 SEX M
+1 BIRT
+2 DATE ABT 1898
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP144@ INDI
+1 NAME William Archibald Brown
+1 SEX M
+1 BIRT
+2 DATE ABT 1899
+1 NOTE Child of Ellen Anderson Spence + George Brown.
+0 @IP145@ INDI
+1 NAME Florence Mildred Wishart
+1 BIRT
+2 DATE ABT 1887
+1 NOTE m. George Augustus Langford 1913
+0 @IP146@ INDI
+1 NAME Henry Allen Wishart
+1 SEX M
+1 BIRT
+2 DATE ABT 1889
+1 NOTE 'Harry' · m. Kathleen Maggie Payne 1920 · WWI 1918
+0 @IP147@ INDI
+1 NAME Edgar Wolseley Franklin Wishart
+1 BIRT
+2 DATE ABT 1891
+1 NOTE 'Ted' · m. Mary Ethel Neilson 1925 · WWI 1918
+0 @IP148@ INDI
+1 NAME Edna Wishart
+1 SEX F
+1 BIRT
+2 DATE ABT 1896
+1 NOTE m. Harold 'Bertie' Cleave 1926
+0 @IP149@ INDI
+1 NAME Ruby Emma Elizabeth Wishart
+1 BIRT
+2 DATE ABT 1897
+0 @IP150@ INDI
+1 NAME Edith Jane Wishart
+1 BIRT
+2 DATE ABT 1900
+1 NOTE m. Thomas Hoy
+0 @IP151@ INDI
+1 NAME Herbert Charles Wishart
+1 BIRT
+2 DATE ABT 1901
+1 NOTE farmer, Makinak
+0 @IP152@ INDI
+1 NAME Antoine (Edwin) Hallett
+1 SEX M
+1 BIRT
+2 DATE ABT 1823
+1 DEAT
+2 DATE ABT 1853
+0 @IP153@ INDI
+1 NAME Esther Justine Hallett
+1 SEX F
+1 BIRT
+2 DATE ABT 1824
+1 DEAT
+2 DATE ABT 1869
+1 NOTE m. Klyne
+0 @IP154@ INDI
+1 NAME Henry Hallett III
+1 SEX M
+1 BIRT
+2 DATE ABT 1827
+1 DEAT
+2 DATE ABT 1869
+1 NOTE 'Andrew'
+0 @IP155@ INDI
+1 NAME Charlotte Hallett
+1 SEX F
+1 BIRT
+2 DATE ABT 1834
+1 NOTE m. McNabb
+0 @IP156@ INDI
+1 NAME Jane Hallett
+1 SEX F
+1 BIRT
+2 DATE ABT 1839
+1 DEAT
+2 DATE ABT 1874
+1 NOTE also recorded as 'Jane Baubee' (1841-79) - possible source duplicate
+0 @IP157@ INDI
+1 NAME Anne Hallett
+1 SEX F
+1 BIRT
+2 DATE ABT 1846
+1 NOTE m. Bird
+0 @IP900@ INDI
+1 NAME George & Ellen Brown
+1 SEX M
+1 NOTE 12 children (each has a full profile in the People tab): Archibald George (1877-1937), Alexander (1878-1923), Daniel David (1880-1956), Jane (1882-), Richard A. (1884-), Ida (1886-), Clara M.E. (1889-
+0 @IP901@ INDI
+1 NAME Peter & Harriet Wishart
+1 SEX M
+1 NOTE 7 children (each has a full profile in the People tab): Florence Mildred (1887-, m. George Augustus Langford 1913), Henry Allen 'Harry' (1889-, m. Kathleen Payne 1920), Edgar Wolseley 'Ted' (1891-, m.
+0 @IP92@ INDI
+1 NAME James Morwick
+1 SEX M
+1 BIRT
+2 DATE ABT c1778
+1 DEAT
+2 DATE ABT 1865
+1 NOTE Jane Morwick's father (c.1778-1865), Kirkwall, Orkney. Confirmed via Red River Ancestry + scrip records. Corrects the earlier 'Catherine Dungas' conflation.
+0 @IP93@ INDI
+1 NAME Sarah Sabiston
+1 SEX F
+1 BIRT
+2 DATE ABT 1800
+1 DEAT
+2 DATE ABT 1872
+1 NOTE Jane Morwick's mother (1800-1872).
+0 @IP94@ INDI
+1 NAME Jan 'John' Oltrop
+1 SEX M
+1 BIRT
+2 DATE ABT 1885
+1 DEAT
+2 DATE ABT 1973
+1 NOTE Geeske Oltrop's father (1885-1973); Dutch/German line, Ochre River RM, MB.
+0 @IP95@ INDI
+1 NAME Antje Von Lengen
+1 SEX F
+1 BIRT
+2 DATE ABT 1885
+1 DEAT
+2 DATE ABT 1961
+1 NOTE Geeske Oltrop's mother (1885-1961).
+0 @IP96@ INDI
+1 NAME Sarah Fowler
+1 SEX F
+1 NOTE Isaac Batt's English wife (m. 1761, Stanstead Abbots, England), who stayed in England. The Metis line descends from Batt's Cree family, not her.
+0 @IP97@ INDI
+1 NAME Leewe de Vries
+1 BIRT
+2 DATE ABT 1862
+1 DEAT
+2 DATE ABT 1926
+1 NOTE Gerhard de Vries's father (8 Dec 1862, Dyksterhusen, East Frisia, Germany; d. 4 May 1926, Germany). East Frisian, not Dutch proper.
+0 @IP98@ INDI
+1 NAME Trienje Pommer
+1 BIRT
+2 DATE ABT 1863
+1 DEAT
+2 DATE ABT 1937
+1 NOTE Gerhard de Vries's mother (13 Sep 1863, Ditzumerhammrich; d. 17 May 1937, Ste. Rose du Lac, MB).
+0 @IP99@ INDI
+1 NAME John James Hamilton
+1 SEX M
+1 BIRT
+2 DATE ABT 1856
+1 DEAT
+2 DATE ABT 1913
+1 NOTE Guy Wentworth Hamilton's father (b. 1856, Mornington Twp, Ontario; d. 1913, Tisdale SK). Irish (Co. Mayo) settler line, not Scottish.
+0 @FU15@ FAM
+1 HUSB @IP079@
+1 WIFE @IP080@
+1 CHIL @IP002@
+0 @FU01@ FAM
+1 HUSB @IP001@
+1 WIFE @IP002@
+1 CHIL @IP003@
+1 CHIL @IP004@
+1 CHIL @IP005@
+1 CHIL @IP006@
+0 @FU02@ FAM
+1 HUSB @IP007@
+1 WIFE @IP006@
+1 CHIL @IP008@
+1 CHIL @IP009@
+1 CHIL @IP010@
+1 CHIL @IP011@
+1 CHIL @IP012@
+1 CHIL @IP013@
+1 CHIL @IP014@
+1 CHIL @IP015@
+1 CHIL @IP016@
+1 CHIL @IP017@
+0 @FU03@ FAM
+1 HUSB @IP010@
+1 WIFE @IP018@
+1 CHIL @IP020@
+1 CHIL @IP021@
+1 CHIL @IP022@
+0 @FU04@ FAM
+1 HUSB @IP003@
+1 WIFE @IP029@
+1 CHIL @IP030@
+1 CHIL @IP031@
+1 CHIL @IP032@
+0 @FU05@ FAM
+1 HUSB @IP030@
+1 WIFE @IP033@
+1 CHIL @IP034@
+1 CHIL @IP035@
+1 CHIL @IP036@
+1 CHIL @IP037@
+1 CHIL @IP038@
+1 CHIL @IP039@
+1 CHIL @IP040@
+0 @FU06@ FAM
+1 HUSB @IP041@
+1 WIFE @IP038@
+1 CHIL @IP042@
+0 @FU07@ FAM
+1 HUSB @IP043@
+1 WIFE @IP042@
+1 CHIL @IP052@
+1 CHIL @IP053@
+1 CHIL @IP044@
+1 CHIL @IP054@
+0 @FU08@ FAM
+1 HUSB @IP044@
+1 WIFE @IP045@
+1 CHIL @IP055@
+1 CHIL @IP056@
+1 CHIL @IP046@
+1 CHIL @IP057@
+1 CHIL @IP058@
+1 CHIL @IP059@
+0 @FU09@ FAM
+1 HUSB @IP047@
+1 WIFE @IP046@
+1 CHIL @IP048@
+1 CHIL @IP090@
+1 CHIL @IP091@
+0 @FU10@ FAM
+1 HUSB @IP048@
+1 WIFE @IP049@
+1 CHIL @IP050@
+1 CHIL @IP083@
+0 @FU11@ FAM
+1 HUSB @IP022@
+1 WIFE @IP051@
+0 @FU12@ FAM
+1 HUSB @IP025@
+1 WIFE @IP060@
+1 CHIL @IP043@
+0 @FU13@ FAM
+1 HUSB @IP061@
+1 WIFE @IP062@
+1 CHIL @IP045@
+1 CHIL @IP063@
+1 CHIL @IP064@
+1 CHIL @IP065@
+1 CHIL @IP066@
+0 @FU14@ FAM
+1 HUSB @IP067@
+1 WIFE @IP068@
+1 CHIL @IP069@
+1 CHIL @IP070@
+1 CHIL @IP071@
+1 CHIL @IP072@
+1 CHIL @IP073@
+1 CHIL @IP074@
+1 CHIL @IP075@
+1 CHIL @IP076@
+1 CHIL @IP077@
+1 CHIL @IP078@
+1 CHIL @IP049@
+0 @FU16@ FAM
+1 HUSB @IP081@
+1 WIFE @IP082@
+1 CHIL @IP079@
+0 @FU17@ FAM
+1 HUSB @IP050@
+1 WIFE @IP088@
+1 CHIL @IP089@
+0 @FU18@ FAM
+1 HUSB @IP083@
+1 WIFE @IP084@
+1 CHIL @IP085@
+1 CHIL @IP086@
+1 CHIL @IP087@
+0 @FU19@ FAM
+1 HUSB @IP010@
+1 WIFE @IP019@
+1 CHIL @IP023@
+1 CHIL @IP024@
+1 CHIL @IP025@
+1 CHIL @IP026@
+1 CHIL @IP027@
+1 CHIL @IP028@
+0 @FU20@ FAM
+1 HUSB @IP92@
+1 WIFE @IP93@
+1 CHIL @IP029@
+0 @FU21@ FAM
+1 HUSB @IP94@
+1 WIFE @IP95@
+1 CHIL @IP068@
+0 @FU23@ FAM
+1 HUSB @IP97@
+1 WIFE @IP98@
+1 CHIL @IP067@
+0 @FU24@ FAM
+1 HUSB @IP99@
+1 WIFE @IP100@
+1 CHIL @IP061@
+0 @FU25@ FAM
+1 HUSB @IP101@
+1 WIFE @IP102@
+1 CHIL @IP062@
+0 @FU26@ FAM
+1 HUSB @IP103@
+1 WIFE @IP104@
+1 CHIL @IP041@
+0 @FU27@ FAM
+1 HUSB @IP105@
+1 WIFE @IP106@
+1 CHIL @IP97@
+0 @FU28@ FAM
+1 HUSB @IP107@
+1 WIFE @IP108@
+1 CHIL @IP103@
+0 @FU29@ FAM
+1 HUSB @IP109@
+1 WIFE @IP110@
+1 CHIL @IP101@
+0 @FU30@ FAM
+1 HUSB @IP113@
+1 WIFE @IP114@
+1 CHIL @IP111@
+0 @FU31@ FAM
+1 HUSB @IP111@
+1 WIFE @IP112@
+1 CHIL @IP99@
+0 @FU32@ FAM
+1 HUSB @IP115@
+1 WIFE @IP116@
+1 CHIL @IP100@
+0 @FU33@ FAM
+1 HUSB @IP117@
+1 WIFE @IP118@
+1 CHIL @IP060@
+0 @FU34@ FAM
+1 HUSB @IP119@
+1 WIFE @IP120@
+1 CHIL @IP117@
+0 @FU35@ FAM
+1 HUSB @IP121@
+1 WIFE @IP122@
+1 CHIL @IP033@
+1 CHIL @IP152@
+1 CHIL @IP153@
+1 CHIL @IP154@
+1 CHIL @IP155@
+1 CHIL @IP156@
+1 CHIL @IP157@
+0 @FU36@ FAM
+1 HUSB @IP123@
+1 WIFE @IP124@
+1 CHIL @IP122@
+0 @FU37@ FAM
+1 HUSB @IP125@
+1 WIFE @IP126@
+1 CHIL @IP121@
+1 CHIL @IP127@
+0 @FU38@ FAM
+1 HUSB @IP127@
+1 WIFE @IP128@
+0 @FU43@ FAM
+1 HUSB @IP035@
+1 WIFE @IP129@
+1 CHIL @IP133@
+1 CHIL @IP134@
+1 CHIL @IP135@
+1 CHIL @IP136@
+1 CHIL @IP137@
+1 CHIL @IP138@
+1 CHIL @IP139@
+1 CHIL @IP140@
+1 CHIL @IP141@
+1 CHIL @IP142@
+1 CHIL @IP143@
+1 CHIL @IP144@
+0 @FU45@ FAM
+1 HUSB @IP037@
+1 WIFE @IP131@
+0 @FU44@ FAM
+1 HUSB @IP039@
+1 WIFE @IP130@
+1 CHIL @IP145@
+1 CHIL @IP146@
+1 CHIL @IP147@
+1 CHIL @IP148@
+1 CHIL @IP149@
+1 CHIL @IP150@
+1 CHIL @IP151@
+0 @FU42@ FAM
+1 HUSB @IP024@
+1 WIFE @IP132@
+0 TRLR
