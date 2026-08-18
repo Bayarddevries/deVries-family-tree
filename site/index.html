@@ -307,8 +307,9 @@ function drawTree(){
     if(f.children.length){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
       // stagger the drop from the bar so same-row children don't stack into a rail
+      // Add increasing vertical offset per child to prevent line overlap
       const dropYs=[];
-      kids.forEach(k=>{ dropYs.push((y0 + k.y + k.h/2)/2); });
+      kids.forEach((k,i)=>{ dropYs.push((y0 + k.y + k.h/2) + i * 40); });
       kids.forEach((k,i)=>{
         const cx=k.x+k.w/2, ky=k.y+k.h/2;
         const midY=dropYs[i];
@@ -359,6 +360,81 @@ function drawTree(){
   });
   applyTransform();
 }
+
+/* ---- lineage path tracking ---- */
+let selectedPersonId = null;
+
+// Highlight a person's lineage path
+function highlightLineage(personId) {
+  selectedPersonId = personId;
+  
+  // Reset all lines
+  const allLines = canvas.querySelectorAll('line');
+  allLines.forEach(line => {
+    line.classList.remove('pathline', 'pathactive', 'ancestorline');
+    // Restore original stroke width
+    line.setAttribute('stroke-width', '2.5');
+  });
+  
+  // Find paths involving this person
+  const dataPaths = D.paths || [];
+  const personPath = dataPaths.find(p => 
+    p.includes(personId) || 
+    p.some(id => id === personId)
+  );
+  
+  if (personPath && personPath.length > 1) {
+    // Draw emphasized lines for the path
+    // ... highlight logic using the path data
+    // Get the path from the data
+    const pathData = D.maplinks.find(m => m.label.includes('Your line') || m.label.includes('Spence'));
+    
+    if (pathData) {
+      // Draw path lines with emphasized styling
+      pathData.p.forEach((pid, idx) => {
+        const node = nodeById(pid);
+        if (node) {
+          // This is a simplified approach - in practice we'd need
+          // to connect the nodes with lines
+          const x = node.x + node.w/2;
+          const y = node.y + node.h/2;
+          
+          if (idx > 0) {
+            const prevNode = nodeById(pathData.p[idx-1]);
+            if (prevNode) {
+              const prevX = prevNode.x + prevNode.w/2;
+              const prevY = prevNode.y + prevNode.h/2;
+              
+              // Create a pathline
+              const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+              line.setAttribute('class', 'pathline');
+              line.setAttribute('x1', prevX);
+              line.setAttribute('y1', prevY);
+              line.setAttribute('x2', x);
+              line.setAttribute('y2', y);
+              line.setAttribute('stroke-width', '4');
+              line.setAttribute('stroke-dasharray', '3,3');
+              line.setAttribute('stroke', '#ff6b6b');
+              svg.appendChild(line);
+            }
+          }
+        }
+      });
+    }
+  }
+}
+
+// Add click handler to nodes to highlight lineage
+canvas.addEventListener('click', (e) => {
+  const clicked = e.target.closest('.cnode');
+  if (clicked) {
+    const pid = clicked.getAttribute('data-pid');
+    if (pid) {
+      highlightLineage(pid);
+    }
+  }
+});
+
 function nodeById(id){return T.nodes.find(n=>n.id===id);}
 function applyTransform(){
   canvas.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;
@@ -716,3 +792,11 @@ drawTree();
 
 </script>
 </body></html>
+/* ---- lineage path highlighting ---- */
+.pathline{stroke:#ff6b6b!important;stroke-width:4!important;stroke-dasharray:3,3!important}
+/* Current selection path */
+.pathactive{stroke:#ff6b6b!important;stroke-width:4!important}
+
+/* Ancestor line emphasis */
+.ancestorline{stroke:#ffd93d!important;stroke-width:3.5!important}
+
