@@ -26,14 +26,21 @@ BAYARD = "P050"
 
 
 def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
-                gap2=GAP2, gap_box=GAP_BOX, collapse=None):
+                gap2=GAP2, gap_box=GAP_BOX, collapse=None, collapse_children=None):
     by_union = {u["id"]: u for u in UNIONS}
     collapse = collapse or {}
+    collapse_children = collapse_children or {}  # {union_id: [child_pid,...] -> collapse into summary_pid}
     if box_w is None:
         box_w = lambda pid: 210 if PEOPLE.get(pid, {}).get("group") else p_w
     eff_children = {u["id"]: ([collapse[u["id"]]] if u["id"] in collapse
                                else list(u.get("children", [])))
                     for u in UNIONS}
+    # For unions in collapse_children, replace listed children with their summary pid
+    for uid, spec in collapse_children.items():
+        if uid in eff_children:
+            children = eff_children[uid]
+            # Remove listed children and add summary pid
+            eff_children[uid] = [c for c in children if c not in spec[0]] + [spec[1]]
 
     # ---- parent-of / spouse-of maps ----
     parent_union_of = {}              # pid -> the union where pid is a child
@@ -136,8 +143,10 @@ def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
     # pulls the parent toward the child's actual position. Damped iteration
     # with overlap constraints prevents collisions. Bidirectional passes (top-down
     # then bottom-up) let convergence propagate through the full tree.
-    _ITER = 20
-    _DAMP = 0.4
+    # Increased from 20->30 iterations and 0.4->0.45 damping to drive ancestral
+    # branches (King, Spence line A) closer to their descendants' positions.
+    _ITER = 30
+    _DAMP = 0.45
     for _relax in range(_ITER):
         for g in sorted(byrow, reverse=True):  # top-down pass
             units = byrow[g]

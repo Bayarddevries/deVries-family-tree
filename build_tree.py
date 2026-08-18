@@ -16,6 +16,15 @@ DATA = json.load(open(os.path.join(HERE, "data", "family-tree.json")))
 PEOPLE = {p["id"]: p for p in DATA["people"]}
 UNIONS = DATA["unions"]
 
+# ---- Remove non-ancestral / duplicate-impact unions ----
+# U03: George Setter (P010) + Isabella Kennedy (P018) — George remarried Jessie Ellen
+# Campbell (P019) and the Mtis line descends through Jessie (Roderick, Alan, ...).
+# Isabella's three children (P020/P021/P022) are non-ancestral collateral and are
+# kept in PEOPLE (People tab / Stories) but not placed in the tree. Removing U03
+# eliminates the duplicate George Setter node so the ancestral line is a single
+# clean trunk. U22 (Sarah Fowler stay-behind) is not added to _extra_unions.
+UNIONS = [u for u in UNIONS if u["id"] not in ("U03", "U22")]
+
 # ---- Verified additions (kept here so data/family-tree.json stays untouched) ----
 # James Morwick + Sarah Sabiston -> parents of Jane Morwick (corrects the 'Catherine Dungas' error)
 # Jan Oltrop + Antje Von Lengen  -> parents of Geeske Oltrop (Ochre River MB, Dutch/German line)
@@ -33,7 +42,6 @@ PEOPLE.setdefault("P96", {"id":"P96","name":"Sarah Fowler","birth":"","death":""
 _extra_unions = [
   {"id":"U20","spouse1":"P92","spouse2":"P93","children":["P029"]},
   {"id":"U21","spouse1":"P94","spouse2":"P95","children":["P068"]},
-  {"id":"U22","spouse1":"P079","spouse2":"P96","children":[]},
 ]
 for _u in _extra_unions:
     if not any(u["id"]==_u["id"] for u in UNIONS): UNIONS.append(_u)
@@ -251,6 +259,12 @@ PEOPLE.setdefault("P900", {"id":"P900","name":"George & Ellen Brown","birth":"",
   "note":"12 children (each has a full profile in the People tab): Archibald George (1877-1937), Alexander (1878-1923), Daniel David (1880-1956), Jane (1882-), Richard A. (1884-), Ida (1886-), Clara M.E. (1889-), Margaret (1891-), Flora C. (1893-1899), Mariam (1895-), Lawrence (1898-), William Archibald (1899-)."})
 PEOPLE.setdefault("P901", {"id":"P901","name":"Peter & Harriet Wishart","birth":"","death":"","metis":False,"privacy":"deceased","group":True,"kids":7,
   "note":"7 children (each has a full profile in the People tab): Florence Mildred (1887-, m. George Augustus Langford 1913), Henry Allen 'Harry' (1889-, m. Kathleen Payne 1920), Edgar Wolseley 'Ted' (1891-, m. Mary Ethel Neilson 1925), Edna (1896-, m. Bertie Cleave 1926), Ruby Emma Elizabeth (1897-), Edith Jane (1900-, m. Thomas Hoy), Herbert Charles (1901-, farmer Makinak)."})
+# Collateral children of George Setter + Jessie Ellen Campbell (U19): 5 siblings
+# (Duncan, Colin, Alexander, George W, Ellen) that are NOT ancestors of Bayard.
+# Collapsed into one summary box so they don't spread the row wide and pull George
+# away from his descendant Roderick. All 5 stay in PEOPLE for the People tab.
+PEOPLE.setdefault("P902", {"id":"P902","name":"George & Jessie's other children","birth":"","death":"","metis":False,"privacy":"deceased","group":True,"kids":5,
+  "note":"5 children of George Setter + Jessie Ellen Campbell (not in Bayard's direct line): Duncan Richard (1848-1930), Colin Campbell (m. Jemima Hourie), Alexander Hunter Murray (1852-), George William (1854-), Ellen Madeleine 'Nellie' (1858-). Each has a full profile in the People tab."})
 
 # HALLETT siblings (children of Henry Hallett Jr + Catherine Parenteau, U35) - corroborated set.
 # RECONCILED the two 'Jane' entries (Jane Spence 1839 + Jane Baubee 1841) as one Jane with a note
@@ -437,7 +451,14 @@ from layout_auto import auto_layout
 # Collateral families with many children render as ONE summary box (P900/P901 group nodes)
 # so their child-rails stay short and never merge with neighbouring families' rails.
 COLLAPSE = {"U43": "P900", "U44": "P901"}   # union -> summary person (defined above as group)
-PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE, collapse=COLLAPSE)
+# U19 (George + Jessie) has Roderick (ancestral) + 5 collateral children.
+# Collapse only the non-ancestral children into P902 so George's bar converges
+# toward Roderick's position instead of being pulled wide by 5 spread-out siblings.
+COLLAPSE_CHILDREN = {
+    "U19": (["P023", "P024", "P026", "P027", "P028"], "P902"),
+}
+PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE, collapse=COLLAPSE,
+                                collapse_children=COLLAPSE_CHILDREN)
 # (overlap resolver, generation lanes, canvas bounds, and family-geometry recompute follow below)
 # ------------------------------------------------------------------------------------------------
 
