@@ -1154,7 +1154,7 @@ function drawTree(){
   const seg=(x1,y1,x2,y2,color,w,dash)=>{
     const l=document.createElementNS('http://www.w3.org/2000/svg','line');
     l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);
-    l.setAttribute('stroke',color||'url(#lg)');l.setAttribute('stroke-width',w||2.5);
+    l.setAttribute('stroke',color||'#6B5E52');l.setAttribute('stroke-width',w||2.5);
     l.setAttribute('vector-effect','non-scaling-stroke');  // lines stay thick at ANY zoom (phone fix)
     if(dash)l.setAttribute('stroke-dasharray','5,5');
     svg.appendChild(l);
@@ -1179,7 +1179,7 @@ function drawTree(){
     if(!n1||!n2)return;
     const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                 // ACTUAL spouse centers
     const my=f.y+PH/2;
-    seg(c1x, my, c2x, my, MAR, 4.5);                        // marriage bar
+    seg(c1x, my, c2x, my, MAR, 3);                        // marriage bar
     const barx=(c1x+c2x)/2, y0=f.y+PH;
     if(f.children.length){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
