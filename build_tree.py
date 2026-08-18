@@ -441,28 +441,27 @@ PERS, FAMS, TEDGES = auto_layout(UNIONS, PEOPLE, collapse=COLLAPSE)
 # (overlap resolver, generation lanes, canvas bounds, and family-geometry recompute follow below)
 # ------------------------------------------------------------------------------------------------
 
-# --- resolve same-row overlaps: sweep by COUPLE UNITS so spouses stay adjacent ---
-rows = {}
-for n in PERS:
-    rows.setdefault(n["y"], []).append(n)
-byid_p = {n["id"]: n for n in PERS}
-for y, ns in rows.items():
-    units, used = [], set()
-    for f in FAMS:
-        n1, n2 = byid_p[f["s1"]], byid_p[f["s2"]]
-        if n1["y"] == y:
-            units.append([n1, n2]); used.add(n1["id"]); used.add(n2["id"])
-    for n in ns:
-        if n["id"] not in used:
-            units.append([n])
-    units.sort(key=lambda u: min(b["x"] for b in u))
-    for i in range(1, len(units)):
-        prev_max = max(b["x"] + b["w"] for b in units[i-1])
-        cur_min = min(b["x"] for b in units[i])
-        if cur_min < prev_max + 10:
-            shift = prev_max + 10 - cur_min
-            for b in units[i]:
-                b["x"] = round(b["x"] + shift, 1)
+# NOTE: overlap resolution is handled inside layout_auto.py.
+# for n in PERS:
+#     rows.setdefault(n["y"], []).append(n)
+# byid_p = {n["id"]: n for n in PERS}
+# for y, ns in rows.items():
+#     units, used = [], set()
+#     for f in FAMS:
+#         n1, n2 = byid_p[f["s1"]], byid_p[f["s2"]]
+#         if n1["y"] == y:
+#             units.append([n1, n2]); used.add(n1["id"]); used.add(n2["id"])
+#     for n in ns:
+#         if n["id"] not in used:
+#             units.append([n])
+#     units.sort(key=lambda u: min(b["x"] for b in u))
+#     for i in range(1, len(units)):
+#         prev_max = max(b["x"] + b["w"] for b in units[i-1])
+#         cur_min = min(b["x"] for b in units[i])
+#         if cur_min < prev_max + 10:
+#             shift = prev_max + 10 - cur_min
+#             for b in units[i]:
+#                 b["x"] = round(b["x"] + shift, 1)
 
 # ---- generation lane labels ----
 bay_depth = 10

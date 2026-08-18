@@ -130,6 +130,89 @@ def auto_layout(UNIONS, PEOPLE, box_w=None, p_w=P_W, p_h=P_H, row_h=ROW_H,
             x_of[id(un)] = xcur + un["w"] / 2
             xcur += un["w"] + gap_box
 
+    # ---- parent bar centering relaxation ----
+    # Each parent bar (couple unit) is shifted toward the mean x of its children.
+    # Children who are spouses already sit at their spouse-union bar, so this
+    # pulls the parent toward the child's actual position. Damped iteration
+    # with overlap constraints prevents collisions. Bidirectional passes (top-down
+    # then bottom-up) let convergence propagate through the full tree.
+    _ITER = 20
+    _DAMP = 0.4
+    for _relax in range(_ITER):
+        for g in sorted(byrow, reverse=True):  # top-down pass
+            units = byrow[g]
+            ideal = {}
+            for un in units:
+                if un["kind"] != "couple":
+                    continue
+                uid_c = un["key"][1]
+                child_xs = []
+                for c in eff_children[uid_c]:
+                    target = next((v for v in spouse_of[c] if v != uid_c), None)
+                    if target and target in unit_of_couple:
+                        child_xs.append(x_of[id(unit_of_couple[target])])
+                    elif (uid_c, c) in unit_of_leaf:
+                        child_xs.append(x_of[id(unit_of_leaf[(uid_c, c)])])
+                if child_xs:
+                    ideal[id(un)] = sum(child_xs) / len(child_xs)
+            if not ideal:
+                continue
+            ordered = sorted(units, key=lambda un: x_of[id(un)])
+            for i, un in enumerate(ordered):
+                if id(un) not in ideal:
+                    continue
+                tgt = ideal[id(un)]; cur = x_of[id(un)]
+                delta = (tgt - cur) * _DAMP
+                left = -1e9
+                if i > 0:
+                    left = x_of[id(ordered[i-1])] + ordered[i-1]["w"] / 2 + 4
+                right = 1e9
+                if i < len(ordered) - 1:
+                    right = x_of[id(ordered[i+1])] - ordered[i+1]["w"] / 2 - 4
+                x_of[id(un)] = max(min(cur + delta, right), left)
+        for g in sorted(byrow):  # bottom-up pass
+            units = byrow[g]
+            ideal = {}
+            for un in units:
+                if un["kind"] != "couple":
+                    continue
+                uid_c = un["key"][1]
+                child_xs = []
+                for c in eff_children[uid_c]:
+                    target = next((v for v in spouse_of[c] if v != uid_c), None)
+                    if target and target in unit_of_couple:
+                        child_xs.append(x_of[id(unit_of_couple[target])])
+                    elif (uid_c, c) in unit_of_leaf:
+                        child_xs.append(x_of[id(unit_of_leaf[(uid_c, c)])])
+                if child_xs:
+                    ideal[id(un)] = sum(child_xs) / len(child_xs)
+            if not ideal:
+                continue
+            ordered = sorted(units, key=lambda un: x_of[id(un)])
+            for i, un in enumerate(ordered):
+                if id(un) not in ideal:
+                    continue
+                tgt = ideal[id(un)]; cur = x_of[id(un)]
+                delta = (tgt - cur) * _DAMP
+                left = -1e9
+                if i > 0:
+                    left = x_of[id(ordered[i-1])] + ordered[i-1]["w"] / 2 + 4
+                right = 1e9
+                if i < len(ordered) - 1:
+                    right = x_of[id(ordered[i+1])] - ordered[i+1]["w"] / 2 - 4
+                x_of[id(un)] = max(min(cur + delta, right), left)
+
+    # ---- final overlap resolution: sweep rows, shift right ----
+    for g in sorted(byrow):
+        ordered = sorted(byrow[g], key=lambda un: x_of[id(un)])
+        for i in range(1, len(ordered)):
+            prev_right = x_of[id(ordered[i - 1])] + ordered[i - 1]["w"] / 2
+            cur_left = x_of[id(ordered[i])] - ordered[i]["w"] / 2
+            if cur_left < prev_right + 4:
+                shift = prev_right + 4 - cur_left
+                for j in range(i, len(ordered)):
+                    x_of[id(ordered[j])] += shift
+
     # ---- place boxes ----
     PERS, FAMS = [], []
     boxid_for = {}                    # (uid, pid) -> nid
