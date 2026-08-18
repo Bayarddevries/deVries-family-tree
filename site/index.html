@@ -301,8 +301,15 @@ function drawTree(){
     const n1=nodeById(f.s1), n2=nodeById(f.s2);
     if(!n1||!n2)return;
     const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                 // ACTUAL spouse centers
-    const my=f.y+PH/2;
-    seg(c1x, my, c2x, my, MAR, 4.5);                        // marriage bar
+    // Stagger marriage bars at crowded y-levels to prevent horizontal overlap
+    if (!window.marriageYCount) window.marriageYCount = {};
+    const my = f.y + PH/2;
+    const yKey = my;
+    if (!window.marriageYCount[yKey]) window.marriageYCount[yKey] = 0;
+    const yOffset = window.marriageYCount[yKey] * 6;  // 6px per family at same level
+    const adjustedMy = my + yOffset;
+    window.marriageYCount[yKey] += 1;
+    seg(c1x, adjustedMy, c2x, adjustedMy, MAR, 4.5);  // marriage bar with stagger
     const barx=(c1x+c2x)/2, y0=f.y+PH;
     if(f.children.length){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
