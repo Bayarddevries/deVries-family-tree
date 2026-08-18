@@ -308,7 +308,10 @@ function drawTree(){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
       // stagger the drop from the bar so same-row children don't stack into a rail
       const dropYs=[];
-      kids.forEach(k=>{ dropYs.push((y0 + k.y + k.h/2)/2); });
+      // stagger the drop from the bar so same-row children don't stack into a rail
+      // Add increasing vertical offset per child to prevent line overlap
+      const dropYs=[];    
+      kids.forEach((k,i)=>{ dropYs.push((y0 + k.y + k.h/2)/2 + i * 25); });
       kids.forEach((k,i)=>{
         const cx=k.x+k.w/2, ky=k.y+k.h/2;
         const midY=dropYs[i];
