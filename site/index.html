@@ -303,7 +303,7 @@ function drawTree(){
     const c1x=n1.x+n1.w/2, c2x=n2.x+n2.w/2;                 // ACTUAL spouse centers
     // Stagger marriage bars at crowded y-levels to prevent horizontal overlap
     if (!window.marriageYCount) window.marriageYCount = {};
-    const my = f.y + PH/2;
+    const my = n1.y + PH/2;;
     const yKey = my;
     if (!window.marriageYCount[yKey]) window.marriageYCount[yKey] = 0;
     const yOffset = window.marriageYCount[yKey] * 6;  // 6px per family at same level
