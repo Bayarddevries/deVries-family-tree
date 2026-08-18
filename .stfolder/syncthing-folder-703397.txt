@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: devries-family-tree
+created: 2026-08-15T12:51:12-05:00
