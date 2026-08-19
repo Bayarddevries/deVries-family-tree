@@ -408,6 +408,19 @@ function drawTree(){
   };
   function lineC(pid){var c=T.faclass&&T.faclass[pid];return c?lineColor[c]||'#6B5E52':'#6B5E52';}
   const famById={};T.fams.forEach(f=>famById['fam_'+f.u]=f);
+  // ---- per-family child-rail stagger: keep siblings on ONE shared rail per family,
+  //      but lift/lower each family's rail so same-generation families never merge
+  //      into one continuous false-sibling rail (pitfall 36). Group by (parent row,
+  //      primary child row) so the stagger only separates families sharing the same
+  //      two rows, then spread them across the empty connector band. ----
+  const railStagger={};const railGroups={};
+    T.fams.forEach(f=>{const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
+      if(!kids.length)return;
+      const cy=Math.min.apply(null,kids.map(k=>k.y));
+      const key=f.y+'|'+cy;(railGroups[key]=railGroups[key]||[]).push(f);});
+    Object.keys(railGroups).forEach(key=>{const gs=railGroups[key]
+      .sort((a,b)=>((a.s1x+a.s2x)/2)-((b.s1x+b.s2x)/2));
+      gs.forEach((f,i)=>{railStagger[f.u]=i-(gs.length-1)/2;});});
   T.fams.forEach(f=>{
     const n1=nodeById(f.s1), n2=nodeById(f.s2);
     if(!n1||!n2)return;
@@ -417,12 +430,17 @@ function drawTree(){
     const barx=(c1x+c2x)/2, y0=f.y+PH;
     if(f.children.length){
       const kids=f.children.map(c=>nodeById(c[0])).filter(Boolean);
-      // stagger the drop from the bar so same-row children don't stack into a rail
-      const dropYs=[];
-      kids.forEach(k=>{ dropYs.push((y0 + k.y + k.h/2)/2); });
-      kids.forEach((k,i)=>{
+      // vertical connector band between this couple's bottom and its children's row
+      const cy=Math.min.apply(null,kids.map(k=>k.y));
+      const band=Math.max(cy-y0, 40);
+      const base=y0+band*0.5;
+      // count families sharing this same (parent,child) pair to bound the spread
+      const key=f.y+'|'+cy;const ng=(railGroups[key]||[f]).length;
+      const step=Math.min(24, Math.max(5,(band*0.7)/Math.max(ng-1,1)));
+      const famOff=(railStagger[f.u]||0)*step;
+      kids.forEach(k=>{
         const cx=k.x+k.w/2, ky=k.y+k.h/2;
-        const midY=dropYs[i];
+        const midY=base+famOff;                            // per-FAMILY rail height
         var kidColor=lineC(k.pid);
         seg(barx, y0, barx, midY, kidColor, 3.5);             // down from bar (family-line colour)
         seg(barx, midY, cx, midY, kidColor, 3.5);             // over to child x
